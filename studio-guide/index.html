@@ -1,0 +1,975 @@
+<title>Red Mile Set Bible</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky header with five stage tabs; one stage visible at a time; content column 1180px. Dark-first studio palette. */
+:root{
+  --bg:#0f1012; --surface:#17191c; --surface2:#1e2125; --line:#2b2f34; --fg:#ece8e0; --muted:#9a9ea5;
+  --accent:#e8542f; --accent-fg:#ffffff; --ok:#4cc38a; --warn:#f0b43c; --bad:#ff6b5e;
+  --k1:#f2b33d; --k2:#ee7a3a; --f:#3fc1b0; --r:#a98bff; --bg-role:#4c9bff; --ac:#ff5fb0; --sk:#9aa0a6;
+  --room:#1a1c20; --wall:#3a3330; --furn:#2c3036;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#f5f3ef; --surface:#ffffff; --surface2:#efece6; --line:#dcd7cf; --fg:#1b1c1f; --muted:#62666d;
+  --accent:#c4401f; --accent-fg:#ffffff; --ok:#1d8a57; --warn:#a86e00; --bad:#c3302a;
+  --k1:#a87200; --k2:#c2541a; --f:#0f877a; --r:#6a4fd3; --bg-role:#1f6fd6; --ac:#c42c7f; --sk:#6b7177;
+  --room:#ebe7e0; --wall:#b9a99a; --furn:#d4cfc6; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#f5f3ef; --surface:#ffffff; --surface2:#efece6; --line:#dcd7cf; --fg:#1b1c1f; --muted:#62666d;
+  --accent:#c4401f; --accent-fg:#ffffff; --ok:#1d8a57; --warn:#a86e00; --bad:#c3302a;
+  --k1:#a87200; --k2:#c2541a; --f:#0f877a; --r:#6a4fd3; --bg-role:#1f6fd6; --ac:#c42c7f; --sk:#6b7177;
+  --room:#ebe7e0; --wall:#b9a99a; --furn:#d4cfc6; color-scheme:light}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--body);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:inherit;text-decoration-color:var(--accent);text-underline-offset:3px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h2{font-size:clamp(22px,3vw,30px);font-weight:800}
+h3{font-size:17px;font-weight:700}
+p{margin:0;max-width:68ch}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono,.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.head-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:12px 8px}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand h1{font-size:20px;font-weight:800}
+.brand .addr{font:400 12px var(--mono);color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 10px;font:500 12px var(--mono);white-space:nowrap}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.chip.ok .dot{background:var(--ok)} .chip.warn .dot{background:var(--warn)} .chip.bad .dot{background:var(--bad)}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs a{display:flex;align-items:baseline;gap:8px;padding:10px 14px 11px;text-decoration:none;border-bottom:2px solid transparent;color:var(--muted);white-space:nowrap;font-weight:500}
+nav.tabs a .n{font:500 11px var(--mono)}
+nav.tabs a[aria-current="page"]{color:var(--fg);border-bottom-color:var(--accent)}
+.sync{font:400 11px var(--mono);color:var(--muted);padding-block:0 6px}
+
+main section.stage{padding-block:28px 64px;display:grid;gap:28px}
+.lede{display:grid;gap:8px}
+.lede p{color:var(--muted);font-size:16px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:12px;min-width:0;align-content:start}
+.panel.flat{background:transparent}
+ul.clean{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+ul.clean li{padding-left:18px;position:relative}
+ul.clean li::before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;border-radius:2px;background:var(--accent)}
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:10px}
+ol.steps>li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start}
+ol.steps>li::before{content:counter(s);font:500 12px var(--mono);border:1px solid var(--line);border-radius:6px;height:24px;display:grid;place-items:center;color:var(--muted)}
+ol.steps>li.done::before{background:var(--ok);border-color:var(--ok);color:var(--bg);content:"✓"}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--surface2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right}
+
+/* role chips */
+.role{display:inline-flex;align-items:center;gap:7px;font:600 12px var(--mono);white-space:nowrap}
+.role i{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-style:normal;font-size:10.5px;color:var(--bg);background:var(--rc)}
+[data-role="K1"]{--rc:var(--k1)} [data-role="K2"]{--rc:var(--k2)} [data-role="F"]{--rc:var(--f)} [data-role="R"]{--rc:var(--r)}
+[data-role="BG"]{--rc:var(--bg-role)} [data-role="AC"]{--rc:var(--ac)} [data-role="SK"]{--rc:var(--sk)}
+
+/* ladder */
+.ladder{display:grid;gap:8px}
+.rung{display:grid;grid-template-columns:120px 1fr 96px;gap:10px;align-items:center;font-size:13px}
+.rung .bar{height:14px;border-radius:4px;background:var(--rc,var(--muted));min-width:4px}
+.rung .stop{font:500 12px var(--mono);text-align:right;color:var(--muted)}
+
+/* tiers */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px}
+.tier{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:10px;align-content:start}
+.tier.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.tier .t-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.tier .price{font:500 22px var(--mono)}
+.tier .tag{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:5px;background:var(--surface2);white-space:nowrap}
+.tier ul{margin:0;padding:0;list-style:none;display:grid;gap:5px;font-size:13px}
+.tier li{display:flex;gap:8px;align-items:center;min-width:0}
+.tier li span.t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn{border:1px solid var(--line);background:var(--surface2);border-radius:7px;padding:7px 12px;font-weight:500;font-size:13px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.btn[disabled]{opacity:.5;cursor:default}
+
+/* kelvin */
+.kelvin{display:grid;gap:10px}
+.kbar{position:relative;height:16px;border-radius:5px;background:linear-gradient(90deg,#ff9a3c 0%,#ffc27a 22%,#ffe9cf 45%,#f4f6ff 70%,#cfe0ff 100%)}
+.kbar .mark{position:absolute;top:-5px;bottom:-5px;width:3px;margin-left:-1.5px;background:var(--fg);border-radius:2px}
+.kbar .span{position:absolute;height:4px;bottom:-10px;border-radius:2px;background:var(--rc)}
+.kpresets{display:flex;flex-wrap:wrap;gap:6px}
+.kpresets button{border:1px solid var(--line);background:var(--surface2);border-radius:6px;padding:4px 9px;font:500 12px var(--mono)}
+.kpresets button.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+
+/* role picker */
+.picker{display:grid;gap:14px}
+.prow{display:grid;grid-template-columns:230px 1fr;gap:14px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--rc);border-radius:10px;padding:14px;min-width:0}
+.prow .about{display:grid;gap:6px;align-content:start;min-width:0}
+.prow .about p{font-size:13px;color:var(--muted)}
+.opts{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;min-width:0}
+.opt{flex:0 0 230px;text-align:left;border:1px solid var(--line);background:var(--surface2);border-radius:8px;padding:11px;display:grid;gap:6px;align-content:start}
+.opt:hover{border-color:var(--muted)}
+.opt.on{border-color:var(--rc);box-shadow:0 0 0 1px var(--rc) inset;background:color-mix(in srgb,var(--rc) 10%,var(--surface2))}
+.opt .o-top{display:flex;justify-content:space-between;gap:6px;align-items:center}
+.badge{font:500 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:4px;border:1px solid var(--line);white-space:nowrap}
+.badge.t1{border-color:var(--muted)} .badge.t2{border-color:var(--f);color:var(--f)} .badge.t3{border-color:var(--accent);color:var(--accent)}
+.badge.alt{border-style:dashed} .badge.own{border-color:var(--ok);color:var(--ok)}
+.opt .name{font-weight:600;font-size:14px;line-height:1.3}
+.opt .lines{font-size:12px;color:var(--muted);line-height:1.45}
+.opt .o-foot{display:flex;justify-content:space-between;align-items:center;gap:6px;font:500 13px var(--mono)}
+.warnline{font-size:12px;color:var(--warn)}
+.okline{font-size:12px;color:var(--ok)}
+
+.summary{position:relative}
+.sumrows{display:grid;gap:6px}
+.sumrow{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-size:13px}
+.sumrow .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.totals{display:grid;grid-template-columns:1fr auto;gap:4px 12px;border-top:1px solid var(--line);padding-top:10px;font-size:13px}
+.totals .big{font:500 20px var(--mono)}
+.alerts{display:grid;gap:6px}
+.alert{font-size:13px;border-radius:7px;padding:8px 10px;background:color-mix(in srgb,var(--warn) 14%,transparent);border:1px solid color-mix(in srgb,var(--warn) 40%,transparent)}
+.alert.good{background:color-mix(in srgb,var(--ok) 12%,transparent);border-color:color-mix(in srgb,var(--ok) 40%,transparent)}
+
+.status{border:1px solid var(--line);border-radius:999px;padding:3px 10px;font:500 11.5px var(--mono);background:var(--surface2);white-space:nowrap}
+.status[data-s="ordered"]{border-color:var(--warn);color:var(--warn)}
+.status[data-s="arrived"]{border-color:var(--f);color:var(--f)}
+.status[data-s="rigged"]{border-color:var(--ok);color:var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+
+/* plan svg */
+.planwrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px;align-items:start}
+.planwrap>*{min-width:0}
+.buygrid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:start}
+.buygrid>*{min-width:0}
+.svgbox{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px;overflow-x:auto}
+.svgbox svg{display:block;width:100%;min-width:360px;height:auto}
+svg text{font-family:var(--mono);fill:var(--muted)}
+svg .lbl{font-size:3.6px;letter-spacing:.04em}
+svg .lblb{font-size:4.2px;font-weight:500;fill:var(--fg)}
+svg .fx{cursor:pointer;transition:opacity .15s}
+svg.dimmed .fx:not(.hl){opacity:.18}
+.legend{display:flex;flex-wrap:wrap;gap:6px}
+.legend button{border:1px solid var(--line);background:var(--surface2);border-radius:7px;padding:4px 8px}
+.legend button.on{border-color:var(--rc);box-shadow:0 0 0 1px var(--rc) inset}
+.toggles{display:flex;flex-wrap:wrap;gap:14px;font-size:13px}
+.toggles label{display:inline-flex;gap:6px;align-items:center}
+
+/* checklists */
+.checks{display:grid;gap:2px}
+.check{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;padding:8px 6px;border-radius:7px}
+.check:hover{background:var(--surface2)}
+.check input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--ok)}
+.check.done span{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--muted)}
+.check small{display:block;color:var(--muted);font-size:12px}
+.progress{height:6px;border-radius:3px;background:var(--surface2);overflow:hidden}
+.progress b{display:block;height:100%;background:var(--ok);width:0}
+.rowhead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px}
+
+.riglog{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:10px}
+.field{display:grid;gap:4px;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--surface2)}
+.field label{font-size:13px;font-weight:500}
+.field .tgt{font:400 11.5px var(--mono);color:var(--muted)}
+.field input{font:500 14px var(--mono);background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:6px 8px;width:100%}
+.field.set{border-color:color-mix(in srgb,var(--ok) 55%,var(--line))}
+.swatch{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;border:1px solid var(--line)}
+.segs{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;flex-wrap:wrap}
+.segs button{border:0;background:var(--surface);padding:7px 12px;font-size:13px;font-weight:500;border-right:1px solid var(--line)}
+.segs button:last-child{border-right:0}
+.segs button.on{background:var(--fg);color:var(--bg)}
+.note{font-size:13px;color:var(--muted)}
+.kbd{font:500 12px var(--mono);background:var(--surface2);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+.camcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px}
+.cam{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:6px;align-content:start}
+.cam .id{font:700 13px var(--mono);color:var(--accent)}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:8px}
+.links a{display:grid;gap:2px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;text-decoration:none;background:var(--surface)}
+.links a:hover{border-color:var(--muted)}
+.links a b{font-weight:600}
+.links a span{font-size:12px;color:var(--muted)}
+
+@media (max-width:820px){
+  .prow{grid-template-columns:1fr}
+  .planwrap{grid-template-columns:1fr}
+  .buygrid{grid-template-columns:1fr}
+  .summary{position:static!important}
+  .rung{grid-template-columns:96px 1fr 80px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="head-row">
+      <div class="brand"><h1>Red Mile Set Bible</h1><span class="addr">1865 17 Ave SW · podcast room 10×10 ft · 8.5 ft ceiling</span></div>
+      <div class="chips" id="chips"></div>
+    </div>
+    <nav class="tabs" aria-label="Stages">
+      <a href="#plan" data-tab="plan"><span class="n">1</span>Plan</a>
+      <a href="#buy" data-tab="buy"><span class="n">2</span>Buy</a>
+      <a href="#place" data-tab="place"><span class="n">3</span>Place</a>
+      <a href="#camera" data-tab="camera"><span class="n">4</span>Camera</a>
+      <a href="#run" data-tab="run"><span class="n">5</span>Run</a>
+    </nav>
+    <div class="sync" id="sync">Connecting to the shared build…</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- PLAN -->
+<section class="stage" id="plan">
+  <div class="lede">
+    <span class="eyebrow">Stage 1 · Plan</span>
+    <h2>One room, one look, lit like the big shows</h2>
+    <p>Interview layout: armchair on the left of frame, couch in the centre and right, slat wall and the Serif 65 behind. The faces are the brightest thing in frame. The wall sits one to two stops under them, lifted by a low colour wash. Colour lives on the wall, never on skin.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <span class="eyebrow">The brightness ladder</span>
+      <h3>How bright each layer reads on camera</h3>
+      <div class="ladder" id="ladder"></div>
+      <p class="note">Key reads 300 lux at the face, the reference for every camera (f/2.8, ISO 400, 1/60 on the wide). A stop is double or half the light. Fill 1.5 stops under the key gives about a 3:1 ratio: shaped, not flat, and no hard shadow on the far cheek.</p>
+    </div>
+    <div class="panel">
+      <span class="eyebrow">What the biggest podcasts do</span>
+      <h3>Seven rules this set follows</h3>
+      <ul class="clean">
+        <li><b>Distance is depth.</b> Every seat at least 3 ft off the slat wall so the wall can sit darker than faces.</li>
+        <li><b>Big, close, soft keys.</b> 26 in lanterns about 4 ft from the face. Size relative to distance is what makes light soft.</li>
+        <li><b>Short-side keys.</b> Each key sits on the side of the face away from that person's single camera. The far cheek gets shape, the near cheek gets fill.</li>
+        <li><b>One colour temperature on skin.</b> Every light that touches a face runs at the camera's Kelvin, CRI 95 or better.</li>
+        <li><b>Separation.</b> A rim on the hair and a wash on the wall keep dark hair from melting into the French Roast slats.</li>
+        <li><b>Colour in the background only.</b> Show colour goes on the tubes and Govee bars. Faces stay neutral.</li>
+        <li><b>Practicals in frame, fixtures out.</b> A warm lamp in shot sells the room. Stands and lanterns stay just outside every camera's frame.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel">
+    <span class="eyebrow">Roles</span>
+    <h3>Every light has one job and one colour</h3>
+    <p class="note">The colour of each role stays the same on the shopping list, the floor plan and every warning, so you can always tell what is playing what.</p>
+    <div class="tbl"><table><thead><tr><th>Role</th><th>Job</th><th>Touches skin</th></tr></thead><tbody id="roleTable"></tbody></table></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <span class="eyebrow">How we get there</span>
+      <h3>Plan to locked standard</h3>
+      <ol class="steps" id="roadmap"></ol>
+    </div>
+    <div class="panel">
+      <span class="eyebrow">Decisions</span>
+      <h3>Settled and still open</h3>
+      <div class="tbl"><table><tbody id="decisions"></tbody></table></div>
+    </div>
+  </div>
+
+  <div class="panel flat">
+    <span class="eyebrow">Built from</span>
+    <div class="links">
+      <a href="https://claude.ai/artifact/FePPhRJnKVvXG71UQNfhWQ#studio-lighting-2026-10" target="_blank" rel="noopener"><b>Gear Scout</b><span>Lighting hunt, prices re-checked Oct 31</span></a>
+      <a href="https://claude.ai/artifact/HWzfrZ5GBR2wU1hJponTsh" target="_blank" rel="noopener"><b>The Room on 17th</b><span>Room, seven layouts, phase 1 and 2 gear</span></a>
+      <a href="https://claude.ai/artifact/P14EaJ1MD19oUd3jq7pRrE" target="_blank" rel="noopener"><b>Studio Light Roles</b><span>Five-layer plan, replaced by this page</span></a>
+      <a href="https://claude.ai/artifact/VzrHmYAAuiRM7R1VEokQKb" target="_blank" rel="noopener"><b>a6000 Camera 3 Setup</b><span>Body settings and framing rules</span></a>
+      <a href="https://claude.ai/artifact/SieU28gpci2vWXQgrmYP2k" target="_blank" rel="noopener"><b>Set Runbook</b><span>Govee scenes, screens, camera plan</span></a>
+      <a href="https://claude.ai/artifact/3aEaqFgvq8DFembG1K2Ehe" target="_blank" rel="noopener"><b>Studio SOPs</b><span>Opening, podcast start, wrap</span></a>
+      <a href="https://claude.ai/artifact/735AxrBbM1a3h3huYnH3eW" target="_blank" rel="noopener"><b>Smart Studio Blueprint</b><span>Alexa and Govee routines</span></a>
+      <a href="https://claude.ai/artifact/9xpzotkc5E5tCvDz1s4esX" target="_blank" rel="noopener"><b>Flagship Show Build Board</b><span>Job 5 set, Job 6 vertical crops</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- BUY -->
+<section class="stage" id="buy" hidden>
+  <div class="lede">
+    <span class="eyebrow">Stage 2 · Buy</span>
+    <h2>Pick a tier, then swap any role</h2>
+    <p>Start from a tier, then change any single role to an option from another tier. The build is shared, so everyone on the team sees the same list. Prices are CAD before 5% GST, from Gear Scout's Oct 31 re-check. Marketplace prices are asking prices.</p>
+  </div>
+
+  <div class="tiers" id="tiers"></div>
+
+  <div class="panel kelvin" id="kelvinPanel">
+    <div class="rowhead"><div><span class="eyebrow">Camera white balance</span><h3 id="kTitle">4500K</h3></div><div class="kpresets" id="kPresets"></div></div>
+    <div class="kbar" id="kbar"></div>
+    <label class="note" for="kRange" style="margin-top:10px">Drag to test a colour temperature against every light that touches skin in this build</label>
+    <input type="range" id="kRange" min="2700" max="6500" step="100" value="4500">
+    <div id="kNote" class="note"></div>
+  </div>
+
+  <div class="buygrid">
+    <div class="picker" id="picker"></div>
+    <div class="panel summary" id="summary" style="position:sticky;top:120px"></div>
+  </div>
+
+  <div class="panel">
+    <div class="rowhead"><div><span class="eyebrow">Shopping list</span><h3>What this build needs</h3></div><span class="note">Tap a status to move it on: Needed → Ordered → Arrived → Rigged</span></div>
+    <div class="tbl"><table><thead><tr><th>Item</th><th>For</th><th class="num">Qty</th><th class="num">Each</th><th class="num">Line</th><th>Where</th><th>Status</th></tr></thead><tbody id="shop"></tbody></table></div>
+  </div>
+</section>
+
+<!-- PLACE -->
+<section class="stage" id="place" hidden>
+  <div class="lede">
+    <span class="eyebrow">Stage 3 · Place</span>
+    <h2>Where everything goes</h2>
+    <p>Top-down plan to scale (1 square = 1 ft). The back wall is the slat wall with the Serif 65. Heights are to the centre of each light. Output levels are starting points for the build you picked. Meter them on rig day and write the real values in the Run tab.</p>
+  </div>
+  <div class="planwrap">
+    <div class="svgbox"><svg id="planSvg" viewBox="-34 -30 192 186" role="img" aria-label="Top-down studio plan"></svg></div>
+    <div class="panel">
+      <div class="toggles">
+        <label><input type="checkbox" id="tFov" checked> Camera frames</label>
+        <label><input type="checkbox" id="tBeam" checked> Light direction</label>
+      </div>
+      <span class="eyebrow">Tap a role to highlight it</span>
+      <div class="legend" id="legend"></div>
+      <div id="placeDetail" class="note"></div>
+    </div>
+  </div>
+  <div class="tbl"><table><thead><tr><th>Role</th><th>Fixture in your build</th><th>Where</th><th class="num">Height</th><th>Aim</th><th class="num">To face</th><th>Start output</th></tr></thead><tbody id="placeTable"></tbody></table></div>
+  <div class="grid2">
+    <div class="panel">
+      <span class="eyebrow">Frame checks</span>
+      <h3>Keep fixtures out of the wide</h3>
+      <ul class="clean">
+        <li>The wide (CAM1, 16mm) sees about 72° across. Its edges cross 3.4 ft in from each side wall at the seats, so both key stands sit outside them.</li>
+        <li>The rim strip hangs at 94 in. That leaves about 8 in to the 8.5 ft ceiling and keeps its bottom edge above the wide's top edge. Lower it only until it peeks into the wide, then back off 2 in.</li>
+        <li>The rim boom's base lives in the back-right corner behind the right Govee bar. Dress it with the plant.</li>
+        <li>The wash tubes lie on the floor at the baseboard behind the armchair and couch. The furniture hides them from every camera.</li>
+        <li>Tape seat marks on the rug once faces meter right. Every show then starts from the same place.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <span class="eyebrow">Mounting</span>
+      <h3>Stands now, ceiling later</h3>
+      <p>Everything here sits on stands, so nothing needs drilling. The lease needs the landlord's written approval before anything goes on the walls or ceiling. Once that's approved, moving both lanterns and the rim to ceiling clamps would free the floor and is the next upgrade.</p>
+      <p class="note">Sandbag every stand base. The 10×10 room has one exit, and a lantern on a tipped stand lands on a guest.</p>
+      <p class="note">Power: 3 to 4 COBs, 2 tubes and the RØDECaster share one circuit. Run lights on their own power bar and keep them off the audio power bar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CAMERA -->
+<section class="stage" id="camera" hidden>
+  <div class="lede">
+    <span class="eyebrow">Stage 4 · Camera</span>
+    <h2>Three bodies that cut together</h2>
+    <p>Every camera runs the same Kelvin as the face lights, the same shutter and the same exposure. The RØDECaster Video switches 1080p. The two ZV-E10 II singles also record 4K inside the camera, so vertical clips are cut from 4K and stay sharp.</p>
+  </div>
+  <div class="camcards" id="camcards"></div>
+  <div class="panel">
+    <div class="rowhead"><div><span class="eyebrow">Recording mode</span><h3 id="modeTitle">Show</h3></div><div class="segs" id="modeSegs"></div></div>
+    <p id="modeLede" class="note"></p>
+    <div class="tbl"><table><thead><tr><th>Setting</th><th>ZV-E10 II · CAM2, CAM3</th><th>a6000 · CAM1</th><th>Why</th></tr></thead><tbody id="camTable"></tbody></table></div>
+    <div id="modeEffects" class="alerts"></div>
+  </div>
+  <div class="grid2">
+    <div class="panel">
+      <span class="eyebrow">Matching</span>
+      <h3>Make three cameras look like one</h3>
+      <ol class="steps">
+        <li><div>Set every body to the same Kelvin as the face lights, G/M tint 0. Never use auto white balance.</div></li>
+        <li><div>Put a grey card at each seat under show light. Expose so the card reads the same on all three cameras.</div></li>
+        <li><div>Shoot 10 seconds of card on every body. In Resolve, match the RGB parade within 2 IRE.</div></li>
+        <li><div>Save the a6000 correction as the PowerGrade <span class="kbd">RMR a6000 Match</span>. Build a corrective LUT with <span class="kbd">make_lut.py</span> (WB strength 0.6, white 232, black 2, saturation 1.06).</div></li>
+        <li><div>Write the final ISO and match gap into the Rig Log.</div></li>
+      </ol>
+    </div>
+    <div class="panel">
+      <span class="eyebrow">Framing</span>
+      <h3>Height, headroom, vertical safety</h3>
+      <ul class="clean">
+        <li>Lens height 48 to 50 in, about seated eye level, tilted down 2 to 3°. Raising the cameras was the Oct 28 call.</li>
+        <li>Head 8 to 10% from the top of frame. People inside the middle 80% of the width.</li>
+        <li>On CAM2 and CAM3, keep the face in the centre third. A 9:16 crop from 3840×2160 is 1215×2160, scaled to 1080×1920, so it stays sharp. The face has to be inside it.</li>
+        <li>Level the wide using the vertical slats as the check. The rug stripes and table should lead to the TV.</li>
+        <li>CAM1 carries the teleprompter for solo and ad reads.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- RUN -->
+<section class="stage" id="run" hidden>
+  <div class="lede">
+    <span class="eyebrow">Stage 5 · Run</span>
+    <h2>Rig day once, then the same start every show</h2>
+    <p>Rig day turns the starting points into measured values. After that the pre-show list gets the room from dark to recording in about 15 minutes. Ticks and numbers save for everyone.</p>
+  </div>
+
+  <div class="panel">
+    <div class="rowhead"><div><span class="eyebrow">Rig day · about 2 hours</span><h3>Place, meter, match, record the numbers</h3></div><span class="note" id="rigProg"></span></div>
+    <div class="progress"><b id="rigBar"></b></div>
+    <div class="checks" id="rigChecks"></div>
+  </div>
+
+  <div class="panel">
+    <div class="rowhead"><div><span class="eyebrow">Rig Log</span><h3>Measured values replace the estimates</h3></div><span class="note">Use a phone light-meter app at each face, pointed at the light. Ratios matter more than exact lux.</span></div>
+    <div class="riglog" id="riglog"></div>
+  </div>
+
+  <div class="panel">
+    <div class="rowhead"><div><span class="eyebrow">Every show · from T-30</span><h3>Pre-show</h3></div><div style="display:flex;gap:10px;align-items:center"><span class="note" id="preProg"></span><button class="btn" id="preReset">Reset for next show</button></div></div>
+    <div class="progress"><b id="preBar"></b></div>
+    <div class="checks" id="preChecks"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <span class="eyebrow">Background scenes</span>
+      <h3>Colour on the wall, not on faces</h3>
+      <div class="tbl"><table><thead><tr><th>Scene</th><th>Bars and tubes</th><th class="num">Level</th></tr></thead><tbody id="scenes"></tbody></table></div>
+      <p class="note">TN scenes use the Late Edition palette (LIGHTING_EXECUTION, Oct 29). Static colours only, no music-reactive or strobe modes. In tiers 2 and 3 the wash tubes take the same colours through their app.</p>
+    </div>
+    <div class="panel">
+      <span class="eyebrow">When it looks wrong</span>
+      <h3>Problem → fix</h3>
+      <div class="tbl"><table><tbody id="fixes"></tbody></table></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <span class="eyebrow">Wrap</span>
+    <h3>Reset the room</h3>
+    <ul class="clean">
+      <li>Stop the RØDECaster Video and the internal recordings on CAM2 and CAM3 before lights go down.</li>
+      <li>Face lights off from their apps. Background scene back to the house Work scene.</li>
+      <li>Leave stands, sandbags and seat marks where they are. Only move what a booking needs.</li>
+      <li>Offload the 4K files and keep at least 100 GB free on STUDIOSSD. 4K runs about 45 GB an hour per camera.</li>
+      <li>Displays back to Red Mile branding (SOP 03).</li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<script>
+/* ---------- reference data ---------- */
+const ROLES = [
+  {id:'K1', name:'Key · armchair', job:'Main soft light on the armchair seat, left of frame. Sits front-left, on the side of the face away from CAM2.', skin:true},
+  {id:'K2', name:'Key · couch', job:'Main soft light on the couch, centre and right. Sits front-right, away from CAM3. One 26 in lantern covers both couch seats.', skin:true},
+  {id:'F',  name:'Fill', job:'Broad, low light from beside the wide camera. Opens the shadow side 1.5 stops under the keys and puts a catchlight in every eye.', skin:true},
+  {id:'R',  name:'Rim', job:'12×48 strip overhead behind the couch. Lights hair and shoulders so dark hair separates from the dark wall.', skin:true},
+  {id:'BG', name:'Wall wash', job:'Two tubes on the floor at the baseboard, aimed up the slats. Lifts the dark wall so H.264 does not crush it to blocks, and carries show colour.', skin:false},
+  {id:'AC', name:'Accents', job:'Govee bars at the wall edges, floor strips and a warm practical lamp in frame. Owned.', skin:false},
+  {id:'SK', name:'Shared kit', job:'Sandbags, clamps, power bars, 14 AWG cords and gaffer tape.', skin:false},
+];
+const P = {
+  sl60iid:{n:'Godox SL60IID', d:'70 W COB, 5600K only, CRI 96, Bowens', src:'Marketplace Calgary (5 listings, $155 to $230)', kind:'mp', price:155, cct:[5600,5600], url:'https://www.facebook.com/marketplace/item/37831808123133428/'},
+  cb60b:{n:'Neewer CB60B', d:'70 W bi-colour COB, 2700 to 6500K, CRI 97+, Bowens, app', src:'Amazon.ca', kind:'new', price:219.99, cct:[2700,6500], url:'https://www.amazon.ca/NEEWER-Continuous-2700K-6500K-Photography-Recording/dp/B0C1CBP7LF'},
+  halo100:{n:'Amaran Halo 100x', d:'100 W bi-colour COB, 2700 to 6500K, CRI 96+, Bowens, amaran app', src:'Amazon.ca', kind:'new', price:250.95, cct:[2700,6500], url:'https://www.amazon.ca/Bi-Color-Ultra-Compact-Shooting-Creators-Vloggers/dp/B0GJ481N9C'},
+  sl60bi:{n:'Godox SL60IIBi (new in box)', d:'75 W bi-colour, 2800 to 6500K, CRI 96, Bowens, app', src:'Marketplace Calgary, one listing', kind:'mp', price:180, cct:[2800,6500], url:'https://www.facebook.com/marketplace/item/4575527462767518/'},
+  gvm80:{n:'GVM SD80D kit', d:'80 W bi-colour, 2700 to 7500K, CRI 97+, with stand and mini lantern', src:'Amazon.ca', kind:'new', price:189, cct:[2700,7500], url:'https://www.amazon.ca/dp/B0DXVH39MT'},
+  nice:{n:'NiceVeedi 20 in softbox', d:'85 W LED bulb, 3000 to 6000K, remote, stand included', src:'Owned (×4)', kind:'owned', price:0, cct:[3000,6000], url:''},
+  ns26l:{n:'Neewer NS26L 26 in lantern', d:'65 cm Bowens lantern, quick release', src:'Amazon.ca', kind:'new', price:90.99, url:'https://www.amazon.ca/dp/B0CC1LMW9W'},
+  aplant:{n:'Aputure Lantern 26 in', d:'66 cm Bowens lantern, skirt set, case', src:'Vistek Calgary', kind:'new', price:112.5, url:'https://www.vistek.ca/store/436544/aputure-lantern-softbox'},
+  aplantU:{n:'Aputure Lantern (used)', d:'Lantern with bag, size not stated', src:'Marketplace Calgary', kind:'mp', price:80, url:'https://www.facebook.com/marketplace/item/1044360098511059/'},
+  gue80:{n:'Godox SB-GUE80 octa + grid', d:'80 cm umbrella octa, Bowens, honeycomb grid', src:'The Camera Store', kind:'new', price:76.87, url:'https://thecamerastore.com/products/copy-of-godox-sb-ue-80cm-octabox-bowens-mount'},
+  fs60b:{n:'Neewer FS60B', d:'Compact bi-colour COB; listing gives no CRI or wattage', src:'Marketplace Calgary', kind:'mp', price:90, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1373359324407474/'},
+  ms60b:{n:'Neewer MS60B', d:'65 W bi-colour, CRI 97+, Bowens, app, 2 batteries', src:'Marketplace Airdrie', kind:'mp', price:140, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1752167802766308/'},
+  halo60:{n:'Amaran Halo 60x', d:'63 W bi-colour, 2700 to 6500K, CRI 96+, Bowens, amaran app', src:'Amazon.ca (ships Nov 25 to Dec 16)', kind:'new', price:169, cct:[2700,6500], url:'https://www.amazon.ca/Aputure-2700K-6500K-Bluetooth-Photography-Production/dp/B0BTTFV42Z'},
+  fw30120:{n:'Godox SB-FW30120 strip + grid', d:'30×120 cm, Bowens, grid', src:'The Camera Store', kind:'new', price:56.87, url:'https://thecamerastore.com/products/godox-30x120cm-strip-box-bowens'},
+  abox:{n:'Amaran Light Box 30x120 + grid', d:'30×120 cm, Bowens, grid, one-snap setup', src:'Amazon.ca', kind:'new', price:102, url:'https://www.amazon.ca/amaran-Light-Box-Quick-Setup-30x120/dp/B0DP46JKNK'},
+  mpcs:{n:'C-stand with boom arm', d:'146 to 320 cm, 128 cm arm, 2 grip heads', src:'Marketplace Calgary', kind:'mp', price:100, url:'https://www.facebook.com/marketplace/item/900124516024271/'},
+  sc172:{n:'Neewer SC172 C-stand + arm', d:'Turtle base, 83 cm arm rated 8 kg', src:'Amazon.ca', kind:'new', price:155.99, url:'https://www.amazon.ca/dp/B0CQQ97T1T'},
+  kf:{n:'K&F Concept 2.8 m stand', d:'Air-cushioned, 8 kg load', src:'Amazon.ca', kind:'new', price:60.99, url:'https://www.amazon.ca/dp/B0GWLP2MZV'},
+  ras280:{n:'SmallRig RA-S280 stand', d:'Air-cushioned, 2.8 m, 8 kg, 2-year warranty', src:'Amazon.ca', kind:'new', price:89.99, url:'https://www.amazon.ca/SMALLRIG-Photography-Air-Cushioned-Reflector-RA-S280-3736/dp/B0B13X1'},
+  tl30:{n:'Godox TL30 pair', d:'2 ft RGB tubes, app. Sept 29 listing, re-check', src:'Marketplace (Studio Light Roles)', kind:'mp', price:120, cct:[2700,6500], url:''},
+  tl60:{n:'Neewer TL60 RGB tube', d:'66 cm RGBWW, 2500 to 10000K, CRI 97+, app, DMX', src:'Amazon.ca', kind:'new', price:196.99, cct:[2500,10000], url:'https://www.amazon.ca/NEEWER-Photography-Handheld-Lighting-2500K-10000K/dp/B0C89Z85L2'},
+  pt2c:{n:'Amaran PT2c 2-light kit', d:'2 ft RGBWW pixel tubes, 2700 to 10000K, CRI 95', src:'Amazon.ca', kind:'new', price:448.5, cct:[2700,10000], url:'https://www.amazon.ca/Aputure-2-Light-to10000K-Handheld-Photography/dp/B0BR9W6DQD'},
+  pavo:{n:'Nanlite PavoTube II 15C kit', d:'2× 2 ft RGBWW, CRI 96+, mounts and case', src:'Amazon.ca', kind:'new', price:389, cct:[2700,6500], url:'https://www.amazon.ca/NANLITE-PavoTube-RGBWW-Tube-Light/dp/B0F48GJPX1'},
+  govee:{n:'Govee bars + floor strips', d:'Left and right wall bars, side-wall floor strips', src:'Owned', kind:'owned', price:0, url:''},
+  lamp:{n:'Practical floor lamp', d:'Warm 2700K bulb, in frame behind the armchair', src:'Owned', kind:'owned', price:0, url:''},
+  sb:{n:'Neewer SB-BL4 sandbags ×4', d:'9 kg each, ship empty', src:'Amazon.ca', kind:'new', price:35.99, url:'https://www.amazon.ca/Neewer%C2%AE-Photographic-Sandbag-Studio-Stands/dp/B00LIRRLBU'},
+  sr5321:{n:'SmallRig 5321 mini clamp 2-pack', d:'Dual ball heads, 1.5 kg each', src:'Amazon.ca', kind:'new', price:39.99, url:'https://www.amazon.ca/dp/B0F18P1LQ3'},
+  sr3757:{n:'SmallRig 3757B crab clamp', d:'Ball-head arm, 3.5 kg', src:'Amazon.ca', kind:'new', price:26.99, url:'https://www.amazon.ca/SmallRig-Ballhead-Crab-Shaped-Threaded-Stabilizer/dp/B0B5LFC6L3'},
+  power:{n:'Power kit (estimate)', d:'2× 1080J power bars, 2× 14 AWG cords, gaffer tape', src:'Estimate from Studio Light Roles', kind:'est', price:116, url:''},
+};
+const OPTS = {
+  K:[
+    {id:'k1', tier:1, lines:[['sl60iid',1],['ns26l',1],['kf',1]], out:'50–60%', note:'Locks the camera to 5600K.'},
+    {id:'k2', tier:2, lines:[['cb60b',1],['ns26l',1],['kf',1]], out:'55–65%'},
+    {id:'k3', tier:3, lines:[['halo100',1],['aplant',1],['ras280',1]], out:'35–45%', note:'Most headroom for 60p and the darker looks.'},
+    {id:'ka', tier:'alt', lines:[['sl60bi',1],['aplantU',1],['kf',1]], out:'45–55%', note:'Marketplace deal. Only one listing of each, so it covers one key.'},
+    {id:'kb', tier:'alt', lines:[['gvm80',1]], out:'60–75%', note:'Kit includes stand and a mini lantern. A smaller source, so harder light.'},
+  ],
+  F:[
+    {id:'f1', tier:1, own:true, lines:[['nice',1]], out:'Bulb 30–40%', note:'Uses one of the four owned softboxes. Its CRI is not published, so check skin on camera.'},
+    {id:'f2', tier:2, lines:[['cb60b',1],['gue80',1],['kf',1]], out:'15–25%'},
+    {id:'f3', tier:3, lines:[['halo100',1],['gue80',1],['ras280',1]], out:'10–20%'},
+  ],
+  R:[
+    {id:'r1', tier:1, lines:[['fs60b',1],['fw30120',1],['mpcs',1]], out:'35–50%', note:'Listing has no CRI. Fine for hair, check on skin.'},
+    {id:'r2', tier:2, lines:[['ms60b',1],['fw30120',1],['mpcs',1]], out:'30–45%'},
+    {id:'r3', tier:3, lines:[['halo60',1],['abox',1],['sc172',1]], out:'30–40%'},
+  ],
+  BG:[
+    {id:'b1', tier:1, lines:[['tl30',1]], out:'25–40%'},
+    {id:'b2', tier:2, lines:[['tl60',2]], out:'20–35%'},
+    {id:'b3', tier:3, lines:[['pt2c',1]], out:'20–35%', note:'Pixel tubes can run gradients for the Cover scene.'},
+    {id:'ba', tier:'alt', lines:[['pavo',1]], out:'20–35%'},
+  ],
+  AC:[
+    {id:'a0', tier:'own', own:true, lines:[['govee',1],['lamp',1]], out:'Per scene'},
+  ],
+  SK:[
+    {id:'s1', tier:1, lines:[['sb',1],['sr5321',1],['power',1]]},
+    {id:'s2', tier:2, lines:[['sb',1],['sr5321',2],['power',1]]},
+    {id:'s3', tier:3, lines:[['sb',1],['sr3757',4],['power',1]]},
+  ],
+};
+const optKey = r => (r==='K1'||r==='K2') ? 'K' : r;
+const TIERS = {
+  1:{name:'Tier 1 · Essential', tag:'Fixed 5600K', blurb:'Cheapest way to get soft, shaped faces. Daylight COBs in lanterns, the owned softbox as fill. Camera locks to 5600K.'},
+  2:{name:'Tier 2 · Bi-colour', tag:'2700–6500K', blurb:'Every face light is adjustable and on one Neewer app. Matched keys and fill. Two Marketplace pickups.'},
+  3:{name:'Tier 3 · Pro', tag:'2700–6500K + app', blurb:'Amaran on every face, the rim included, plus pixel tubes. Most output for 60p and moody looks.'},
+};
+
+/* ---------- state ---------- */
+function tierSel(t){
+  const s={};
+  for(const r of ROLES){
+    const list=OPTS[optKey(r.id)];
+    const o=list.find(x=>x.tier===t)||list.find(x=>x.own)||list[0];
+    s[r.id]=o.id;
+  }
+  return s;
+}
+const S = { sel:tierSel(2), kelvin:4500, status:{}, checks:{}, rig:{}, db:null, uid:null, canWrite:true };
+const optById = id => { for(const k in OPTS){const o=OPTS[k].find(x=>x.id===id); if(o) return o;} return null; };
+const optPrice = o => o.lines.reduce((a,[p,q])=>a+P[p].price*q,0);
+const lightOf = o => { const l=o.lines.find(([p])=>P[p].cct); return l?P[l[0]]:null; };
+const money = n => '$'+n.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $ = (s,r=document)=>r.querySelector(s);
+const roleChip = (id,label=true)=>{const r=ROLES.find(x=>x.id===id);return `<span class="role" data-role="${id}"><i>${id}</i>${label?esc(r.name):''}</span>`;};
+const tierBadge = t => t==='alt'?'<span class="badge alt">Swap-in</span>':t==='own'?'<span class="badge own">Owned</span>':`<span class="badge t${t}">Tier ${t}</span>`;
+function buildTotal(sel=S.sel){ let n=0; for(const r of ROLES) n+=optPrice(optById(sel[r.id])); return n; }
+function currentTier(){ for(const t of [1,2,3]){ const s=tierSel(t); if(ROLES.every(r=>s[r.id]===S.sel[r.id])) return t; } return null; }
+
+function issues(){
+  const out=[]; const k=S.kelvin;
+  for(const r of ROLES){ if(!r.skin) continue;
+    const L=lightOf(optById(S.sel[r.id])); if(!L) continue;
+    if(k<L.cct[0]||k>L.cct[1]) out.push({role:r.id, text:`${L.n} can't reach ${k}K (range ${L.cct[0]===L.cct[1]?L.cct[0]+'K only':L.cct[0]+'–'+L.cct[1]+'K'}). Set the camera to a Kelvin it can hit, or swap this role.`});
+  }
+  const kp=[S.sel.K1,S.sel.K2].map(id=>lightOf(optById(id))?.n);
+  if(kp[0]!==kp[1]) out.push({role:'K2', text:`The two keys are different models (${kp[0]} and ${kp[1]}). Matched keys keep skin tone identical between the armchair and the couch.`});
+  const ka=optById(S.sel.K1); if(ka.id==='ka'&&S.sel.K2==='ka') out.push({role:'K2', text:'The Marketplace deal is one listing. Only one key can come from it.'});
+  return out;
+}
+
+/* ---------- header ---------- */
+function renderChips(){
+  const t=currentTier(), tot=buildTotal(), iss=issues().length;
+  const filled=RIG.filter(f=>S.rig[f.id]?.v).length;
+  $('#chips').innerHTML=
+    `<span class="chip"><span class="dot"></span>${t?('Tier '+t):'Mixed build'} · ${money(tot)}</span>`+
+    `<span class="chip ${iss?'warn':'ok'}"><span class="dot"></span>WB ${S.kelvin}K${iss?' · '+iss+' to fix':''}</span>`+
+    `<span class="chip ${filled===RIG.length?'ok':filled?'warn':''}"><span class="dot"></span>Rig log ${filled}/${RIG.length}</span>`;
+}
+
+/* ---------- plan ---------- */
+const LADDER=[
+  {role:'R', label:'Rim on hair', w:100, stop:'+0.5 stop'},
+  {role:'K1', label:'Key on face', w:80, stop:'0 · 300 lux'},
+  {role:'BG', label:'Slat wall', w:34, stop:'−1 to −2'},
+  {role:'F', label:'Fill side', w:30, stop:'−1.5 stops'},
+  {role:'AC', label:'TV and bars', w:56, stop:'below clip'},
+];
+function renderPlan(){
+  $('#ladder').innerHTML=LADDER.map(l=>`<div class="rung" data-role="${l.role}"><span>${esc(l.label)}</span><span class="bar" style="width:${l.w}%"></span><span class="stop">${l.stop}</span></div>`).join('');
+  $('#roleTable').innerHTML=ROLES.map(r=>`<tr><td>${roleChip(r.id)}</td><td>${esc(r.job)}</td><td>${r.skin?'Yes · must match camera Kelvin':'No · any colour'}</td></tr>`).join('');
+  const rigDone=RIG.filter(f=>S.rig[f.id]?.v).length;
+  const bought=Object.values(S.status).some(s=>s.s&&s.s!=='needed');
+  const steps=[
+    {t:'Plan the look and the roles', d:'This tab. Rules, ladder and roles are set.', done:true},
+    {t:'Pick the build and buy it', d:'Buy tab. Choose a tier, swap roles, track each item to Rigged.', done:bought},
+    {t:'Rig day: place, meter, match', d:'Place tab for positions, Camera tab for settings, Run tab for the checklist.', done:rigDone===RIG.length},
+    {t:'Lock the house standard', d:'Measured values from the Rig Log replace every starting point on this page (v2).', done:false},
+    {t:'Run every show from the pre-show list', d:'Run tab. Same marks, same levels, same Kelvin every time.', done:false},
+  ];
+  $('#roadmap').innerHTML=steps.map(s=>`<li class="${s.done?'done':''}"><div><b>${esc(s.t)}</b><br><span class="note">${esc(s.d)}</span></div></li>`).join('');
+  const D=[
+    ['Settled','Three tiers plus mix-and-match. Tier 1 fixed 5600K, tiers 2 and 3 bi-colour.'],
+    ['Settled','House frame rate 29.97. Sony\'s "30p" in NTSC mode is 29.97, so the old 30 vs 29.97 conflict is one setting.'],
+    ['Settled','RØDECaster Video switches 1080p. CAM2 and CAM3 also record 4K internally for vertical clips.'],
+    ['Settled','Armchair left of frame, couch centre and right. Nancy-style interview.'],
+    ['Settled','Owned NiceVeedi softboxes ×4 stay as Tier 1 fill and spares.'],
+    ['Proposed','Move the a6000 to the wide (CAM1). It cannot record 4K, and the wide is the shot cropped least for vertical clips.'],
+    ['Open','Lens count: this plan needs 2× Sigma 30mm and 1× Sigma 16mm. Confirm what is owned.'],
+    ['Open','Exact Govee bar and strip models.'],
+    ['Open','Landlord approval for ceiling mounts (lease needs written approval).'],
+    ['Open','Whether to shoot 60p reels sessions (see Camera tab, 60p mode).'],
+  ];
+  $('#decisions').innerHTML=D.map(([s,t])=>`<tr><td><span class="status" data-s="${s==='Settled'?'rigged':s==='Proposed'?'arrived':'ordered'}">${s}</span></td><td>${esc(t)}</td></tr>`).join('');
+}
+
+/* ---------- buy ---------- */
+function renderTiers(){
+  const cur=currentTier();
+  $('#tiers').innerHTML=[1,2,3].map(t=>{
+    const sel=tierSel(t), T=TIERS[t];
+    const rows=ROLES.map(r=>{const o=optById(sel[r.id]); const L=lightOf(o)||P[o.lines[0][0]]; return `<li>${roleChip(r.id,false)}<span class="t">${esc(L.n)}</span></li>`;}).join('');
+    return `<div class="tier ${cur===t?'on':''}"><div class="t-top"><h3>${esc(T.name)}</h3><span class="tag">${esc(T.tag)}</span></div>
+      <div class="price">${money(buildTotal(sel))}</div><p class="note">${esc(T.blurb)}</p><ul>${rows}</ul>
+      <button class="btn ${cur===t?'':'primary'}" data-tier="${t}" ${cur===t?'disabled':''}>${cur===t?'Current build':'Use this tier'}</button></div>`;
+  }).join('');
+}
+function renderKelvin(){
+  const k=S.kelvin; $('#kTitle').textContent=k+'K'; $('#kRange').value=k;
+  const pct=v=>((v-2700)/(6500-2700))*100;
+  let spans='', i=0;
+  for(const r of ROLES){ if(!r.skin) continue; const L=lightOf(optById(S.sel[r.id])); if(!L) continue;
+    const a=Math.max(2700,L.cct[0]), b=Math.min(6500,L.cct[1]);
+    spans+=`<span class="span" data-role="${r.id}" style="left:${pct(a)}%;width:${Math.max(1.2,pct(b)-pct(a))}%;bottom:${-10-i*6}px"></span>`; i++; }
+  $('#kbar').innerHTML=`<span class="mark" style="left:${pct(k)}%"></span>`+spans;
+  $('#kbar').style.marginBottom=(i*6+8)+'px';
+  $('#kPresets').innerHTML=[3200,4000,4500,5000,5600].map(v=>`<button data-k="${v}" class="${v===k?'on':''}">${v}K</button>`).join('');
+  const bad=issues().filter(x=>x.text.includes("can't reach"));
+  $('#kNote').innerHTML=bad.length?`<span class="warnline">${bad.length} face light${bad.length>1?'s':''} can't reach ${k}K. The coloured bars under the strip show each face light's range.</span>`:`<span class="okline">Every face light in this build can run at ${k}K. The coloured bars show each light's range.</span>`;
+}
+function renderPicker(){
+  $('#picker').innerHTML=ROLES.map(r=>{
+    const list=OPTS[optKey(r.id)];
+    const cards=list.map(o=>{
+      const L=lightOf(o); const on=S.sel[r.id]===o.id;
+      const bad=r.skin&&L&&(S.kelvin<L.cct[0]||S.kelvin>L.cct[1]);
+      const lines=o.lines.map(([p,q])=>`${q>1?q+'× ':''}${esc(P[p].n)}`).join('<br>');
+      return `<button class="opt ${on?'on':''}" data-role-pick="${r.id}" data-opt="${o.id}" aria-pressed="${on}">
+        <div class="o-top">${tierBadge(o.tier)}${on?'<span class="badge" style="border-color:var(--rc);color:var(--rc)">Picked</span>':''}</div>
+        <div class="lines">${lines}</div>
+        ${L&&r.skin?`<div class="note mono" style="font-size:11.5px">${L.cct[0]===L.cct[1]?L.cct[0]+'K fixed':L.cct[0]+'–'+L.cct[1]+'K'}</div>`:''}
+        ${bad?`<div class="warnline">Can't reach ${S.kelvin}K</div>`:''}
+        ${o.note?`<div class="note" style="font-size:12px">${esc(o.note)}</div>`:''}
+        <div class="o-foot"><span>${optPrice(o)?money(optPrice(o)):'Owned'}</span><span class="muted" style="font-size:11px">${o.out?esc(o.out):''}</span></div>
+      </button>`;}).join('');
+    return `<div class="prow" data-role="${r.id}"><div class="about">${roleChip(r.id)}<p>${esc(r.job)}</p></div><div class="opts">${cards}</div></div>`;
+  }).join('');
+}
+function renderSummary(){
+  const tot=buildTotal(), iss=issues();
+  const rows=ROLES.map(r=>{const o=optById(S.sel[r.id]); const L=lightOf(o)||P[o.lines[0][0]]; const p=optPrice(o);
+    return `<div class="sumrow">${roleChip(r.id,false)}<span class="t">${esc(L.n)} ${tierBadge(o.tier)}</span><span class="num">${p?money(p):'Owned'}</span></div>`;}).join('');
+  $('#summary').innerHTML=`<div><span class="eyebrow">Your build</span><h3>${currentTier()?'Tier '+currentTier():'Mixed build'}</h3></div>
+    <div class="sumrows">${rows}</div>
+    <div class="totals"><span>Before GST</span><span class="num">${money(tot)}</span><span>GST 5%</span><span class="num">${money(tot*0.05)}</span><span><b>Total</b></span><span class="big">${money(tot*1.05)}</span></div>
+    <div class="alerts">${iss.length?iss.map(i=>`<div class="alert">${roleChip(i.role,false)} ${esc(i.text)}</div>`).join(''):'<div class="alert good">No conflicts. Every face light matches the camera Kelvin and the keys are matched.</div>'}</div>
+    ${S.canWrite?'':'<p class="note">You can view this build. Ask the owner for Contributor access to change it.</p>'}`;
+}
+function shopLines(){
+  const m=new Map();
+  for(const r of ROLES){ const o=optById(S.sel[r.id]);
+    for(const [p,q] of o.lines){ const e=m.get(p)||{p,q:0,roles:[]}; e.q+=q; if(!e.roles.includes(r.id)) e.roles.push(r.id); m.set(p,e);} }
+  return [...m.values()].sort((a,b)=>(P[a.p].kind==='owned')-(P[b.p].kind==='owned')||P[b.p].price*b.q-P[a.p].price*a.q);
+}
+const NEXT={needed:'ordered',ordered:'arrived',arrived:'rigged',rigged:'needed'};
+const LABEL={needed:'Needed',ordered:'Ordered',arrived:'Arrived',rigged:'Rigged'};
+function renderShop(){
+  $('#shop').innerHTML=shopLines().map(e=>{const pr=P[e.p]; const own=pr.kind==='owned';
+    const st=own?'rigged':(S.status[e.p]?.s||'needed');
+    return `<tr><td><b>${esc(pr.n)}</b><br><span class="note">${esc(pr.d)}</span></td>
+      <td>${e.roles.map(r=>roleChip(r,false)).join(' ')}</td><td class="num">${e.q}</td>
+      <td class="num">${own?'—':money(pr.price)}</td><td class="num">${own?'Owned':money(pr.price*e.q)}</td>
+      <td>${pr.url?`<a href="${esc(pr.url)}" target="_blank" rel="noopener">${esc(pr.src)}</a>`:esc(pr.src)}</td>
+      <td>${own?'<span class="status" data-s="rigged">Owned</span>':`<button class="status" data-s="${st}" data-status="${e.p}" ${S.canWrite?'':'disabled'}>${LABEL[st]}</button>`}</td></tr>`;}).join('');
+}
+
+/* ---------- place ---------- */
+const FACES={H1:[22,56,44],H2:[67,52,42],H3:[91,52,42]};
+const FIX={
+  K1:{x:30,y:86,z:80,aim:'H1',where:'Front-left of the armchair, stand outside the wide frame',tilt:'Down 35°, at the armchair face'},
+  K2:{x:104,y:86,z:80,aim:'H3',where:'Front-right of the couch, stand outside the wide frame',tilt:'Down 35°, between the couch seats'},
+  F:{x:77,y:113,z:56,aim:'H2',where:'Beside CAM1, against the front wall',tilt:'Level, at the middle of the set'},
+  R:{x:86,y:30,z:94,aim:'H2',where:'Over the gap behind the couch, boom from the back-right corner',tilt:'Down 60°, forward onto hair and shoulders'},
+  BG:{x:60,y:5,z:2,aim:null,where:'Floor at the baseboard: one behind the armchair, one behind the couch',tilt:'Up the slats, grazing'},
+  AC:{x:8,y:30,z:60,aim:null,where:'Govee bars at the outer wall edges, lamp back-left behind the armchair',tilt:'In frame as practicals'},
+};
+const CAMS=[
+  {id:'CAM1',x:60,y:112,aim:[60,50],fov:72.6,lens:'16mm'},
+  {id:'CAM2',x:94,y:102,aim:[22,56],fov:42.8,lens:'30mm'},
+  {id:'CAM3',x:42,y:100,aim:[79,52],fov:42.8,lens:'30mm'},
+];
+let hlRole=null;
+function dist3(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);}
+function ftin(i){const f=Math.floor(i/12), r=Math.round(i-f*12); return r===12?`${f+1}′0″`:`${f}′${r}″`;}
+function cone(c,len){
+  const a=Math.atan2(c.aim[1]-c.y,c.aim[0]-c.x), h=c.fov*Math.PI/360;
+  const p1=[c.x+len*Math.cos(a-h),c.y+len*Math.sin(a-h)], p2=[c.x+len*Math.cos(a+h),c.y+len*Math.sin(a+h)];
+  return `M${c.x},${c.y} L${p1[0].toFixed(1)},${p1[1].toFixed(1)} L${p2[0].toFixed(1)},${p2[1].toFixed(1)} Z`;
+}
+function renderPlace(){
+  const showFov=$('#tFov').checked, showBeam=$('#tBeam').checked;
+  let g='';
+  // grid
+  g+=`<rect x="0" y="0" width="120" height="120" fill="var(--room)" stroke="var(--line)" stroke-width="0.8"/>`;
+  for(let i=12;i<120;i+=12) g+=`<line x1="${i}" y1="0" x2="${i}" y2="120" stroke="var(--line)" stroke-width="0.25"/><line x1="0" y1="${i}" x2="120" y2="${i}" stroke="var(--line)" stroke-width="0.25"/>`;
+  // walls and labels
+  g+=`<rect x="0" y="0" width="120" height="3.2" fill="var(--wall)"/>`;
+  for(let i=2;i<120;i+=2.4) g+=`<line x1="${i}" y1="0" x2="${i}" y2="3.2" stroke="var(--room)" stroke-width="0.35"/>`;
+  g+=`<text x="60" y="-6" text-anchor="middle" class="lbl">BACK WALL · SLAT, FRENCH ROAST</text>`;
+  g+=`<rect x="31.5" y="3.4" width="57" height="2" fill="var(--fg)" opacity=".75"/><text x="60" y="10.5" text-anchor="middle" class="lbl">SERIF 65</text>`;
+  g+=`<text x="60" y="130" text-anchor="middle" class="lbl">FRONT · CAMERAS</text><text x="-6" y="60" text-anchor="middle" class="lbl" transform="rotate(-90 -6 60)">10 FT</text>`;
+  g+=`<path d="M4,120 A30,30 0 0 1 34,90" fill="none" stroke="var(--muted)" stroke-width="0.5" stroke-dasharray="1.5 1.5"/><line x1="4" y1="120" x2="4" y2="90" stroke="var(--muted)" stroke-width="0.7"/><text x="17" y="117" class="lbl">DOOR</text>`;
+  // camera cones
+  if(showFov) for(const c of CAMS) g+=`<path d="${cone(c,c.id==='CAM1'?130:110)}" fill="var(--fg)" opacity=".05" stroke="var(--muted)" stroke-width=".3" stroke-dasharray="1 1.4" clip-path="url(#roomClip)"/>`;
+  // rug, table, furniture
+  g+=`<rect x="30" y="72" width="70" height="34" rx="2" fill="none" stroke="var(--muted)" stroke-width=".4" stroke-dasharray="2 1.5"/>`;
+  g+=`<rect x="50" y="36" width="58" height="34" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="50" y="36" width="58" height="9" rx="4" fill="var(--line)" opacity=".7"/><text x="79" y="66" text-anchor="middle" class="lbl">COUCH</text>`;
+  g+=`<g transform="rotate(-28 24 60)"><rect x="8" y="44" width="32" height="32" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="8" y="44" width="32" height="8" rx="4" fill="var(--line)" opacity=".7"/></g><text x="24" y="82" text-anchor="middle" class="lbl">ARMCHAIR</text>`;
+  g+=`<circle cx="57" cy="86" r="10" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/>`;
+  // faces
+  for(const [k,f] of Object.entries(FACES)) g+=`<circle cx="${f[0]}" cy="${f[1]}" r="3.4" fill="var(--fg)"/><text x="${f[0]}" y="${f[1]-5}" text-anchor="middle" class="lblb">${k}</text>`;
+  // fixtures
+  const fx=(role,inner)=>`<g class="fx ${hlRole===role?'hl':''}" data-fx="${role}" style="color:var(--rc)" data-role="${role}">${inner}</g>`;
+  const beam=(f,tgt)=>showBeam&&tgt?`<line x1="${f.x}" y1="${f.y}" x2="${tgt[0]}" y2="${tgt[1]}" stroke="currentColor" stroke-width=".7" stroke-dasharray="2 1.2" opacity=".8"/>`:'';
+  const k1=FIX.K1,k2=FIX.K2,F=FIX.F,R=FIX.R;
+  g+=fx('K1',`${beam(k1,FACES.H1)}<circle cx="${k1.x}" cy="${k1.y}" r="13" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${k1.x}" y="${k1.y+3}" text-anchor="middle" class="lblb">K1</text>`);
+  g+=fx('K2',`${beam(k2,FACES.H3)}${showBeam?`<line x1="${k2.x}" y1="${k2.y}" x2="${FACES.H2[0]}" y2="${FACES.H2[1]}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2" opacity=".6"/>`:''}<circle cx="${k2.x}" cy="${k2.y}" r="13" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${k2.x}" y="${k2.y+3}" text-anchor="middle" class="lblb">K2</text>`);
+  g+=fx('F',`${beam(F,FACES.H2)}<path d="M${F.x-15},${F.y+4} L${F.x-11},${F.y-6} L${F.x+11},${F.y-6} L${F.x+15},${F.y+4} Z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${F.x}" y="${F.y+1.5}" text-anchor="middle" class="lblb">F</text>`);
+  g+=fx('R',`<line x1="116" y1="6" x2="${R.x+24}" y2="${R.y}" stroke="currentColor" stroke-width="1"/><circle cx="116" cy="6" r="2.2" fill="currentColor"/><rect x="${R.x-24}" y="${R.y-4}" width="48" height="8" rx="1.5" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1"/><text x="${R.x}" y="${R.y+2.6}" text-anchor="middle" class="lblb">R</text>${showBeam?`<line x1="${R.x-12}" y1="${R.y+4}" x2="${FACES.H2[0]}" y2="${FACES.H2[1]-3}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2"/><line x1="${R.x+8}" y1="${R.y+4}" x2="${FACES.H3[0]}" y2="${FACES.H3[1]-3}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2"/>`:''}`);
+  g+=fx('BG',`<rect x="10" y="6" width="24" height="2.6" rx="1.3" fill="currentColor"/><rect x="86" y="6" width="24" height="2.6" rx="1.3" fill="currentColor"/><text x="22" y="14" text-anchor="middle" class="lblb">BG</text><text x="98" y="14" text-anchor="middle" class="lblb">BG</text>`);
+  g+=fx('AC',`<rect x="3.5" y="3.4" width="3" height="5" fill="currentColor"/><rect x="113.5" y="3.4" width="3" height="5" fill="currentColor"/><line x1="1.2" y1="12" x2="1.2" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><line x1="118.8" y1="12" x2="118.8" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><circle cx="8" cy="30" r="3.5" fill="currentColor" fill-opacity=".5" stroke="currentColor"/><text x="8" y="38" text-anchor="middle" class="lbl">LAMP</text>`);
+  // cameras
+  for(const c of CAMS){ const a=Math.atan2(c.aim[1]-c.y,c.aim[0]-c.x)*180/Math.PI;
+    g+=`<g transform="translate(${c.x} ${c.y}) rotate(${a.toFixed(1)})"><rect x="-4" y="-3.2" width="7" height="6.4" rx="1" fill="var(--accent)"/><rect x="3" y="-2" width="3" height="4" fill="var(--accent)"/></g><text x="${c.x}" y="${c.y+(c.y>108?-6:9)}" text-anchor="middle" class="lblb" style="fill:var(--accent)">${c.id}</text>`;}
+  // scale
+  g+=`<line x1="0" y1="146" x2="24" y2="146" stroke="var(--muted)" stroke-width=".6"/><line x1="0" y1="144" x2="0" y2="148" stroke="var(--muted)" stroke-width=".6"/><line x1="24" y1="144" x2="24" y2="148" stroke="var(--muted)" stroke-width=".6"/><text x="28" y="148" class="lbl">2 FT</text>`;
+  const svg=$('#planSvg');
+  svg.innerHTML=`<defs><clipPath id="roomClip"><rect x="0" y="0" width="120" height="120"/></clipPath></defs>`+g;
+  svg.classList.toggle('dimmed',!!hlRole);
+  $('#legend').innerHTML=ROLES.filter(r=>r.id!=='SK').map(r=>`<button data-role="${r.id}" data-hl="${r.id}" class="${hlRole===r.id?'on':''}">${roleChip(r.id)}</button>`).join('');
+  // table
+  $('#placeTable').innerHTML=ROLES.filter(r=>FIX[r.id]).map(r=>{const f=FIX[r.id], o=optById(S.sel[r.id]);
+    const names=o.lines.filter(([p])=>!['kf','ras280','sb','sr5321','sr3757','power'].includes(p)).map(([p,q])=>(q>1?q+'× ':'')+P[p].n).join(' + ');
+    const d=f.aim?ftin(dist3([f.x,f.y,f.z],FACES[f.aim])):'—';
+    return `<tr><td>${roleChip(r.id)}</td><td>${esc(names)} ${tierBadge(o.tier)}</td><td>${esc(f.where)}</td><td class="num">${f.z?f.z+' in':''}</td><td>${esc(f.tilt)}</td><td class="num">${d}</td><td class="mono">${esc(o.out||'')}</td></tr>`;}).join('');
+  const det=hlRole?ROLES.find(r=>r.id===hlRole):null;
+  $('#placeDetail').innerHTML=det?`${roleChip(det.id)}<p style="margin-top:6px">${esc(det.job)}</p>${FIX[det.id]?`<p class="mono" style="margin-top:6px;font-size:12px">${esc(FIX[det.id].where)} · ${FIX[det.id].z} in high · ${esc(FIX[det.id].tilt)}</p>`:''}`:
+    'Seats: H1 armchair (guest), H2 and H3 couch (host and second host). Cameras sit at 48 in. CAM2 shoots the armchair from front-right and CAM3 shoots the couch from front-left, so the singles cross.';
+}
+
+/* ---------- camera ---------- */
+const MODES={
+  show:{name:'Show', lede:'Default for every episode. Matches the RØDECaster Video at 1080p 29.97, and CAM2 and CAM3 record 4K internally for vertical clips.'},
+  p60:{name:'60p reels', lede:'For a separate reels or slow-motion session. Every RØDECaster Video input must run the same rate, so do not mix 60p into a 29.97 show.'},
+  vert:{name:'Native vertical', lede:'A ZV-E10 II turned 90° on an L-bracket records 2160×3840 with no crop. Use it for solo, teleprompter and ad reads. For shows, cropping 9:16 from the 4K singles is enough.'},
+};
+let mode='show';
+function camRows(){
+  const k=S.kelvin, m=mode;
+  const rate=m==='p60'?'NTSC · 60p (59.94)':'NTSC · 30p (29.97)';
+  const sh=m==='p60'?'1/125':'1/60';
+  const zvFile=m==='p60'?'XAVC S 4K 60p (check the crop) or HD 60p':m==='vert'?'XAVC S 4K 30p, body rotated, 2160×3840':'XAVC S 4K 30p 100M 4:2:2 10-bit';
+  return [
+    ['Region and rate', rate, m==='p60'?'NTSC · 60p (59.94)':'NTSC · 30p (29.97)', 'In Sony\'s NTSC menu "30p" is 29.97. Every input has to match the switcher.'],
+    ['Internal file', zvFile, m==='p60'?'XAVC S HD 60p 50M':'XAVC S HD 30p 50M (no 4K)', 'The 4K files are for vertical crops and re-framing in the edit.'],
+    ['HDMI out', '1080p, info display off', '1080p, info display off, CTRL FOR HDMI off', 'Confirm on rig day that 1080p HDMI keeps running while 4K records internally.'],
+    ['Shutter', sh, sh, m==='p60'?'Double the frame rate needs double the shutter speed, so one stop less light reaches the sensor.':'180° shutter: natural motion blur.'],
+    ['Aperture', 'f/2.0', 'f/2.8', 'The wide needs depth across all three seats. The singles get softer backgrounds.'],
+    ['ISO (fixed)', m==='p60'?'400':'200', m==='p60'?'800':'400', 'f/2.0 at ISO 200 and f/2.8 at ISO 400 give the same exposure, so all three cameras match under one light level.'],
+    ['White balance', `${k}K, tint 0`, `${k}K, tint 0`, 'Same Kelvin as every face light. Never auto.'],
+    ['Look', 'Creative Look ST, Picture Profile off', 'Creative Style Standard, sharpness −1', 'Ready for air with no grade. Sharpness −1 stops moiré on the slats.'],
+    ['Focus', 'AF-C, Human, eye on', 'AF once, then MF, centre area', 'The wide stays put. The singles follow the face.'],
+    ['Exposure aid', 'Zebra 70', 'Zebra 70', 'Forehead highlights just touching 70 means skin is right.'],
+    ['Stabilisation', 'Off', 'SteadyShot off', 'Locked off on tripods.'],
+    ['Power', 'USB-C PD, Power Save off', 'NP-FW50 dummy + AC-PW20, Power Save 30 min', 'Shows run past battery life.'],
+    ['Record', 'Press REC on each body at the start', 'Never press record (HDMI only)', 'Clap on camera to sync the 4K files.'],
+    ['Audio', 'Off', 'Off', 'Sound comes from the RØDECaster Pro II.'],
+  ];
+}
+function renderCamera(){
+  const cams=[
+    {id:'CAM1', t:'Wide · three-shot', b:'a6000 + Sigma 16mm f/1.4', s:'Centre, behind the table, 48 in. f/2.8. HDMI 1. Carries the teleprompter.', n:'Proposed move: the a6000 shoots the wide because it cannot record 4K.'},
+    {id:'CAM2', t:'Single · armchair', b:'ZV-E10 II + Sigma 30mm f/1.4', s:'Front-right, crossed onto H1, 48 in. f/2.0. HDMI 2. 4K internal.', n:''},
+    {id:'CAM3', t:'Single · couch', b:'ZV-E10 II + Sigma 30mm f/1.4', s:'Front-left, crossed onto H2 and H3, 48 in. f/2.0. HDMI 3. 4K internal.', n:''},
+    {id:'CAM4', t:'Remote and screens', b:'Mac HDMI out', s:'Riverside guests and screen shares. HDMI 4 (approved Oct 20).', n:''},
+  ];
+  $('#camcards').innerHTML=cams.map(c=>`<div class="cam"><span class="id">${c.id}</span><b>${esc(c.t)}</b><span class="mono" style="font-size:12.5px">${esc(c.b)}</span><span class="note">${esc(c.s)}</span>${c.n?`<span class="warnline">${esc(c.n)}</span>`:''}</div>`).join('');
+  $('#modeSegs').innerHTML=Object.entries(MODES).map(([k,v])=>`<button data-mode="${k}" class="${mode===k?'on':''}">${esc(v.name)}</button>`).join('');
+  $('#modeTitle').textContent=MODES[mode].name; $('#modeLede').textContent=MODES[mode].lede;
+  $('#camTable').innerHTML=camRows().map(r=>`<tr><td><b>${esc(r[0])}</b></td><td class="mono" style="font-size:13px">${esc(r[1])}</td><td class="mono" style="font-size:13px">${esc(r[2])}</td><td class="note">${esc(r[3])}</td></tr>`).join('');
+  const t=currentTier(); const fill=optById(S.sel.F);
+  let eff=[];
+  if(mode==='p60'){
+    eff.push('Lighting: keys need about 600 lux at the face, or ISO doubles (singles 400, wide 800). The output ranges on the Place tab roughly double.');
+    eff.push('Flicker: dimmed LEDs can band at 1/125. Run the flicker test on rig day before any reels session.'+(fill.id==='f1'?' The owned NiceVeedi bulb fill is the most likely to flicker.':''));
+    eff.push('Files are about twice the size. The ZV-E10 II crops in at 4K 60p, so frame the singles a little looser.');
+    if(t===1) eff.push('Tier 1 SL60IID keys have the output for 60p at about 4 ft. Expect 85 to 100%.');
+  } else if(mode==='vert'){
+    eff.push('Lighting is unchanged. The rim and wall wash matter more because a vertical frame shows more wall above the head.');
+    eff.push('The camera needs an L-bracket and a second tripod position. It can\'t feed the switcher as a landscape shot.');
+  } else {
+    eff.push('4K internal runs about 45 GB an hour per body. Use V60 cards of 128 GB or more and offload after each show.');
+    eff.push('Run a 60-minute heat soak on rig day with HDMI out and internal 4K running at once.');
+  }
+  $('#modeEffects').innerHTML=eff.map(e=>`<div class="alert">${esc(e)}</div>`).join('');
+}
+
+/* ---------- run ---------- */
+const RIGDAY=[
+  ['r1','Clear the floor, place furniture: couch back 3 ft off the slat wall, armchair angled 28° toward the couch.'],
+  ['r2','Stand every light at its Place-tab position and height. Sandbag every base.'],
+  ['r3','Set every face light to the camera Kelvin, tint 0. Start at the Place-tab output levels.'],
+  ['r4','Cameras on tripods at 48 in, settings from the Camera tab. Check both key stands and the rim strip are outside the wide frame.'],
+  ['r5','Meter each face with the key only, then add fill and rim. Adjust output until the ratios on the Plan tab read true.'],
+  ['r6','Bring up the wall wash and Govee bars. Wall between the hosts sits 1 to 2 stops under the faces.'],
+  ['r7','TV on a slide. Lower its brightness until whites don\'t clip on the wide.'],
+  ['r8','Grey card match across all three cameras within 2 IRE. Save the PowerGrade.'],
+  ['r9','Flicker test: record 10 s of every light at 1/60 and 1/125.'],
+  ['r10','Heat and power soak: 60 minutes, internal 4K and HDMI out together.'],
+  ['r11','Tape seat marks on the rug. Shoot reference stills from all three cameras.'],
+  ['r12','Fill in the Rig Log below. The measured values become the house standard.'],
+];
+const PRESHOW=[
+  ['p1','Lights on before cameras','Low light made the old cameras drop to about 13.5 fps.'],
+  ['p2','Face lights at the Rig Log output, camera Kelvin, tint 0',''],
+  ['p3','Background scene set (Govee bars and wash tubes)','TN BOOKEND for TBD.TN, House Neutral for client shows'],
+  ['p4','TV slides at 01, brightness at the Rig Log value','Whites must not clip on the wide'],
+  ['p5','Seats on the tape marks, mics just out of frame',''],
+  ['p6','Exposure, ISO and white balance locked on all three bodies',''],
+  ['p7','Zebra check: forehead highlights just touching 70',''],
+  ['p8','Card space checked on CAM2 and CAM3 (45 GB per hour in 4K)',''],
+  ['p9','Press REC on CAM2 and CAM3, then start the RØDECaster Video',''],
+  ['p10','Clap on camera',''],
+  ['p11','Phones and the Studio Echo on Do Not Disturb',''],
+];
+const RIG=[
+  {id:'lux_h1', l:'Armchair face, key side', t:'Target 300 lux', u:'lux'},
+  {id:'lux_h2', l:'Couch faces, key side', t:'Target 300 lux', u:'lux'},
+  {id:'lux_fill', l:'Shadow side of faces', t:'Target 100–130 lux (−1.5 stops)', u:'lux'},
+  {id:'lux_rim', l:'Top of head, rim only', t:'Target 400 lux', u:'lux'},
+  {id:'lux_wall', l:'Slat wall between the hosts', t:'Target 75–150 lux', u:'lux'},
+  {id:'out_k', l:'Key output (K1 / K2)', t:'Starting point on the Place tab', u:'%'},
+  {id:'out_fr', l:'Fill and rim output', t:'Starting point on the Place tab', u:'%'},
+  {id:'out_bg', l:'Wash tubes and Govee level', t:'Per scene', u:'%'},
+  {id:'tv', l:'Serif 65 brightness setting', t:'Highest value with no clipping', u:''},
+  {id:'iso', l:'Final ISO (singles / wide)', t:'Planned 200 / 400', u:''},
+  {id:'ire', l:'Camera match gap', t:'2 IRE or less', u:'IRE'},
+  {id:'flicker', l:'Flicker at 1/60 and 1/125', t:'Note any light that bands', u:''},
+  {id:'hdmi4k', l:'HDMI 1080p while recording 4K', t:'Works / fails', u:''},
+  {id:'heat', l:'60-minute heat soak', t:'Pass / overheat at minute …', u:''},
+];
+const SCENES=[
+  ['TN BOOKEND','#FF4FB8','#2F5CFF','Pink left, blue right, warm floor','40%, floor 25%'],
+  ['TN HEADLINES','#FF4FB8','#2F5CFF','Pink and blue','70%'],
+  ['TN COVER',null,null,'Three colours from the album cover (set_kit.py)','60%'],
+  ['TN MUSIC','#FF4FB8','#FF4FB8','Pink on all','55%'],
+  ['TN NEXT','#2F5CFF','#2F5CFF','Blue on all','50%'],
+  ['House Neutral','#FFC27A','#FFC27A','Warm white 2700K on all','30%'],
+  ['On Air (door)','#FF3B30','#FF3B30','Door-side Govee red (Blueprint)','100%'],
+];
+const FIXES=[
+  ['Hard shadow on the far cheek','Fill is too low or off. Raise F until the shadow side reads 1.5 stops under the key.'],
+  ['Mic arm shadow on the chin','Raise the key and move it a little further to the side. The lantern should sit higher than the mic.'],
+  ['Wall looks blocky or noisy','The wall is too dark for H.264. Raise the wash tubes, never the face lights.'],
+  ['TV whites clip on the wide','Lower TV brightness. Never lower camera exposure to fix the TV.'],
+  ['Skin is a different colour between cameras','A Kelvin or tint mismatch. Set every body and every face light to the same Kelvin, tint 0.'],
+  ['Rolling bands in the picture','LED flicker. Keep the shutter at 1/60 and raise the light\'s output rather than dimming it very low.'],
+  ['Stand or lantern edge in the wide','Slide the stand outward. The wide\'s edges cross 3.4 ft in from each side wall at the seats.'],
+  ['Hair melts into the wall','Rim too low or aimed at the face. Re-aim it at the crown and shoulders and raise it half a stop.'],
+];
+function renderRun(){
+  const mk=(list,doc,withSub)=>list.map(([id,t,sub])=>{const on=!!S.checks[doc]?.[id];
+    return `<label class="check ${on?'done':''}"><input type="checkbox" data-check="${doc}" data-id="${id}" ${on?'checked':''} ${S.canWrite?'':'disabled'}><span>${esc(t)}${withSub&&sub?`<small>${esc(sub)}</small>`:''}</span></label>`;}).join('');
+  $('#rigChecks').innerHTML=mk(RIGDAY,'rigday',false);
+  $('#preChecks').innerHTML=mk(PRESHOW,'preshow',true);
+  const rc=RIGDAY.filter(([id])=>S.checks.rigday?.[id]).length, pc=PRESHOW.filter(([id])=>S.checks.preshow?.[id]).length;
+  $('#rigProg').textContent=`${rc} of ${RIGDAY.length} done`; $('#rigBar').style.width=(rc/RIGDAY.length*100)+'%';
+  $('#preProg').textContent=`${pc} of ${PRESHOW.length}`; $('#preBar').style.width=(pc/PRESHOW.length*100)+'%';
+  renderRig();
+  $('#scenes').innerHTML=SCENES.map(([n,a,b,d,lv])=>`<tr><td><b>${esc(n)}</b></td><td>${a?`<span class="swatch" style="background:${a}"></span> <span class="swatch" style="background:${b}"></span> `:'<span class="swatch" style="background:linear-gradient(90deg,#EC6047,#E9B841,#187A62)"></span> '}${esc(d)}</td><td class="num mono">${esc(lv)}</td></tr>`).join('');
+  $('#fixes').innerHTML=FIXES.map(([p,f])=>`<tr><td style="width:38%"><b>${esc(p)}</b></td><td>${esc(f)}</td></tr>`).join('');
+}
+function renderRig(){
+  const box=$('#riglog');
+  if(!box.dataset.built){
+    box.innerHTML=RIG.map(f=>`<div class="field" id="fld-${f.id}"><label for="rig-${f.id}">${esc(f.l)}${f.u?` <span class="muted mono" style="font-size:11px">${esc(f.u)}</span>`:''}</label><span class="tgt">${esc(f.t)}</span><input id="rig-${f.id}" data-rig="${f.id}" autocomplete="off" placeholder="Not measured yet" ${S.canWrite?'':'disabled'}></div>`).join('');
+    box.dataset.built='1';
+  }
+  for(const f of RIG){ const el=$('#rig-'+f.id); const v=S.rig[f.id]?.v||'';
+    if(document.activeElement!==el) el.value=v;
+    $('#fld-'+f.id).classList.toggle('set',!!v);
+    el.disabled=!S.canWrite; }
+}
+
+/* ---------- render all ---------- */
+function renderAll(){ renderChips(); renderPlan(); renderTiers(); renderKelvin(); renderPicker(); renderSummary(); renderShop(); renderPlace(); renderCamera(); renderRun(); }
+
+/* ---------- routing ---------- */
+const TABS=['plan','buy','place','camera','run'];
+function route(){ const h=(location.hash||'').slice(1); const t=TABS.includes(h)?h:'plan';
+  for(const id of TABS){ $('#'+id).hidden=id!==t; }
+  document.querySelectorAll('nav.tabs a').forEach(a=>{ if(a.dataset.tab===t) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+}
+window.addEventListener('hashchange',()=>{route();window.scrollTo(0,0);});
+
+/* ---------- writes ---------- */
+let buildTimer=null, buildChain=Promise.resolve();
+function saveBuild(){
+  renderAll();
+  if(!S.db) return;
+  clearTimeout(buildTimer);
+  buildTimer=setTimeout(()=>{ const body={sel:{...S.sel}, kelvin:S.kelvin, by:S.uid, at:Date.now()};
+    buildChain=buildChain.then(()=>S.db.doc('build/current').set(body)).catch(writeFail); },500);
+}
+const chains={};
+function writeDoc(path,body){ if(!S.db) return; chains[path]=(chains[path]||Promise.resolve()).then(()=>S.db.doc(path).set(body)).catch(writeFail); }
+function writeFail(e){ if(e&&e.code==='invalid_argument'){ S.canWrite=false; setSync('View only. Your changes are not saved. Ask for Contributor access.'); renderAll(); } else setSync('A change did not save. Try again in a moment.'); }
+function setSync(t){ $('#sync').textContent=t; }
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-tier]'); if(t&&S.canWrite){ S.sel=tierSel(+t.dataset.tier); if(+t.dataset.tier===1) S.kelvin=5600; saveBuild(); return; }
+  const o=e.target.closest('[data-opt]'); if(o&&S.canWrite){ S.sel[o.dataset.rolePick]=o.dataset.opt; saveBuild(); return; }
+  const k=e.target.closest('[data-k]'); if(k&&S.canWrite){ S.kelvin=+k.dataset.k; saveBuild(); return; }
+  const st=e.target.closest('[data-status]'); if(st&&S.canWrite){ const id=st.dataset.status; const cur=S.status[id]?.s||'needed'; const nx=NEXT[cur];
+    S.status[id]={s:nx,at:Date.now(),by:S.uid}; renderShop(); renderPlan(); writeDoc('status/'+id,S.status[id]); return; }
+  const h=e.target.closest('[data-hl],[data-fx]'); if(h){ const r=h.dataset.hl||h.dataset.fx; hlRole=hlRole===r?null:r; renderPlace(); return; }
+  const m=e.target.closest('[data-mode]'); if(m){ mode=m.dataset.mode; renderCamera(); return; }
+  if(e.target.id==='preReset'&&S.canWrite){ S.checks.preshow={}; renderRun(); writeDoc('checks/preshow',{items:{},at:Date.now()}); }
+});
+$('#kRange').addEventListener('input',e=>{ if(!S.canWrite) return; S.kelvin=+e.target.value; saveBuild(); });
+document.addEventListener('change',e=>{
+  const c=e.target.closest('[data-check]'); if(c){ const doc=c.dataset.check; S.checks[doc]={...(S.checks[doc]||{}),[c.dataset.id]:c.checked};
+    renderRun(); renderPlan(); writeDoc('checks/'+doc,{items:S.checks[doc],at:Date.now()}); return; }
+  const r=e.target.closest('[data-rig]'); if(r){ const id=r.dataset.rig; const v=r.value.trim(); S.rig[id]={v,at:Date.now(),by:S.uid};
+    renderRig(); renderChips(); renderPlan(); writeDoc('riglog/'+id,S.rig[id]); return; }
+  if(e.target.id==='tFov'||e.target.id==='tBeam') renderPlace();
+});
+
+/* ---------- boot ---------- */
+route(); renderAll();
+(async()=>{
+  const use=n=>{try{return window.claude?.use?window.claude.use(n):Promise.resolve(null);}catch(e){return Promise.resolve(null);}};
+  const [db,user]=await Promise.all([use('db'),use('user')]);
+  if(!db){ setSync('Shared saving is off in this view. Changes stay on this screen only.'); return; }
+  S.db=db;
+  if(user){ try{ S.uid=await user.id(); const w=await user.can('data.write'); if(w===false){S.canWrite=false; renderAll();} }catch(e){} }
+  let first=true; const timer=setTimeout(()=>{ if(first) setSync('The shared build can\'t be reached yet. Showing the default Tier 2 build.'); },10000);
+  const onErr=()=>setSync('Lost the connection to the shared build. Reload the page to reconnect.');
+  db.doc('build/current').onSnapshot(s=>{
+    if(first&&!s.metadata.fromCache){ first=false; clearTimeout(timer); setSync(S.canWrite?'Shared build · changes save for everyone':'Shared build · view only'); }
+    if(s.exists){ const d=s.data(); if(!s.metadata.hasPendingWrites){ S.sel={...tierSel(2),...(d.sel||{})}; for(const r of ROLES) if(!optById(S.sel[r.id])) S.sel[r.id]=tierSel(2)[r.id]; if(d.kelvin) S.kelvin=d.kelvin; } }
+    renderAll();
+  },onErr);
+  db.collection('status').onSnapshot(q=>{ const m={}; q.docs.forEach(d=>m[d.id]=d.data()); S.status=m; renderShop(); renderPlan(); },onErr);
+  db.collection('checks').onSnapshot(q=>{ const m={}; q.docs.forEach(d=>m[d.id]=d.data().items||{}); S.checks=m; renderRun(); renderPlan(); },onErr);
+  db.collection('riglog').onSnapshot(q=>{ const m={}; q.docs.forEach(d=>m[d.id]=d.data()); S.rig=m; renderRig(); renderChips(); renderPlan(); },onErr);
+})();
+</script>
