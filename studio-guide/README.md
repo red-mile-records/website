@@ -3,8 +3,9 @@
 Source for the studio lighting and set guide, published at
 https://claude.ai/artifact/4xRxXwSDcz7S2bwNcxczri
 
-One self-contained page (`index.html`) with five stages: Plan, Buy, Place, Camera, Run.
+One self-contained page (`index.html`) with six tabs: Room today, Plan, Buy, Place, Camera, Run.
 
+- **Room today**: diagnosis of three session stills from the room, nine ranked fixes with a shared tracker (`checks/today`).
 - **Buy**: three tiers (Tier 1 fixed 5600K, Tiers 2 and 3 bi-colour) with per-role mix and match.
   Prices are CAD before GST from the Gear Scout hunt `studio-lighting-2026-10` (re-checked Oct 31 2026).
 - **Place**: to-scale top-down plan of the 10x10 ft room (armchair left of frame, couch centre and right).
