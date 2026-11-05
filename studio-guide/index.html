@@ -343,7 +343,7 @@ svg.dimmed .fx:not(.hl){opacity:.18}
   <div class="lede">
     <span class="eyebrow">Stage 2 · Buy</span>
     <h2>Pick a tier, then swap any role</h2>
-    <p>Start from a tier, then change any single role to an option from another tier. The build is shared, so everyone on the team sees the same list. Prices are CAD before 5% GST, mostly from Gear Scout's Oct 31 re-check. The shopping list shows the date each price was checked. Marketplace prices are asking prices.</p>
+    <p>Start from a tier, then change any single role to an option from another tier. The build is shared, so everyone on the team sees the same list. Prices are CAD before 5% GST. Three were verified on Nov 5 (Halo 100x, Aputure Lantern, RA-S280); the rest come from Gear Scout's Oct 31 re-check. The shopping list shows each price's date. Marketplace prices are asking prices from older listings and are marked as stale offers.</p>
   </div>
 
   <div class="tiers" id="tiers"></div>
@@ -517,23 +517,23 @@ const ROLES = [
 const P = {
   sl60iid:{n:'Godox SL60IID', d:'70 W COB, 5600K only, CRI 96, Bowens', src:'Marketplace Calgary (5 listings, $155 to $230)', kind:'mp', price:155, cct:[5600,5600], url:'https://www.facebook.com/marketplace/item/37831808123133428/', checked:'2026-10-31'},
   cb60b:{n:'Neewer CB60B', d:'70 W bi-colour COB, 2700 to 6500K, CRI 97+, Bowens, app', src:'Amazon.ca', kind:'new', price:219.99, cct:[2700,6500], url:'https://www.amazon.ca/NEEWER-Continuous-2700K-6500K-Photography-Recording/dp/B0C1CBP7LF', checked:'2026-10-31'},
-  halo100:{n:'Amaran Halo 100x', d:'100 W bi-colour COB, 2700 to 6500K, CRI 96+, Bowens, amaran app', src:'Amazon.ca', kind:'new', price:250.95, cct:[2700,6500], url:'https://www.amazon.ca/Bi-Color-Ultra-Compact-Shooting-Creators-Vloggers/dp/B0GJ481N9C', checked:'2026-10-31'},
+  halo100:{n:'Amaran Halo 100x', d:'100 W bi-colour COB, 2700 to 6500K, CRI 96+, Bowens, amaran app. $240.66 + $12.03 estimated import. Gear Scout read $250.95 on Oct 31', src:'Amazon.ca · Amazon Global Store US', kind:'new', price:252.69, cct:[2700,6500], url:'https://www.amazon.ca/Bi-Color-Ultra-Compact-Shooting-Creators-Vloggers/dp/B0GJ481N9C', checked:'2026-11-05'},
   sl60bi:{n:'Godox SL60IIBi (new in box)', d:'75 W bi-colour, 2800 to 6500K, CRI 96, Bowens, app', src:'Marketplace Calgary, one listing', kind:'mp', price:180, cct:[2800,6500], url:'https://www.facebook.com/marketplace/item/4575527462767518/', checked:'2026-10-31'},
   gvm80:{n:'GVM SD80D kit', d:'80 W bi-colour, 2700 to 7500K, CRI 97+, with stand and mini lantern', src:'Amazon.ca', kind:'new', price:189, cct:[2700,7500], url:'https://www.amazon.ca/dp/B0DXVH39MT', checked:'2026-10-31'},
   nice:{n:'NiceVeedi 20 in softbox', d:'85 W LED bulb, 3000 to 6000K, remote, stand included', src:'Owned (×4)', kind:'owned', price:0, cct:[3000,6000], url:''},
   ns26l:{n:'Neewer NS26L 26 in lantern', d:'65 cm Bowens lantern, quick release', src:'Amazon.ca', kind:'new', price:90.99, url:'https://www.amazon.ca/dp/B0CC1LMW9W', checked:'2026-10-31'},
-  aplant:{n:'Aputure Lantern 26 in', d:'66 cm Bowens lantern, skirt set, case', src:'Vistek Calgary', kind:'new', price:112.5, url:'https://www.vistek.ca/store/436544/aputure-lantern-softbox', checked:'2026-10-31'},
+  aplant:{n:'Aputure Lantern 26 in', d:'66 cm Bowens lantern, skirt set, case. Vistek webcode 436544. Gear Scout read $112.50 on Oct 31', src:'Vistek Calgary · in stock', kind:'new', price:133.5, url:'https://www.vistek.ca/store/436544/aputure-lantern-softbox', checked:'2026-11-05'},
   aplantU:{n:'Aputure Lantern (used)', d:'Lantern with bag, size not stated', src:'Marketplace Calgary', kind:'mp', price:80, url:'https://www.facebook.com/marketplace/item/1044360098511059/', checked:'2026-10-31'},
   gue80:{n:'Godox SB-GUE80 octa + grid', d:'80 cm umbrella octa, Bowens, honeycomb grid', src:'The Camera Store', kind:'new', price:76.87, url:'https://thecamerastore.com/products/copy-of-godox-sb-ue-80cm-octabox-bowens-mount', checked:'2026-10-31'},
   fs60b:{n:'Neewer FS60B', d:'Compact bi-colour COB; listing gives no CRI or wattage', src:'Marketplace Calgary', kind:'mp', price:90, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1373359324407474/', checked:'2026-10-31'},
   ms60b:{n:'Neewer MS60B', d:'65 W bi-colour, CRI 97+, Bowens, app, 2 batteries', src:'Marketplace Airdrie', kind:'mp', price:140, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1752167802766308/', checked:'2026-10-31'},
-  halo60:{n:'Amaran Halo 60x', d:'63 W bi-colour, 2700 to 6500K, CRI 96+, Bowens, amaran app', src:'Amazon.ca (ships Nov 25 to Dec 16)', kind:'new', price:169, cct:[2700,6500], url:'https://www.amazon.ca/Aputure-2700K-6500K-Bluetooth-Photography-Production/dp/B0BTTFV42Z', checked:'2026-10-31'},
+  halo60:{n:'Amaran Halo 60x', d:'63 W bi-colour, 2700 to 6500K, CRI 96+, Bowens, amaran app. Not re-verified Nov 5: the listing link redirects to an ambiguous ASIN', src:'Amazon.ca (ships Nov 25 to Dec 16)', kind:'new', price:169, cct:[2700,6500], url:'https://www.amazon.ca/Aputure-2700K-6500K-Bluetooth-Photography-Production/dp/B0BTTFV42Z', checked:'2026-10-31'},
   fw30120:{n:'Godox SB-FW30120 strip + grid', d:'30×120 cm, Bowens, grid', src:'The Camera Store', kind:'new', price:56.87, url:'https://thecamerastore.com/products/godox-30x120cm-strip-box-bowens', checked:'2026-10-31'},
   abox:{n:'Amaran Light Box 30x120 + grid', d:'30×120 cm, Bowens, grid, one-snap setup', src:'Amazon.ca', kind:'new', price:102, url:'https://www.amazon.ca/amaran-Light-Box-Quick-Setup-30x120/dp/B0DP46JKNK', checked:'2026-10-31'},
   mpcs:{n:'C-stand with boom arm', d:'146 to 320 cm, 128 cm arm, 2 grip heads', src:'Marketplace Calgary', kind:'mp', price:100, url:'https://www.facebook.com/marketplace/item/900124516024271/', checked:'2026-10-31'},
   sc172:{n:'Neewer SC172 C-stand + arm', d:'Turtle base, 83 cm arm rated 8 kg', src:'Amazon.ca', kind:'new', price:155.99, url:'https://www.amazon.ca/dp/B0CQQ97T1T', checked:'2026-10-31'},
   kf:{n:'K&F Concept 2.8 m stand', d:'Air-cushioned, 8 kg load', src:'Amazon.ca', kind:'new', price:60.99, url:'https://www.amazon.ca/dp/B0GWLP2MZV', checked:'2026-10-31'},
-  ras280:{n:'SmallRig RA-S280 stand', d:'Air-cushioned, 2.8 m, 8 kg, 2-year warranty. Gear Scout read $89.99 on Oct 31', src:'Amazon.ca · Grok read, in stock', kind:'new', price:80.99, url:'https://www.amazon.ca/SMALLRIG-Photography-Air-Cushioned-Reflector-RA-S280-3736/dp/B0B13X1Y1H', checked:'2026-11-05'},
+  ras280:{n:'SmallRig RA-S280 stand', d:'Model 3736, air-cushioned, 2.8 m, 8 kg, 2-year warranty. Gear Scout read $89.99 on Oct 31', src:'Amazon.ca · SmallRig Canada, in stock', kind:'new', price:80.99, url:'https://www.amazon.ca/SMALLRIG-Photography-Air-Cushioned-Reflector-RA-S280-3736/dp/B0B13X1Y1H', checked:'2026-11-05'},
   tl30:{n:'Godox TL30 pair', d:'2 ft RGB tubes, app. Sept 29 listing, re-check', src:'Marketplace (Studio Light Roles)', kind:'mp', price:120, cct:[2700,6500], url:'', checked:'2026-09-29'},
   tl60:{n:'Neewer TL60 RGB tube', d:'66 cm RGBWW, 2500 to 10000K, CRI 97+, app, DMX', src:'Amazon.ca', kind:'new', price:196.99, cct:[2500,10000], url:'https://www.amazon.ca/NEEWER-Photography-Handheld-Lighting-2500K-10000K/dp/B0C89Z85L2', checked:'2026-10-31'},
   pt2c:{n:'Amaran PT2c 2-light kit', d:'2 ft RGBWW pixel tubes, 2700 to 10000K, CRI 95', src:'Amazon.ca', kind:'new', price:448.5, cct:[2700,10000], url:'https://www.amazon.ca/Aputure-2-Light-to10000K-Handheld-Photography/dp/B0BR9W6DQD', checked:'2026-10-31'},
@@ -605,6 +605,7 @@ const $ = (s,r=document)=>r.querySelector(s);
 const roleChip = (id,label=true)=>{const r=ROLES.find(x=>x.id===id);return `<span class="role" data-role="${id}"><i>${id}</i>${label?esc(r.name):''}</span>`;};
 const tierBadge = t => t==='alt'?'<span class="badge alt">Swap-in</span>':t==='own'?'<span class="badge own">Owned</span>':`<span class="badge t${t}">Tier ${t}</span>`;
 function buildTotal(sel=S.sel){ let n=0; for(const r of ROLES) n+=optPrice(optById(sel[r.id])); return n; }
+function staleSplit(sel=S.sel){ let n=0; const ps=new Set(); for(const r of ROLES) for(const [p,q] of optById(sel[r.id]).lines){ if(P[p].kind==='mp') ps.add(p); else n+=P[p].price*q; } return {fresh:n, stale:ps.size}; }
 function currentTier(){ for(const t of [1,2,3]){ const s=tierSel(t); if(ROLES.every(r=>s[r.id]===S.sel[r.id])) return t; } return null; }
 
 function issues(){
@@ -674,7 +675,7 @@ function renderTiers(){
     const sel=tierSel(t), T=TIERS[t];
     const rows=ROLES.map(r=>{const o=optById(sel[r.id]); const L=lightOf(o)||P[o.lines[0][0]]; return `<li>${roleChip(r.id,false)}<span class="t">${esc(L.n)}</span></li>`;}).join('');
     return `<div class="tier ${cur===t?'on':''}"><div class="t-top"><h3>${esc(T.name)}</h3><span class="tag">${esc(T.tag)}</span></div>
-      <div class="price">${money(buildTotal(sel))}</div><p class="note">${esc(T.blurb)}</p><ul>${rows}</ul>
+      <div class="price">${money(buildTotal(sel))}</div>${(()=>{const x=staleSplit(sel); return x.stale?`<p class="note mono" style="font-size:12px">Without ${x.stale} stale Marketplace offer${x.stale>1?'s':''}: ${money(x.fresh)} (partial)</p>`:'';})()}<p class="note">${esc(T.blurb)}</p><ul>${rows}</ul>
       <button class="btn ${cur===t?'':'primary'}" data-tier="${t}" ${cur===t?'disabled':''}>${cur===t?'Current build':'Use this tier'}</button></div>`;
   }).join('');
 }
@@ -734,7 +735,7 @@ function renderShop(){
     return `<tr><td><b>${esc(pr.n)}</b><br><span class="note">${esc(pr.d)}</span></td>
       <td>${e.roles.map(r=>roleChip(r,false)).join(' ')}</td><td class="num">${e.q}</td>
       <td class="num">${own?'—':money(pr.price)}</td><td class="num">${own?'Owned':money(pr.price*e.q)}</td>
-      <td>${pr.url?`<a href="${esc(pr.url)}" target="_blank" rel="noopener">${esc(pr.src)}</a>`:esc(pr.src)}${pr.checked?`<span class="note"> · checked ${checkedLabel(pr.checked)}</span>`:''}</td>
+      <td>${pr.url?`<a href="${esc(pr.url)}" target="_blank" rel="noopener">${esc(pr.src)}</a>`:esc(pr.src)}${pr.checked?`<span class="note"> · ${pr.kind==='mp'?'stale offer, ':''}checked ${checkedLabel(pr.checked)}</span>`:''}</td>
       <td>${own?'<span class="status" data-s="rigged">Owned</span>':`<button class="status" data-s="${st}" data-status="${e.p}" ${S.canWrite?'':'disabled'}>${LABEL[st]}</button>`}</td></tr>`;}).join('');
 }
 
