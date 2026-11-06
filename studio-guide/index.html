@@ -118,11 +118,11 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
 /* role picker */
 .picker{display:grid;gap:14px}
-.prow{display:grid;grid-template-columns:230px 1fr;gap:14px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--rc);border-radius:10px;padding:14px;min-width:0}
-.prow .about{display:grid;gap:6px;align-content:start;min-width:0}
-.prow .about p{font-size:13px;color:var(--muted)}
-.opts{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;min-width:0}
-.opt{flex:0 0 230px;text-align:left;border:1px solid var(--line);background:var(--surface2);border-radius:8px;padding:11px;display:grid;gap:6px;align-content:start}
+.prow{display:grid;grid-template-columns:1fr;gap:12px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--rc);border-radius:10px;padding:14px;min-width:0}
+.prow .about{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;min-width:0}
+.prow .about p{font-size:13px;color:var(--muted);flex:1 1 280px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:10px;min-width:0}
+.opt{text-align:left;min-width:0;border:1px solid var(--line);background:var(--surface2);border-radius:8px;padding:11px;display:grid;gap:6px;align-content:start}
 .opt:hover{border-color:var(--muted)}
 .opt.on{border-color:var(--rc);box-shadow:0 0 0 1px var(--rc) inset;background:color-mix(in srgb,var(--rc) 10%,var(--surface2))}
 .opt .o-top{display:flex;justify-content:space-between;gap:6px;align-items:center}
@@ -718,7 +718,7 @@ function renderPicker(){
 function renderSummary(){
   const tot=buildTotal(), iss=issues();
   const rows=ROLES.map(r=>{const o=optById(S.sel[r.id]); const L=lightOf(o)||P[o.lines[0][0]]; const p=optPrice(o);
-    return `<div class="sumrow">${roleChip(r.id,false)}<span class="t">${esc(L.n)} ${tierBadge(o.tier)}</span><span class="num">${p?money(p):'Owned'}${hasScout(o)?' + to scout':''}</span></div>`;}).join('');
+    return `<div class="sumrow">${roleChip(r.id,false)}<span class="t">${esc(L.n)} ${tierBadge(o.tier)}</span><span class="num" style="text-align:right">${p?money(p):'Owned'}${hasScout(o)?'<br><small class="muted">+ to scout</small>':''}</span></div>`;}).join('');
   $('#summary').innerHTML=`<div><span class="eyebrow">Your build</span><h3>${currentTier()?'Tier '+currentTier():'Mixed build'}</h3></div>
     <div class="sumrows">${rows}</div>
     <div class="totals"><span>Before GST</span><span class="num">${money(tot)}</span><span>GST 5%</span><span class="num">${money(tot*0.05)}</span><span><b>Total</b></span><span class="big">${money(tot*1.05)}</span></div>
