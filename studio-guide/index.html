@@ -377,6 +377,8 @@ svg.dimmed .fx:not(.hl){opacity:.18}
   <div class="planwrap">
     <div class="svgbox" data-sx="plan"><svg id="planSvg" viewBox="-34 -30 192 186" role="img" aria-label="Top-down studio plan"></svg></div>
     <div class="panel">
+      <span class="eyebrow">Layout</span>
+      <div class="segs" id="layoutSegs"></div>
       <div class="toggles">
         <label><input type="checkbox" id="tFov" checked> Camera frames</label>
         <label><input type="checkbox" id="tBeam" checked> Light direction</label>
@@ -744,20 +746,47 @@ function renderShop(){
 }
 
 /* ---------- place ---------- */
-const FACES={H1:[22,56,44],H2:[67,52,42],H3:[91,52,42]};
-const FIX={
-  K1:{x:30,y:86,z:80,aim:'H1',where:'Front-left of the armchair, stand outside the wide frame',tilt:'Down 35°, at the armchair face'},
-  K2:{x:104,y:86,z:80,aim:'H3',where:'Front-right of the couch, stand outside the wide frame',tilt:'Down 35°, between the couch seats'},
-  F:{x:77,y:113,z:56,aim:'H2',where:'Beside CAM1, against the front wall',tilt:'Level, at the middle of the set'},
-  R:{x:86,y:30,z:94,aim:'H2',where:'Over the gap behind the couch, boom base against the right wall just in front of the shelf',tilt:'Down 60°, forward onto hair and shoulders'},
+const LAYOUTS={
+  interview:{name:'Interview · 3 seats',
+    faces:{H1:[22,56,44],H2:[67,52,42],H3:[91,52,42]},
+    fix:{
+  K1:{x:30,y:86,z:80,aim:['H1'],where:'Front-left of the armchair, stand outside the wide frame',tilt:'Down 35°, at the armchair face'},
+  K2:{x:104,y:86,z:80,aim:['H3','H2'],where:'Front-right of the couch, stand outside the wide frame',tilt:'Down 35°, between the couch seats'},
+  F:{x:77,y:113,z:56,aim:['H2'],where:'Beside CAM1, against the front wall',tilt:'Level, at the middle of the set'},
+  R:{x:86,y:30,z:94,aim:['H2','H3'],boom:[114,24],where:'Over the gap behind the couch, boom base against the right wall just in front of the shelf',tilt:'Down 60°, forward onto hair and shoulders'},
   BG:{x:60,y:5,z:2,aim:null,where:'Floor at the baseboard: one behind the armchair, one behind the couch',tilt:'Up the slats, grazing'},
   AC:{x:8,y:30,z:60,aim:null,where:'Govee bars at the wall edges (right one behind the shelf), warm lamp on the marble side table',tilt:'In frame as practicals'},
-};
-const CAMS=[
+},
+    cams:[
   {id:'CAM1',x:60,y:112,aim:[60,50],fov:72.6,lens:'16mm'},
   {id:'CAM2',x:94,y:102,aim:[22,56],fov:42.8,lens:'30mm'},
   {id:'CAM3',x:42,y:100,aim:[79,52],fov:42.8,lens:'30mm'},
-];
+],
+    lamp:[45,38],
+    detail:'Seats: H1 armchair (guest), H2 and H3 couch (host and second host). Cameras sit at 48 in. CAM2 shoots the armchair from front-right and CAM3 shoots the couch from front-left, so the singles cross.'},
+  table:{name:'Open table · 4 seats',
+    faces:{H1:[42,40,44],H2:[33,70,44],H3:[100,44,42],H4:[100,82,42]},
+    fix:{
+      K1:{x:112,y:108,z:84,aim:['H2','H1'],where:'Front-right corner, stand against the right wall just in front of the couch arm',tilt:'Down 30°, across the table at both armchair faces'},
+      K2:{x:34,y:98,z:84,aim:['H4','H3'],where:'Front-left, in front of the front armchair and clear of the door swing',tilt:'Down 30°, across the table at both couch faces'},
+      F:{x:60,y:116,z:66,aim:['H2','H4'],where:'Above and behind CAM1, against the front wall',tilt:'Down 10°, down the middle of the table'},
+      R:{x:106,y:63,z:94,aim:['H3','H4'],boom:[114,20],vert:true,where:'Over the back of the couch, boom base in the gap between the shelf and the couch\'s back arm',tilt:'Down 60°, onto hair and shoulders of both couch seats'},
+      BG:{x:60,y:5,z:2,aim:null,where:'Floor at the baseboard either side of the TV console: one behind the back armchair, one behind the couch\'s back arm',tilt:'Up the slats, grazing'},
+      AC:{x:8,y:30,z:60,aim:null,where:'Govee bars at the wall edges (right one behind the shelf), warm lamp on the right end of the TV console',tilt:'In frame as practicals'},
+    },
+    cams:[
+      {id:'CAM1',x:60,y:114,aim:[62,62],fov:72.6,lens:'16mm'},
+      {id:'CAM2',x:100,y:114,aim:[36,56],fov:42.8,lens:'30mm'},
+      {id:'CAM3',x:38,y:112,aim:[100,64],fov:42.8,lens:'30mm'},
+    ],
+    lamp:[82,9],
+    detail:'Seats: H1 back armchair and H2 front armchair face the couch. H3 and H4 sit on the couch facing them across the table. The open end of the table points at the wide. CAM2 shoots the armchairs from front-right and CAM3 shoots the couch from front-left, so the singles cross. The armchairs sit in front of the white curtain and separate from it without a rim, so the rim strip goes over the couch, where hair meets the brown panels.'},
+};
+let layout='interview';
+try{ if(localStorage.getItem('rmsb-layout')==='table') layout='table'; }catch(e){}
+let FACES, FIX, CAMS;
+function useLayout(k){ layout=LAYOUTS[k]?k:'interview'; const L=LAYOUTS[layout]; FACES=L.faces; FIX=L.fix; CAMS=L.cams; }
+useLayout(layout);
 let hlRole=null;
 function dist3(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);}
 function ftin(i){const f=Math.floor(i/12), r=Math.round(i-f*12); return r===12?`${f+1}′0″`:`${f}′${r}″`;}
@@ -785,21 +814,32 @@ function renderPlace(){
   g+=`<path d="M0.6,14 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8" fill="none" stroke="var(--fg)" stroke-width="1.1" opacity=".55"/><text x="5" y="104" class="lbl">CURTAIN</text>`;
   g+=`<rect x="98" y="4" width="20" height="12" fill="none" stroke="var(--muted)" stroke-width=".6"/><line x1="98" y1="10" x2="118" y2="10" stroke="var(--muted)" stroke-width=".3"/><text x="108" y="21" text-anchor="middle" class="lbl">SHELF</text>`;
   g+=`<circle cx="36" cy="14" r="5" fill="none" stroke="var(--ok)" stroke-width=".6"/><text x="36" y="23" text-anchor="middle" class="lbl">PLANT</text>`;
-  g+=`<rect x="50" y="36" width="58" height="34" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="50" y="36" width="58" height="9" rx="4" fill="var(--line)" opacity=".7"/><text x="79" y="66" text-anchor="middle" class="lbl">COUCH</text>`;
-  g+=`<g transform="rotate(-28 24 60)"><rect x="8" y="44" width="32" height="32" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="8" y="44" width="32" height="8" rx="4" fill="var(--line)" opacity=".7"/></g><text x="24" y="82" text-anchor="middle" class="lbl">ARMCHAIR</text>`;
-  g+=`<circle cx="45" cy="38" r="6" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><text x="45" y="30" text-anchor="middle" class="lbl">SIDE TABLE</text>`;
+  if(layout==='table'){
+    g+=`<rect x="34" y="5" width="52" height="8" rx="1" fill="var(--furn)" stroke="var(--line)" stroke-width=".5"/><circle cx="89" cy="15" r="4" fill="none" stroke="var(--ok)" stroke-width=".6"/>`;
+    const chair=(cx,cy,rot)=>`<g transform="rotate(${rot} ${cx} ${cy})"><rect x="${cx-15}" y="${cy-15}" width="30" height="30" rx="9" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="${cx-15}" y="${cy-15}" width="8" height="30" rx="4" fill="var(--line)" opacity=".7"/></g>`;
+    g+=chair(38,38,20)+chair(28,70,0)+`<text x="3" y="88" class="lbl">ARMCHAIRS</text>`;
+    g+=`<rect x="50" y="54" width="22" height="44" rx="2" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><text x="61" y="78" text-anchor="middle" class="lbl">TABLE</text>`;
+    g+=`<rect x="84" y="24" width="32" height="76" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="108" y="24" width="8" height="76" rx="4" fill="var(--line)" opacity=".7"/><text x="92" y="65" text-anchor="middle" class="lbl" transform="rotate(90 92 65)">COUCH</text>`;
+  } else {
+    g+=`<rect x="50" y="36" width="58" height="34" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="50" y="36" width="58" height="9" rx="4" fill="var(--line)" opacity=".7"/><text x="79" y="66" text-anchor="middle" class="lbl">COUCH</text>`;
+    g+=`<g transform="rotate(-28 24 60)"><rect x="8" y="44" width="32" height="32" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="8" y="44" width="32" height="8" rx="4" fill="var(--line)" opacity=".7"/></g><text x="24" y="82" text-anchor="middle" class="lbl">ARMCHAIR</text>`;
+    g+=`<circle cx="45" cy="38" r="6" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><text x="45" y="30" text-anchor="middle" class="lbl">SIDE TABLE</text>`;
+  }
   // faces
   for(const [k,f] of Object.entries(FACES)) g+=`<circle cx="${f[0]}" cy="${f[1]}" r="3.4" fill="var(--fg)"/><text x="${f[0]}" y="${f[1]-5}" text-anchor="middle" class="lblb">${k}</text>`;
   // fixtures
   const fx=(role,inner)=>`<g class="fx ${hlRole===role?'hl':''}" data-fx="${role}" style="color:var(--rc)" data-role="${role}">${inner}</g>`;
   const beam=(f,tgt)=>showBeam&&tgt?`<line x1="${f.x}" y1="${f.y}" x2="${tgt[0]}" y2="${tgt[1]}" stroke="currentColor" stroke-width=".7" stroke-dasharray="2 1.2" opacity=".8"/>`:'';
   const k1=FIX.K1,k2=FIX.K2,F=FIX.F,R=FIX.R;
-  g+=fx('K1',`${beam(k1,FACES.H1)}<circle cx="${k1.x}" cy="${k1.y}" r="13" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${k1.x}" y="${k1.y+3}" text-anchor="middle" class="lblb">K1</text>`);
-  g+=fx('K2',`${beam(k2,FACES.H3)}${showBeam?`<line x1="${k2.x}" y1="${k2.y}" x2="${FACES.H2[0]}" y2="${FACES.H2[1]}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2" opacity=".6"/>`:''}<circle cx="${k2.x}" cy="${k2.y}" r="13" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${k2.x}" y="${k2.y+3}" text-anchor="middle" class="lblb">K2</text>`);
-  g+=fx('F',`${beam(F,FACES.H2)}<path d="M${F.x-15},${F.y+4} L${F.x-11},${F.y-6} L${F.x+11},${F.y-6} L${F.x+15},${F.y+4} Z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${F.x}" y="${F.y+1.5}" text-anchor="middle" class="lblb">F</text>`);
-  g+=fx('R',`<line x1="114" y1="24" x2="${R.x+24}" y2="${R.y}" stroke="currentColor" stroke-width="1"/><circle cx="114" cy="24" r="2.2" fill="currentColor"/><rect x="${R.x-24}" y="${R.y-4}" width="48" height="8" rx="1.5" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1"/><text x="${R.x}" y="${R.y+2.6}" text-anchor="middle" class="lblb">R</text>${showBeam?`<line x1="${R.x-12}" y1="${R.y+4}" x2="${FACES.H2[0]}" y2="${FACES.H2[1]-3}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2"/><line x1="${R.x+8}" y1="${R.y+4}" x2="${FACES.H3[0]}" y2="${FACES.H3[1]-3}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2"/>`:''}`);
+  const beams=f=>showBeam&&f.aim?f.aim.map((h,i)=>`<line x1="${f.x}" y1="${f.y}" x2="${FACES[h][0]}" y2="${FACES[h][1]}" stroke="currentColor" stroke-width="${i?.5:.7}" stroke-dasharray="2 1.2" opacity="${i?.6:.8}"/>`).join(''):'';
+  for(const [id,k] of [['K1',k1],['K2',k2]]) g+=fx(id,`${beams(k)}<circle cx="${k.x}" cy="${k.y}" r="13" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${k.x}" y="${k.y+3}" text-anchor="middle" class="lblb">${id}</text>`);
+  g+=fx('F',`${beams(F)}<path d="M${F.x-15},${F.y+4} L${F.x-11},${F.y-6} L${F.x+11},${F.y-6} L${F.x+15},${F.y+4} Z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${F.x}" y="${F.y+1.5}" text-anchor="middle" class="lblb">F</text>`);
+  const rb=R.boom, rEnd=R.vert?[R.x+4,R.y-24]:[R.x+24,R.y];
+  const rRect=R.vert?`<rect x="${R.x-4}" y="${R.y-24}" width="8" height="48" rx="1.5"`:`<rect x="${R.x-24}" y="${R.y-4}" width="48" height="8" rx="1.5"`;
+  const rBeams=showBeam?R.aim.map(h=>`<line x1="${R.x}" y1="${R.y}" x2="${FACES[h][0]}" y2="${FACES[h][1]-3}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2"/>`).join(''):'';
+  g+=fx('R',`<line x1="${rb[0]}" y1="${rb[1]}" x2="${rEnd[0]}" y2="${rEnd[1]}" stroke="currentColor" stroke-width="1"/><circle cx="${rb[0]}" cy="${rb[1]}" r="2.2" fill="currentColor"/>${rRect} fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1"/><text x="${R.x}" y="${R.y+1.5}" text-anchor="middle" class="lblb">R</text>${rBeams}`);
   g+=fx('BG',`<rect x="10" y="6" width="24" height="2.6" rx="1.3" fill="currentColor"/><rect x="86" y="6" width="24" height="2.6" rx="1.3" fill="currentColor"/><text x="22" y="14" text-anchor="middle" class="lblb">BG</text><text x="98" y="14" text-anchor="middle" class="lblb">BG</text>`);
-  g+=fx('AC',`<rect x="3.5" y="3.4" width="3" height="5" fill="currentColor"/><rect x="113.5" y="3.4" width="3" height="5" fill="currentColor"/><line x1="3" y1="12" x2="3" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><line x1="118.8" y1="12" x2="118.8" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><circle cx="45" cy="38" r="2.6" fill="currentColor" fill-opacity=".6" stroke="currentColor"/><text x="45" y="47" text-anchor="middle" class="lbl">LAMP</text>`);
+  g+=fx('AC',`<rect x="3.5" y="3.4" width="3" height="5" fill="currentColor"/><rect x="113.5" y="3.4" width="3" height="5" fill="currentColor"/><line x1="3" y1="12" x2="3" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><line x1="118.8" y1="12" x2="118.8" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><circle cx="${LAYOUTS[layout].lamp[0]}" cy="${LAYOUTS[layout].lamp[1]}" r="2.6" fill="currentColor" fill-opacity=".6" stroke="currentColor"/><text x="${LAYOUTS[layout].lamp[0]}" y="${LAYOUTS[layout].lamp[1]+9}" text-anchor="middle" class="lbl">LAMP</text>`);
   // cameras
   for(const c of CAMS){ const a=Math.atan2(c.aim[1]-c.y,c.aim[0]-c.x)*180/Math.PI;
     g+=`<g transform="translate(${c.x} ${c.y}) rotate(${a.toFixed(1)})"><rect x="-4" y="-3.2" width="7" height="6.4" rx="1" fill="var(--accent)"/><rect x="3" y="-2" width="3" height="4" fill="var(--accent)"/></g><text x="${c.x}" y="${c.y+(c.y>108?-6:9)}" text-anchor="middle" class="lblb" style="fill:var(--accent)">${c.id}</text>`;}
@@ -808,22 +848,23 @@ function renderPlace(){
   const svg=$('#planSvg');
   svg.innerHTML=`<defs><clipPath id="roomClip"><rect x="0" y="0" width="120" height="120"/></clipPath></defs>`+g;
   svg.classList.toggle('dimmed',!!hlRole);
+  $('#layoutSegs').innerHTML=Object.entries(LAYOUTS).map(([k,v])=>`<button data-layout="${k}" data-fk="layout-${k}" class="${layout===k?'on':''}">${esc(v.name)}</button>`).join('');
   $('#legend').innerHTML=ROLES.filter(r=>r.id!=='SK').map(r=>`<button data-role="${r.id}" data-hl="${r.id}" data-fk="hl-${r.id}" class="${hlRole===r.id?'on':''}">${roleChip(r.id)}</button>`).join('');
   // table
   $('#placeTable').innerHTML=ROLES.filter(r=>FIX[r.id]).map(r=>{const f=FIX[r.id], o=optById(S.sel[r.id]);
     const names=o.lines.filter(([p])=>!['kf','ras280','sb','sr5321','sr3757','power'].includes(p)).map(([p,q])=>(q>1?q+'× ':'')+P[p].n).join(' + ');
-    const d=f.aim?ftin(dist3([f.x,f.y,f.z],FACES[f.aim])):'—';
+    const d=f.aim?ftin(dist3([f.x,f.y,f.z],FACES[f.aim[0]])):'—';
     return `<tr><td>${roleChip(r.id)}</td><td>${esc(names)} ${tierBadge(o.tier)}</td><td>${esc(f.where)}</td><td class="num">${f.z?f.z+' in':''}</td><td>${esc(f.tilt)}</td><td class="num">${d}</td><td class="mono">${esc(o.out||'')}</td></tr>`;}).join('');
   const det=hlRole?ROLES.find(r=>r.id===hlRole):null;
   $('#placeDetail').innerHTML=det?`${roleChip(det.id)}<p style="margin-top:6px">${esc(det.job)}</p>${FIX[det.id]?`<p class="mono" style="margin-top:6px;font-size:12px">${esc(FIX[det.id].where)} · ${FIX[det.id].z} in high · ${esc(FIX[det.id].tilt)}</p>`:''}`:
-    'Seats: H1 armchair (guest), H2 and H3 couch (host and second host). Cameras sit at 48 in. CAM2 shoots the armchair from front-right and CAM3 shoots the couch from front-left, so the singles cross.';
+    esc(LAYOUTS[layout].detail);
 }
 
 /* ---------- camera ---------- */
 const MODES={
   show:{name:'Show', lede:'Default for every episode: every camera at 1080p 29.97 into the RØDECaster Video. No internal recording for now.'},
   p60:{name:'60p reels (future)', lede:'Not planned for now. For a separate reels or slow-motion session later. Every RØDECaster Video input must run the same rate, so do not mix 60p into a 29.97 show.'},
-  vert:{name:'Native vertical (future)', lede:'Not planned for now. A ZV-E10 II turned 90° on an L-bracket records 2160×3840 with no crop. Use it for solo, teleprompter and ad reads. For shows, cropping 9:16 from the 4K singles is enough.'},
+  vert:{name:'Native vertical (future)', lede:'Not planned for now. A ZV-E10 II turned 90° on an L-bracket records 2160×3840 with no crop. Use it for solo, teleprompter and ad reads. For shows, crop 9:16 from the singles.'},
 };
 let mode='show';
 function camRows(){
@@ -1042,6 +1083,7 @@ document.addEventListener('click',e=>{
   const st=e.target.closest('[data-status]'); if(st&&S.canWrite){ const id=st.dataset.status; const cur=S.status[id]?.s||'needed'; const nx=NEXT[cur];
     S.status[id]={s:nx,at:Date.now(),by:S.uid}; renderShop(); renderPlan(); writeDoc('status/'+id,S.status[id]); return; }
   const h=e.target.closest('[data-hl],[data-fx]'); if(h){ const r=h.dataset.hl||h.dataset.fx; hlRole=hlRole===r?null:r; renderPlace(); return; }
+  const lay=e.target.closest('[data-layout]'); if(lay){ useLayout(lay.dataset.layout); try{localStorage.setItem('rmsb-layout',layout);}catch(_){} hlRole=null; renderPlace(); return; }
   const m=e.target.closest('[data-mode]'); if(m){ mode=m.dataset.mode; renderCamera(); return; }
   if(e.target.id==='preReset'&&S.canWrite){ S.checks.preshow={}; renderRun(); writeDoc('checks/preshow',{items:{},at:Date.now()}); }
 });
