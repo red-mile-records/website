@@ -423,6 +423,8 @@ svg.dimmed .fx:not(.hl){opacity:.18}
   <div class="panel">
     <div class="rowhead"><div><span class="eyebrow">Recording mode</span><h3 id="modeTitle">Show</h3></div><div class="segs" id="modeSegs"></div></div>
     <p id="modeLede" class="note"></p>
+    <div class="rowhead"><div><span class="eyebrow">Skin tone on camera</span><h3 id="skinTitle">Fair</h3></div><div class="segs" id="skinSegs"></div></div>
+    <p id="skinLede" class="note"></p>
     <div class="tbl" data-sx="camtbl"><table><thead><tr><th>Setting</th><th>ZV-E10 II · CAM2, CAM3</th><th>a6000 · CAM1</th><th>Why</th></tr></thead><tbody id="camTable"></tbody></table></div>
     <div id="modeEffects" class="alerts"></div>
   </div>
@@ -867,8 +869,27 @@ const MODES={
   vert:{name:'Native vertical (future)', lede:'Not planned for now. A ZV-E10 II turned 90° on an L-bracket records 2160×3840 with no crop. Use it for solo, teleprompter and ad reads. For shows, crop 9:16 from the singles.'},
 };
 let mode='show';
+const SKINS={
+  fair:{name:'Fair', lede:'Light skin reflects the most light. Protect the forehead and nose from clipping.',
+    zebra:70, ire:'60–70 IRE', keyLux:300, fillStops:1.5,
+    look:['Creative Look ST, Highlights −1, Picture Profile off','Creative Style Standard, sharpness −1'],
+    lookWhy:'Highlights −1 on the singles keeps forehead shine from clipping. The wide keeps Standard.',
+    notes:['Shine shows first on fair skin. Blot foreheads and noses before the show.','Keep the lanterns\' inner diffusion in. A bare COB makes hot spots on pale skin.']},
+  medium:{name:'Medium', lede:'Olive, tan and light brown skin. Expose a little lower than fair skin so it stays rich instead of washed out.',
+    zebra:60, ire:'50–60 IRE', keyLux:300, fillStops:1.5,
+    look:['Creative Look ST, Picture Profile off','Creative Style Standard, sharpness −1'],
+    lookWhy:'Ready for air with no grade. Sharpness −1 stops moiré on the slats.',
+    notes:['Warm skin turns orange if the Kelvin drifts. Check the grey card, never the face, when matching cameras.']},
+  deep:{name:'Deep', lede:'Dark brown and deep skin reflects less light. Add light to the face rather than gain to the camera, and keep detail in the shadow side.',
+    zebra:50, ire:'40–50 IRE', keyLux:480, fillStops:1,
+    look:['Creative Look ST, Contrast −1, Shadows +1, Picture Profile off','Creative Style Standard, contrast −1, sharpness −1'],
+    lookWhy:'Lower contrast keeps detail in the shadow side of the face instead of crushing it to black.',
+    notes:['Sheen reads as white patches on deep skin. Blot before the show and keep the lanterns fully diffused.']},
+};
+let skin='fair';
+try{ const v=localStorage.getItem('rmsb-skin'); if(SKINS[v]) skin=v; }catch(e){}
 function camRows(){
-  const k=S.kelvin, m=mode;
+  const k=S.kelvin, m=mode, sk=SKINS[skin];
   const rate=m==='p60'?'NTSC · 60p (59.94)':'NTSC · 30p (29.97)';
   const sh=m==='p60'?'1/125':'1/60';
   const zvFile=m==='p60'?'XAVC S HD 60p 50M':m==='vert'?'XAVC S 4K 30p, body rotated, 2160×3840':'None for now (HDMI only). Later: XAVC S 4K 30p';
@@ -878,11 +899,12 @@ function camRows(){
     ['HDMI out', '1080p, info display off', '1080p, info display off, CTRL FOR HDMI off', 'Confirm on rig day that every input holds 1080p 29.97 for the whole show.'],
     ['Shutter', sh, sh, m==='p60'?'Double the frame rate needs double the shutter speed, so one stop less light reaches the sensor.':'180° shutter: natural motion blur.'],
     ['Aperture', 'f/2.0', 'f/2.8', 'The wide needs depth across all three seats. The singles get softer backgrounds.'],
-    ['ISO (fixed)', m==='p60'?'400':'200', m==='p60'?'800':'400', 'f/2.0 at ISO 200 and f/2.8 at ISO 400 give the same exposure, so all three cameras match under one light level.'],
+    ['ISO (fixed)', m==='p60'?'400':'200', m==='p60'?'800':'400', 'f/2.0 at ISO 200 and f/2.8 at ISO 400 give the same exposure, so all three cameras match under one light level. ISO stays put for every skin tone; the key changes instead.'],
     ['White balance', `${k}K, tint 0`, `${k}K, tint 0`, 'Same Kelvin as every face light. Never auto.'],
-    ['Look', 'Creative Look ST, Picture Profile off', 'Creative Style Standard, sharpness −1', 'Ready for air with no grade. Sharpness −1 stops moiré on the slats.'],
+    ['Look', sk.look[0], sk.look[1], sk.lookWhy],
     ['Focus', 'AF-C, Human, eye on', 'AF once, then MF, centre area', 'The wide stays put. The singles follow the face.'],
-    ['Exposure aid', 'Zebra 70', 'Zebra 70', 'Forehead highlights just touching 70 means skin is right.'],
+    ['Exposure aid', `Zebra ${sk.zebra}`, `Zebra ${sk.zebra}`, `For ${sk.name.toLowerCase()} skin, forehead highlights just touching ${sk.zebra} means skin is right.`],
+    ['Skin level', sk.ire, sk.ire, 'Where the lit cheek sits on the waveform. Check it on each single during the grey-card match.'],
     ['Stabilisation', 'Off', 'SteadyShot off', 'Locked off on tripods.'],
     ['Power', 'USB-C PD, Power Save off', 'NP-FW50 dummy + AC-PW20, Power Save 30 min', 'Shows run past battery life.'],
     ['Record', 'Never press record (HDMI only)', 'Never press record (HDMI only)', 'Recording happens on the RØDECaster Video. Clap on camera at the start.'],
@@ -899,11 +921,13 @@ function renderCamera(){
   $('#camcards').innerHTML=cams.map(c=>`<div class="cam"><span class="id">${c.id}</span><b>${esc(c.t)}</b><span class="mono" style="font-size:12.5px">${esc(c.b)}</span><span class="note">${esc(c.s)}</span>${c.n?`<span class="warnline">${esc(c.n)}</span>`:''}</div>`).join('');
   $('#modeSegs').innerHTML=Object.entries(MODES).map(([k,v])=>`<button data-mode="${k}" data-fk="mode-${k}" class="${mode===k?'on':''}">${esc(v.name)}</button>`).join('');
   $('#modeTitle').textContent=MODES[mode].name; $('#modeLede').textContent=MODES[mode].lede;
+  $('#skinSegs').innerHTML=Object.entries(SKINS).map(([k,v])=>`<button data-skin="${k}" data-fk="skin-${k}" class="${skin===k?'on':''}">${esc(v.name)}</button>`).join('');
+  const sk=SKINS[skin]; $('#skinTitle').textContent=sk.name; $('#skinLede').textContent=sk.lede;
   $('#camTable').innerHTML=camRows().map(r=>`<tr><td><b>${esc(r[0])}</b></td><td class="mono" style="font-size:13px">${esc(r[1])}</td><td class="mono" style="font-size:13px">${esc(r[2])}</td><td class="note">${esc(r[3])}</td></tr>`).join('');
   const t=currentTier(); const fill=optById(S.sel.F);
   let eff=[];
   if(mode==='p60'){
-    eff.push('Lighting: keys need about 600 lux at the face, or ISO doubles (singles 400, wide 800). The output ranges on the Place tab roughly double.');
+    eff.push(`Lighting: keys need about ${sk.keyLux*2} lux at the face, or ISO doubles (singles 400, wide 800). The output ranges on the Place tab roughly double.`);
     eff.push('Flicker: dimmed LEDs can band at 1/125. Run the flicker test on rig day before any reels session.'+(fill.id==='f1'?' The owned NiceVeedi bulb fill is the most likely to flicker.':''));
     eff.push('Files are about twice the size. Every input on the RØDECaster Video has to run 60p for that session.');
     if(t===1) eff.push('Tier 1 SL60IID keys have the output for 60p at about 4 ft. Expect 85 to 100%.');
@@ -914,7 +938,9 @@ function renderCamera(){
     eff.push('Vertical clips crop from 1080p for now, so a 9:16 single is about 608×1080 and looks soft on phones. 4K inside the ZV-E10 IIs fixes that later.');
     eff.push('Run a 60-minute power soak on rig day with all three bodies feeding HDMI.');
   }
-  $('#modeEffects').innerHTML=eff.map(e=>`<div class="alert">${esc(e)}</div>`).join('');
+  const skinEff=[`Key ${sk.keyLux} lux at the face${sk.keyLux>300?' (about 2/3 stop over the 300 lux house reference), from more key output, never more ISO, because noise lands in the shadows first':', the house reference'}. Fill ${sk.fillStops} stop${sk.fillStops>1?'s':''} under the key, about ${sk.fillStops>1?'3:1':'2:1'}${sk.fillStops<1.5?', so the shadow side keeps its detail':''}.`, ...sk.notes,
+    'Mixed panel: set each single for the person it shoots, and set its key for them. On the wide, keep the fairest forehead under its zebra and lift the deepest face with its own key, not with exposure.'];
+  $('#modeEffects').innerHTML=eff.map(e=>`<div class="alert">${esc(e)}</div>`).join('')+skinEff.map(e=>`<div class="alert good">${esc(e)}</div>`).join('');
 }
 
 /* ---------- run ---------- */
@@ -1084,6 +1110,7 @@ document.addEventListener('click',e=>{
     S.status[id]={s:nx,at:Date.now(),by:S.uid}; renderShop(); renderPlan(); writeDoc('status/'+id,S.status[id]); return; }
   const h=e.target.closest('[data-hl],[data-fx]'); if(h){ const r=h.dataset.hl||h.dataset.fx; hlRole=hlRole===r?null:r; renderPlace(); return; }
   const lay=e.target.closest('[data-layout]'); if(lay){ useLayout(lay.dataset.layout); try{localStorage.setItem('rmsb-layout',layout);}catch(_){} hlRole=null; renderPlace(); return; }
+  const sb=e.target.closest('[data-skin]'); if(sb){ skin=sb.dataset.skin; try{localStorage.setItem('rmsb-skin',skin);}catch(_){} renderCamera(); return; }
   const m=e.target.closest('[data-mode]'); if(m){ mode=m.dataset.mode; renderCamera(); return; }
   if(e.target.id==='preReset'&&S.canWrite){ S.checks.preshow={}; renderRun(); writeDoc('checks/preshow',{items:{},at:Date.now()}); }
 });
