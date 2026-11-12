@@ -118,11 +118,11 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
 /* role picker */
 .picker{display:grid;gap:14px}
-.prow{display:grid;grid-template-columns:230px 1fr;gap:14px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--rc);border-radius:10px;padding:14px;min-width:0}
-.prow .about{display:grid;gap:6px;align-content:start;min-width:0}
-.prow .about p{font-size:13px;color:var(--muted)}
-.opts{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;min-width:0}
-.opt{flex:0 0 230px;text-align:left;border:1px solid var(--line);background:var(--surface2);border-radius:8px;padding:11px;display:grid;gap:6px;align-content:start}
+.prow{display:grid;grid-template-columns:1fr;gap:12px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--rc);border-radius:10px;padding:14px;min-width:0}
+.prow .about{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;min-width:0}
+.prow .about p{font-size:13px;color:var(--muted);flex:1 1 280px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:10px;min-width:0}
+.opt{text-align:left;min-width:0;border:1px solid var(--line);background:var(--surface2);border-radius:8px;padding:11px;display:grid;gap:6px;align-content:start}
 .opt:hover{border-color:var(--muted)}
 .opt.on{border-color:var(--rc);box-shadow:0 0 0 1px var(--rc) inset;background:color-mix(in srgb,var(--rc) 10%,var(--surface2))}
 .opt .o-top{display:flex;justify-content:space-between;gap:6px;align-items:center}
@@ -343,7 +343,7 @@ svg.dimmed .fx:not(.hl){opacity:.18}
   <div class="lede">
     <span class="eyebrow">Stage 2 · Buy</span>
     <h2>Pick a tier, then swap any role</h2>
-    <p>Start from a tier, then change any single role to an option from another tier. The build is shared, so everyone on the team sees the same list. Prices are CAD before 5% GST, from Gear Scout's Oct 31 re-check. Marketplace prices are asking prices.</p>
+    <p>Start from a tier, then change any single role to an option from another tier. The build is shared, so everyone on the team sees the same list. Prices are CAD before 5% GST. Three were verified on Nov 5 (Halo 100x, Aputure Lantern, RA-S280); the rest come from Gear Scout's Oct 31 re-check. The shopping list shows each price's date. Marketplace prices are asking prices from older listings and are marked as stale offers.</p>
   </div>
 
   <div class="tiers" id="tiers"></div>
@@ -363,7 +363,7 @@ svg.dimmed .fx:not(.hl){opacity:.18}
 
   <div class="panel">
     <div class="rowhead"><div><span class="eyebrow">Shopping list</span><h3>What this build needs</h3></div><span class="note">Tap a status to move it on: Needed → Ordered → Arrived → Rigged</span></div>
-    <div class="tbl"><table><thead><tr><th>Item</th><th>For</th><th class="num">Qty</th><th class="num">Each</th><th class="num">Line</th><th>Where</th><th>Status</th></tr></thead><tbody id="shop"></tbody></table></div>
+    <div class="tbl" data-sx="shop"><table><thead><tr><th>Item</th><th>For</th><th class="num">Qty</th><th class="num">Each</th><th class="num">Line</th><th>Where</th><th>Status</th></tr></thead><tbody id="shop"></tbody></table></div>
   </div>
 </section>
 
@@ -375,8 +375,10 @@ svg.dimmed .fx:not(.hl){opacity:.18}
     <p>Top-down plan to scale (1 square = 1 ft). The back wall is the slat wall with the Serif 65. Heights are to the centre of each light. Output levels are starting points for the build you picked. Meter them on rig day and write the real values in the Run tab.</p>
   </div>
   <div class="planwrap">
-    <div class="svgbox"><svg id="planSvg" viewBox="-34 -30 192 186" role="img" aria-label="Top-down studio plan"></svg></div>
+    <div class="svgbox" data-sx="plan"><svg id="planSvg" viewBox="-34 -30 192 186" role="img" aria-label="Top-down studio plan"></svg></div>
     <div class="panel">
+      <span class="eyebrow">Layout</span>
+      <div class="segs" id="layoutSegs"></div>
       <div class="toggles">
         <label><input type="checkbox" id="tFov" checked> Camera frames</label>
         <label><input type="checkbox" id="tBeam" checked> Light direction</label>
@@ -386,7 +388,7 @@ svg.dimmed .fx:not(.hl){opacity:.18}
       <div id="placeDetail" class="note"></div>
     </div>
   </div>
-  <div class="tbl"><table><thead><tr><th>Role</th><th>Fixture in your build</th><th>Where</th><th class="num">Height</th><th>Aim</th><th class="num">To face</th><th>Start output</th></tr></thead><tbody id="placeTable"></tbody></table></div>
+  <div class="tbl" data-sx="placetbl"><table><thead><tr><th>Role</th><th>Fixture in your build</th><th>Where</th><th class="num">Height</th><th>Aim</th><th class="num">To face</th><th>Start output</th></tr></thead><tbody id="placeTable"></tbody></table></div>
   <div class="grid2">
     <div class="panel">
       <span class="eyebrow">Frame checks</span>
@@ -395,15 +397,15 @@ svg.dimmed .fx:not(.hl){opacity:.18}
         <li>The wide (CAM1, 16mm) sees about 72° across. Its edges cross 3.4 ft in from each side wall at the seats, so both key stands sit outside them.</li>
         <li>The rim strip hangs at 94 in. That leaves about 8 in to the 8.5 ft ceiling and keeps its bottom edge above the wide's top edge. Lower it only until it peeks into the wide, then back off 2 in.</li>
         <li>The shelf takes the back-right corner, so the rim boom's base sits against the right wall just in front of it, behind the couch's right arm. Check it in the wide.</li>
-        <li>CAM2's background is the left wall and the white curtain. Keep the skirt on the K1 lantern's curtain side and meter the curtain at least 1 stop under the armchair face.</li>
+        <li>CAM2's background is the left wall, where the charcoal drape replaces the white curtain. Until it is up, keep the skirt on the K1 lantern's curtain side.</li>
         <li>The wash tubes lie on the floor at the baseboard behind the armchair and couch. The furniture hides them from every camera.</li>
         <li>Tape seat marks on the rug once faces meter right. Every show then starts from the same place.</li>
       </ul>
     </div>
     <div class="panel">
       <span class="eyebrow">Mounting</span>
-      <h3>Stands now, ceiling later</h3>
-      <p>Everything here sits on stands, so nothing needs drilling. The lease needs the landlord's written approval before anything goes on the walls or ceiling. Once that's approved, moving both lanterns and the rim to ceiling clamps would free the floor and is the next upgrade.</p>
+      <h3>Ceiling approved, stands until the hardware is in</h3>
+      <p>The landlord has approved ceiling mounting in writing. Hang both lanterns and the rim from ceiling clamps with drop arms at the same positions and heights shown here. That frees the floor and takes every stand out of the wide. The hardware is on the shopping list to scout. Until it is up, use the stands.</p>
       <p class="note">Sandbag every stand base. The 10×10 room has one exit, and a lantern on a tipped stand lands on a guest.</p>
       <p class="note">Power: 3 to 4 COBs, 2 tubes and the RØDECaster share one circuit. Run lights on their own power bar and keep them off the audio power bar.</p>
     </div>
@@ -415,13 +417,15 @@ svg.dimmed .fx:not(.hl){opacity:.18}
   <div class="lede">
     <span class="eyebrow">Stage 4 · Camera</span>
     <h2>Three bodies that cut together</h2>
-    <p>Every camera runs the same Kelvin as the face lights, the same shutter and the same exposure. The RØDECaster Video switches 1080p. The two ZV-E10 II singles also record 4K inside the camera, so vertical clips are cut from 4K and stay sharp.</p>
+    <p>Every camera runs the same Kelvin as the face lights, the same shutter and the same exposure. All three run 1080p 29.97 for now into the RØDECaster Video, which switches and ISO-records each one. Recording 4K inside the two ZV-E10 IIs is the later upgrade for sharper vertical clips.</p>
   </div>
   <div class="camcards" id="camcards"></div>
   <div class="panel">
     <div class="rowhead"><div><span class="eyebrow">Recording mode</span><h3 id="modeTitle">Show</h3></div><div class="segs" id="modeSegs"></div></div>
     <p id="modeLede" class="note"></p>
-    <div class="tbl"><table><thead><tr><th>Setting</th><th>ZV-E10 II · CAM2, CAM3</th><th>a6000 · CAM1</th><th>Why</th></tr></thead><tbody id="camTable"></tbody></table></div>
+    <div class="rowhead"><div><span class="eyebrow">Skin tone on camera</span><h3 id="skinTitle">Fair</h3></div><div class="segs" id="skinSegs"></div></div>
+    <p id="skinLede" class="note"></p>
+    <div class="tbl" data-sx="camtbl"><table><thead><tr><th>Setting</th><th>ZV-E10 II · CAM2, CAM3</th><th>a6000 · CAM1</th><th>Why</th></tr></thead><tbody id="camTable"></tbody></table></div>
     <div id="modeEffects" class="alerts"></div>
   </div>
   <div class="grid2">
@@ -442,7 +446,7 @@ svg.dimmed .fx:not(.hl){opacity:.18}
       <ul class="clean">
         <li>Lens height 48 to 50 in, about seated eye level, tilted down 2 to 3°. Raising the cameras was the Oct 28 call.</li>
         <li>Head 8 to 10% from the top of frame. People inside the middle 80% of the width.</li>
-        <li>On CAM2 and CAM3, keep the face in the centre third. A 9:16 crop from 3840×2160 is 1215×2160, scaled to 1080×1920, so it stays sharp. The face has to be inside it.</li>
+        <li>On CAM2 and CAM3, keep the face in the centre third so a 9:16 crop holds it. From 1080p that crop is about 608×1080 and soft; once the ZV-E10 IIs record 4K it is 1215×2160 and sharp.</li>
         <li>Level the wide using the vertical slats as the check. Show the whole shelf on the right or frame it out. Half a shelf looks like a mistake.</li>
         <li>CAM1 carries the teleprompter for solo and ad reads.</li>
       </ul>
@@ -493,10 +497,10 @@ svg.dimmed .fx:not(.hl){opacity:.18}
     <span class="eyebrow">Wrap</span>
     <h3>Reset the room</h3>
     <ul class="clean">
-      <li>Stop the RØDECaster Video and the internal recordings on CAM2 and CAM3 before lights go down.</li>
+      <li>Stop the RØDECaster Video recording before lights go down.</li>
       <li>Face lights off from their apps. Background scene back to the house Work scene.</li>
       <li>Leave stands, sandbags and seat marks where they are. Only move what a booking needs.</li>
-      <li>Offload the 4K files and keep at least 100 GB free on STUDIOSSD. 4K runs about 45 GB an hour per camera.</li>
+      <li>Offload the RØDECaster Video files and keep at least 100 GB free on STUDIOSSD.</li>
       <li>Displays back to Red Mile branding (SOP 03).</li>
     </ul>
   </div>
@@ -515,34 +519,36 @@ const ROLES = [
   {id:'SK', name:'Shared kit', job:'Sandbags, clamps, power bars, 14 AWG cords and gaffer tape.', skin:false},
 ];
 const P = {
-  sl60iid:{n:'Godox SL60IID', d:'70 W COB, 5600K only, CRI 96, Bowens', src:'Marketplace Calgary (5 listings, $155 to $230)', kind:'mp', price:155, cct:[5600,5600], url:'https://www.facebook.com/marketplace/item/37831808123133428/'},
-  cb60b:{n:'Neewer CB60B', d:'70 W bi-colour COB, 2700 to 6500K, CRI 97+, Bowens, app', src:'Amazon.ca', kind:'new', price:219.99, cct:[2700,6500], url:'https://www.amazon.ca/NEEWER-Continuous-2700K-6500K-Photography-Recording/dp/B0C1CBP7LF'},
-  halo100:{n:'Amaran Halo 100x', d:'100 W bi-colour COB, 2700 to 6500K, CRI 96+, Bowens, amaran app', src:'Amazon.ca', kind:'new', price:250.95, cct:[2700,6500], url:'https://www.amazon.ca/Bi-Color-Ultra-Compact-Shooting-Creators-Vloggers/dp/B0GJ481N9C'},
-  sl60bi:{n:'Godox SL60IIBi (new in box)', d:'75 W bi-colour, 2800 to 6500K, CRI 96, Bowens, app', src:'Marketplace Calgary, one listing', kind:'mp', price:180, cct:[2800,6500], url:'https://www.facebook.com/marketplace/item/4575527462767518/'},
-  gvm80:{n:'GVM SD80D kit', d:'80 W bi-colour, 2700 to 7500K, CRI 97+, with stand and mini lantern', src:'Amazon.ca', kind:'new', price:189, cct:[2700,7500], url:'https://www.amazon.ca/dp/B0DXVH39MT'},
+  sl60iid:{n:'Godox SL60IID', d:'70 W COB, 5600K only, CRI 96, Bowens', src:'Marketplace Calgary (5 listings, $155 to $230)', kind:'mp', price:155, cct:[5600,5600], url:'https://www.facebook.com/marketplace/item/37831808123133428/', checked:'2026-10-31'},
+  cb60b:{n:'Neewer CB60B', d:'70 W bi-colour COB, 2700 to 6500K, CRI 97+, Bowens, app', src:'Amazon.ca', kind:'new', price:219.99, cct:[2700,6500], url:'https://www.amazon.ca/NEEWER-Continuous-2700K-6500K-Photography-Recording/dp/B0C1CBP7LF', checked:'2026-10-31'},
+  halo100:{n:'Amaran Halo 100x', d:'100 W bi-colour COB, 2700 to 6500K, CRI 96+, Bowens, amaran app. $240.66 + $12.03 estimated import. Gear Scout read $250.95 on Oct 31', src:'Amazon.ca · Amazon Global Store US', kind:'new', price:252.69, cct:[2700,6500], url:'https://www.amazon.ca/Bi-Color-Ultra-Compact-Shooting-Creators-Vloggers/dp/B0GJ481N9C', checked:'2026-11-05'},
+  sl60bi:{n:'Godox SL60IIBi (new in box)', d:'75 W bi-colour, 2800 to 6500K, CRI 96, Bowens, app', src:'Marketplace Calgary, one listing', kind:'mp', price:180, cct:[2800,6500], url:'https://www.facebook.com/marketplace/item/4575527462767518/', checked:'2026-10-31'},
+  gvm80:{n:'GVM SD80D kit', d:'80 W bi-colour, 2700 to 7500K, CRI 97+, with stand and mini lantern', src:'Amazon.ca', kind:'new', price:189, cct:[2700,7500], url:'https://www.amazon.ca/dp/B0DXVH39MT', checked:'2026-10-31'},
   nice:{n:'NiceVeedi 20 in softbox', d:'85 W LED bulb, 3000 to 6000K, remote, stand included', src:'Owned (×4)', kind:'owned', price:0, cct:[3000,6000], url:''},
-  ns26l:{n:'Neewer NS26L 26 in lantern', d:'65 cm Bowens lantern, quick release', src:'Amazon.ca', kind:'new', price:90.99, url:'https://www.amazon.ca/dp/B0CC1LMW9W'},
-  aplant:{n:'Aputure Lantern 26 in', d:'66 cm Bowens lantern, skirt set, case', src:'Vistek Calgary', kind:'new', price:112.5, url:'https://www.vistek.ca/store/436544/aputure-lantern-softbox'},
-  aplantU:{n:'Aputure Lantern (used)', d:'Lantern with bag, size not stated', src:'Marketplace Calgary', kind:'mp', price:80, url:'https://www.facebook.com/marketplace/item/1044360098511059/'},
-  gue80:{n:'Godox SB-GUE80 octa + grid', d:'80 cm umbrella octa, Bowens, honeycomb grid', src:'The Camera Store', kind:'new', price:76.87, url:'https://thecamerastore.com/products/copy-of-godox-sb-ue-80cm-octabox-bowens-mount'},
-  fs60b:{n:'Neewer FS60B', d:'Compact bi-colour COB; listing gives no CRI or wattage', src:'Marketplace Calgary', kind:'mp', price:90, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1373359324407474/'},
-  ms60b:{n:'Neewer MS60B', d:'65 W bi-colour, CRI 97+, Bowens, app, 2 batteries', src:'Marketplace Airdrie', kind:'mp', price:140, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1752167802766308/'},
-  halo60:{n:'Amaran Halo 60x', d:'63 W bi-colour, 2700 to 6500K, CRI 96+, Bowens, amaran app', src:'Amazon.ca (ships Nov 25 to Dec 16)', kind:'new', price:169, cct:[2700,6500], url:'https://www.amazon.ca/Aputure-2700K-6500K-Bluetooth-Photography-Production/dp/B0BTTFV42Z'},
-  fw30120:{n:'Godox SB-FW30120 strip + grid', d:'30×120 cm, Bowens, grid', src:'The Camera Store', kind:'new', price:56.87, url:'https://thecamerastore.com/products/godox-30x120cm-strip-box-bowens'},
-  abox:{n:'Amaran Light Box 30x120 + grid', d:'30×120 cm, Bowens, grid, one-snap setup', src:'Amazon.ca', kind:'new', price:102, url:'https://www.amazon.ca/amaran-Light-Box-Quick-Setup-30x120/dp/B0DP46JKNK'},
-  mpcs:{n:'C-stand with boom arm', d:'146 to 320 cm, 128 cm arm, 2 grip heads', src:'Marketplace Calgary', kind:'mp', price:100, url:'https://www.facebook.com/marketplace/item/900124516024271/'},
-  sc172:{n:'Neewer SC172 C-stand + arm', d:'Turtle base, 83 cm arm rated 8 kg', src:'Amazon.ca', kind:'new', price:155.99, url:'https://www.amazon.ca/dp/B0CQQ97T1T'},
-  kf:{n:'K&F Concept 2.8 m stand', d:'Air-cushioned, 8 kg load', src:'Amazon.ca', kind:'new', price:60.99, url:'https://www.amazon.ca/dp/B0GWLP2MZV'},
-  ras280:{n:'SmallRig RA-S280 stand', d:'Air-cushioned, 2.8 m, 8 kg, 2-year warranty', src:'Amazon.ca', kind:'new', price:89.99, url:'https://www.amazon.ca/SMALLRIG-Photography-Air-Cushioned-Reflector-RA-S280-3736/dp/B0B13X1'},
-  tl30:{n:'Godox TL30 pair', d:'2 ft RGB tubes, app. Sept 29 listing, re-check', src:'Marketplace (Studio Light Roles)', kind:'mp', price:120, cct:[2700,6500], url:''},
-  tl60:{n:'Neewer TL60 RGB tube', d:'66 cm RGBWW, 2500 to 10000K, CRI 97+, app, DMX', src:'Amazon.ca', kind:'new', price:196.99, cct:[2500,10000], url:'https://www.amazon.ca/NEEWER-Photography-Handheld-Lighting-2500K-10000K/dp/B0C89Z85L2'},
-  pt2c:{n:'Amaran PT2c 2-light kit', d:'2 ft RGBWW pixel tubes, 2700 to 10000K, CRI 95', src:'Amazon.ca', kind:'new', price:448.5, cct:[2700,10000], url:'https://www.amazon.ca/Aputure-2-Light-to10000K-Handheld-Photography/dp/B0BR9W6DQD'},
-  pavo:{n:'Nanlite PavoTube II 15C kit', d:'2× 2 ft RGBWW, CRI 96+, mounts and case', src:'Amazon.ca', kind:'new', price:389, cct:[2700,6500], url:'https://www.amazon.ca/NANLITE-PavoTube-RGBWW-Tube-Light/dp/B0F48GJPX1'},
+  ns26l:{n:'Neewer NS26L 26 in lantern', d:'65 cm Bowens lantern, quick release', src:'Amazon.ca', kind:'new', price:90.99, url:'https://www.amazon.ca/dp/B0CC1LMW9W', checked:'2026-10-31'},
+  aplant:{n:'Aputure Lantern 26 in', d:'66 cm Bowens lantern, skirt set, case. Vistek webcode 436544. Gear Scout read $112.50 on Oct 31', src:'Vistek Calgary · in stock', kind:'new', price:133.5, url:'https://www.vistek.ca/store/436544/aputure-lantern-softbox', checked:'2026-11-05'},
+  aplantU:{n:'Aputure Lantern (used)', d:'Lantern with bag, size not stated', src:'Marketplace Calgary', kind:'mp', price:80, url:'https://www.facebook.com/marketplace/item/1044360098511059/', checked:'2026-10-31'},
+  gue80:{n:'Godox SB-GUE80 octa + grid', d:'80 cm umbrella octa, Bowens, honeycomb grid', src:'The Camera Store', kind:'new', price:76.87, url:'https://thecamerastore.com/products/copy-of-godox-sb-ue-80cm-octabox-bowens-mount', checked:'2026-10-31'},
+  fs60b:{n:'Neewer FS60B', d:'Compact bi-colour COB; listing gives no CRI or wattage', src:'Marketplace Calgary', kind:'mp', price:90, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1373359324407474/', checked:'2026-10-31'},
+  ms60b:{n:'Neewer MS60B', d:'65 W bi-colour, CRI 97+, Bowens, app, 2 batteries', src:'Marketplace Airdrie', kind:'mp', price:140, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1752167802766308/', checked:'2026-10-31'},
+  halo60:{n:'Amaran Halo 60x', d:'63 W bi-colour, 2700 to 6500K, CRI 96+, Bowens, amaran app. Not re-verified Nov 5: the listing link redirects to an ambiguous ASIN', src:'Amazon.ca (ships Nov 25 to Dec 16)', kind:'new', price:169, cct:[2700,6500], url:'https://www.amazon.ca/Aputure-2700K-6500K-Bluetooth-Photography-Production/dp/B0BTTFV42Z', checked:'2026-10-31'},
+  fw30120:{n:'Godox SB-FW30120 strip + grid', d:'30×120 cm, Bowens, grid', src:'The Camera Store', kind:'new', price:56.87, url:'https://thecamerastore.com/products/godox-30x120cm-strip-box-bowens', checked:'2026-10-31'},
+  abox:{n:'Amaran Light Box 30x120 + grid', d:'30×120 cm, Bowens, grid, one-snap setup', src:'Amazon.ca', kind:'new', price:102, url:'https://www.amazon.ca/amaran-Light-Box-Quick-Setup-30x120/dp/B0DP46JKNK', checked:'2026-10-31'},
+  mpcs:{n:'C-stand with boom arm', d:'146 to 320 cm, 128 cm arm, 2 grip heads', src:'Marketplace Calgary', kind:'mp', price:100, url:'https://www.facebook.com/marketplace/item/900124516024271/', checked:'2026-10-31'},
+  sc172:{n:'Neewer SC172 C-stand + arm', d:'Turtle base, 83 cm arm rated 8 kg', src:'Amazon.ca', kind:'new', price:155.99, url:'https://www.amazon.ca/dp/B0CQQ97T1T', checked:'2026-10-31'},
+  kf:{n:'K&F Concept 2.8 m stand', d:'Air-cushioned, 8 kg load', src:'Amazon.ca', kind:'new', price:60.99, url:'https://www.amazon.ca/dp/B0GWLP2MZV', checked:'2026-10-31'},
+  ras280:{n:'SmallRig RA-S280 stand', d:'Model 3736, air-cushioned, 2.8 m, 8 kg, 2-year warranty. Gear Scout read $89.99 on Oct 31', src:'Amazon.ca · SmallRig Canada, in stock', kind:'new', price:80.99, url:'https://www.amazon.ca/SMALLRIG-Photography-Air-Cushioned-Reflector-RA-S280-3736/dp/B0B13X1Y1H', checked:'2026-11-05'},
+  tl30:{n:'Godox TL30 pair', d:'2 ft RGB tubes, app. Sept 29 listing, re-check', src:'Marketplace (Studio Light Roles)', kind:'mp', price:120, cct:[2700,6500], url:'', checked:'2026-09-29'},
+  tl60:{n:'Neewer TL60 RGB tube', d:'66 cm RGBWW, 2500 to 10000K, CRI 97+, app, DMX', src:'Amazon.ca', kind:'new', price:196.99, cct:[2500,10000], url:'https://www.amazon.ca/NEEWER-Photography-Handheld-Lighting-2500K-10000K/dp/B0C89Z85L2', checked:'2026-10-31'},
+  pt2c:{n:'Amaran PT2c 2-light kit', d:'2 ft RGBWW pixel tubes, 2700 to 10000K, CRI 95', src:'Amazon.ca', kind:'new', price:448.5, cct:[2700,10000], url:'https://www.amazon.ca/Aputure-2-Light-to10000K-Handheld-Photography/dp/B0BR9W6DQD', checked:'2026-10-31'},
+  pavo:{n:'Nanlite PavoTube II 15C kit', d:'2× 2 ft RGBWW, CRI 96+, mounts and case', src:'Amazon.ca', kind:'new', price:389, cct:[2700,6500], url:'https://www.amazon.ca/NANLITE-PavoTube-RGBWW-Tube-Light/dp/B0F48GJPX1', checked:'2026-10-31'},
   govee:{n:'Govee bars + floor strips', d:'Left and right wall bars, side-wall floor strips', src:'Owned', kind:'owned', price:0, url:''},
   lamp:{n:'Practical table lamp', d:'Warm 2700K bulb, on the marble side table in the wide', src:'Owned', kind:'owned', price:0, url:''},
-  sb:{n:'Neewer SB-BL4 sandbags ×4', d:'9 kg each, ship empty', src:'Amazon.ca', kind:'new', price:35.99, url:'https://www.amazon.ca/Neewer%C2%AE-Photographic-Sandbag-Studio-Stands/dp/B00LIRRLBU'},
-  sr5321:{n:'SmallRig 5321 mini clamp 2-pack', d:'Dual ball heads, 1.5 kg each', src:'Amazon.ca', kind:'new', price:39.99, url:'https://www.amazon.ca/dp/B0F18P1LQ3'},
-  sr3757:{n:'SmallRig 3757B crab clamp', d:'Ball-head arm, 3.5 kg', src:'Amazon.ca', kind:'new', price:26.99, url:'https://www.amazon.ca/SmallRig-Ballhead-Crab-Shaped-Threaded-Stabilizer/dp/B0B5LFC6L3'},
+  sb:{n:'Neewer SB-BL4 sandbags ×4', d:'9 kg each, ship empty', src:'Amazon.ca', kind:'new', price:35.99, url:'https://www.amazon.ca/Neewer%C2%AE-Photographic-Sandbag-Studio-Stands/dp/B00LIRRLBU', checked:'2026-10-31'},
+  sr5321:{n:'SmallRig 5321 mini clamp 2-pack', d:'Dual ball heads, 1.5 kg each', src:'Amazon.ca', kind:'new', price:39.99, url:'https://www.amazon.ca/dp/B0F18P1LQ3', checked:'2026-10-31'},
+  sr3757:{n:'SmallRig 3757B crab clamp', d:'Ball-head arm, 3.5 kg', src:'Amazon.ca', kind:'new', price:26.99, url:'https://www.amazon.ca/SmallRig-Ballhead-Crab-Shaped-Threaded-Stabilizer/dp/B0B5LFC6L3', checked:'2026-10-31'},
+  drape:{n:'Charcoal drape, left wall', d:'Replaces the white curtain behind the armchair. Decided Nov 6. Size and model to scout', src:'To scout', kind:'scout', price:0, url:''},
+  ceil:{n:'Ceiling mounts for K1, K2 and rim', d:'Landlord approved in writing. Clamps and drop arms to scout; stands stay until they are up', src:'To scout', kind:'scout', price:0, url:''},
   power:{n:'Power kit (estimate)', d:'2× 1080J power bars, 2× 14 AWG cords, gaffer tape', src:'Estimate from Studio Light Roles', kind:'est', price:116, url:''},
 };
 const OPTS = {
@@ -570,12 +576,12 @@ const OPTS = {
     {id:'ba', tier:'alt', lines:[['pavo',1]], out:'20–35%'},
   ],
   AC:[
-    {id:'a0', tier:'own', own:true, lines:[['govee',1],['lamp',1]], out:'Per scene'},
+    {id:'a0', tier:'own', own:true, lines:[['govee',1],['lamp',1],['drape',1]], out:'Per scene', note:'The charcoal drape is still to scout and price.'},
   ],
   SK:[
-    {id:'s1', tier:1, lines:[['sb',1],['sr5321',1],['power',1]]},
-    {id:'s2', tier:2, lines:[['sb',1],['sr5321',2],['power',1]]},
-    {id:'s3', tier:3, lines:[['sb',1],['sr3757',4],['power',1]]},
+    {id:'s1', tier:1, lines:[['sb',1],['sr5321',1],['power',1],['ceil',1]]},
+    {id:'s2', tier:2, lines:[['sb',1],['sr5321',2],['power',1],['ceil',1]]},
+    {id:'s3', tier:3, lines:[['sb',1],['sr3757',4],['power',1],['ceil',1]]},
   ],
 };
 const optKey = r => (r==='K1'||r==='K2') ? 'K' : r;
@@ -598,6 +604,7 @@ function tierSel(t){
 const S = { sel:tierSel(2), kelvin:4500, status:{}, checks:{}, rig:{}, db:null, uid:null, canWrite:true };
 const optById = id => { for(const k in OPTS){const o=OPTS[k].find(x=>x.id===id); if(o) return o;} return null; };
 const optPrice = o => o.lines.reduce((a,[p,q])=>a+P[p].price*q,0);
+const hasScout = o => o.lines.some(([p])=>P[p].kind==='scout');
 const lightOf = o => { const l=o.lines.find(([p])=>P[p].cct); return l?P[l[0]]:null; };
 const money = n => '$'+n.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
 const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -605,6 +612,7 @@ const $ = (s,r=document)=>r.querySelector(s);
 const roleChip = (id,label=true)=>{const r=ROLES.find(x=>x.id===id);return `<span class="role" data-role="${id}"><i>${id}</i>${label?esc(r.name):''}</span>`;};
 const tierBadge = t => t==='alt'?'<span class="badge alt">Swap-in</span>':t==='own'?'<span class="badge own">Owned</span>':`<span class="badge t${t}">Tier ${t}</span>`;
 function buildTotal(sel=S.sel){ let n=0; for(const r of ROLES) n+=optPrice(optById(sel[r.id])); return n; }
+function staleSplit(sel=S.sel){ let n=0; const ps=new Set(); for(const r of ROLES) for(const [p,q] of optById(sel[r.id]).lines){ if(P[p].kind==='mp') ps.add(p); else n+=P[p].price*q; } return {fresh:n, stale:ps.size}; }
 function currentTier(){ for(const t of [1,2,3]){ const s=tierSel(t); if(ROLES.every(r=>s[r.id]===S.sel[r.id])) return t; } return null; }
 
 function issues(){
@@ -653,16 +661,16 @@ function renderPlan(){
   const D=[
     ['Settled','Three tiers plus mix-and-match. Tier 1 fixed 5600K, tiers 2 and 3 bi-colour.'],
     ['Settled','House frame rate 29.97. Sony\'s "30p" in NTSC mode is 29.97, so the old 30 vs 29.97 conflict is one setting.'],
-    ['Settled','RØDECaster Video switches 1080p. CAM2 and CAM3 also record 4K internally for vertical clips.'],
+    ['Settled','All three cameras run 1080p 29.97 for now, switched and ISO-recorded on the RØDECaster Video. 4K inside the ZV-E10 IIs is the later upgrade for sharper vertical clips.'],
     ['Settled','Armchair left of frame, couch centre and right. Nancy-style interview.'],
     ['Settled','Owned NiceVeedi softboxes ×4 stay as Tier 1 fill and spares.'],
     ['Settled','Room confirmed from session stills: white curtain on the left wall, black shelf with books and LED in the back-right corner, plant back-left, marble side table between the seats, grey armchair, brown leather tufted couch.'],
-    ['Proposed','Move the a6000 to the wide (CAM1). It cannot record 4K, and the wide is the shot cropped least for vertical clips.'],
-    ['Open','Lens count: this plan needs 2× Sigma 30mm and 1× Sigma 16mm. Confirm what is owned.'],
-    ['Open','Exact Govee bar and strip models.'],
-    ['Open','Landlord approval for ceiling mounts (lease needs written approval).'],
-    ['Open','Whether to shoot 60p reels sessions (see Camera tab, 60p mode).'],
-    ['Open','Keep the white curtain or swap it for a charcoal or deep-blue drape (not priced yet).'],
+    ['Settled','The a6000 shoots the wide (CAM1). The two ZV-E10 IIs take the singles.'],
+    ['Settled','Lenses owned: 2× Sigma 30mm f/1.4 for the singles, 1× Sigma 16mm f/1.4 for the wide.'],
+    ['Settled','Landlord approved ceiling mounting in writing. Keys and rim move to ceiling clamps once the hardware is scouted.'],
+    ['Settled','No 60p reels sessions for now. The 60p mode stays on the Camera tab as a future option.'],
+    ['Settled','Swap the white curtain for a charcoal drape. To scout and price.'],
+    ['Open','Exact Govee bar and strip models. Check the device list in the Govee Home app.'],
   ];
   $('#decisions').innerHTML=D.map(([s,t])=>`<tr><td><span class="status" data-s="${s==='Settled'?'rigged':s==='Proposed'?'arrived':'ordered'}">${s}</span></td><td>${esc(t)}</td></tr>`).join('');
 }
@@ -674,8 +682,8 @@ function renderTiers(){
     const sel=tierSel(t), T=TIERS[t];
     const rows=ROLES.map(r=>{const o=optById(sel[r.id]); const L=lightOf(o)||P[o.lines[0][0]]; return `<li>${roleChip(r.id,false)}<span class="t">${esc(L.n)}</span></li>`;}).join('');
     return `<div class="tier ${cur===t?'on':''}"><div class="t-top"><h3>${esc(T.name)}</h3><span class="tag">${esc(T.tag)}</span></div>
-      <div class="price">${money(buildTotal(sel))}</div><p class="note">${esc(T.blurb)}</p><ul>${rows}</ul>
-      <button class="btn ${cur===t?'':'primary'}" data-tier="${t}" ${cur===t?'disabled':''}>${cur===t?'Current build':'Use this tier'}</button></div>`;
+      <div class="price">${money(buildTotal(sel))}</div>${(()=>{const x=staleSplit(sel); return x.stale?`<p class="note mono" style="font-size:12px">Without ${x.stale} stale Marketplace offer${x.stale>1?'s':''}: ${money(x.fresh)} (partial)</p>`:'';})()}<p class="note">${esc(T.blurb)}</p><ul>${rows}</ul>
+      <button class="btn ${cur===t?'':'primary'}" data-tier="${t}" data-fk="tier-${t}" ${cur===t?'disabled':''}>${cur===t?'Current build':'Use this tier'}</button></div>`;
   }).join('');
 }
 function renderKelvin(){
@@ -687,7 +695,7 @@ function renderKelvin(){
     spans+=`<span class="span" data-role="${r.id}" style="left:${pct(a)}%;width:${Math.max(1.2,pct(b)-pct(a))}%;bottom:${-10-i*6}px"></span>`; i++; }
   $('#kbar').innerHTML=`<span class="mark" style="left:${pct(k)}%"></span>`+spans;
   $('#kbar').style.marginBottom=(i*6+8)+'px';
-  $('#kPresets').innerHTML=[3200,4000,4500,5000,5600].map(v=>`<button data-k="${v}" class="${v===k?'on':''}">${v}K</button>`).join('');
+  $('#kPresets').innerHTML=[3200,4000,4500,5000,5600].map(v=>`<button data-k="${v}" data-fk="k-${v}" class="${v===k?'on':''}">${v}K</button>`).join('');
   const bad=issues().filter(x=>x.text.includes("can't reach"));
   $('#kNote').innerHTML=bad.length?`<span class="warnline">${bad.length} face light${bad.length>1?'s':''} can't reach ${k}K. The coloured bars under the strip show each face light's range.</span>`:`<span class="okline">Every face light in this build can run at ${k}K. The coloured bars show each light's range.</span>`;
 }
@@ -698,21 +706,21 @@ function renderPicker(){
       const L=lightOf(o); const on=S.sel[r.id]===o.id;
       const bad=r.skin&&L&&(S.kelvin<L.cct[0]||S.kelvin>L.cct[1]);
       const lines=o.lines.map(([p,q])=>`${q>1?q+'× ':''}${esc(P[p].n)}`).join('<br>');
-      return `<button class="opt ${on?'on':''}" data-role-pick="${r.id}" data-opt="${o.id}" aria-pressed="${on}">
+      return `<button class="opt ${on?'on':''}" data-role-pick="${r.id}" data-opt="${o.id}" data-fk="opt-${r.id}-${o.id}" aria-pressed="${on}">
         <div class="o-top">${tierBadge(o.tier)}${on?'<span class="badge" style="border-color:var(--rc);color:var(--rc)">Picked</span>':''}</div>
         <div class="lines">${lines}</div>
         ${L&&r.skin?`<div class="note mono" style="font-size:11.5px">${L.cct[0]===L.cct[1]?L.cct[0]+'K fixed':L.cct[0]+'–'+L.cct[1]+'K'}</div>`:''}
         ${bad?`<div class="warnline">Can't reach ${S.kelvin}K</div>`:''}
         ${o.note?`<div class="note" style="font-size:12px">${esc(o.note)}</div>`:''}
-        <div class="o-foot"><span>${optPrice(o)?money(optPrice(o)):'Owned'}</span><span class="muted" style="font-size:11px">${o.out?esc(o.out):''}</span></div>
+        <div class="o-foot"><span>${optPrice(o)?money(optPrice(o)):'Owned'}${hasScout(o)?' + to scout':''}</span><span class="muted" style="font-size:11px">${o.out?esc(o.out):''}</span></div>
       </button>`;}).join('');
-    return `<div class="prow" data-role="${r.id}"><div class="about">${roleChip(r.id)}<p>${esc(r.job)}</p></div><div class="opts">${cards}</div></div>`;
+    return `<div class="prow" data-role="${r.id}"><div class="about">${roleChip(r.id)}<p>${esc(r.job)}</p></div><div class="opts" data-sx="opts-${r.id}">${cards}</div></div>`;
   }).join('');
 }
 function renderSummary(){
   const tot=buildTotal(), iss=issues();
   const rows=ROLES.map(r=>{const o=optById(S.sel[r.id]); const L=lightOf(o)||P[o.lines[0][0]]; const p=optPrice(o);
-    return `<div class="sumrow">${roleChip(r.id,false)}<span class="t">${esc(L.n)} ${tierBadge(o.tier)}</span><span class="num">${p?money(p):'Owned'}</span></div>`;}).join('');
+    return `<div class="sumrow">${roleChip(r.id,false)}<span class="t">${esc(L.n)} ${tierBadge(o.tier)}</span><span class="num" style="text-align:right">${p?money(p):'Owned'}${hasScout(o)?'<br><small class="muted">+ to scout</small>':''}</span></div>`;}).join('');
   $('#summary').innerHTML=`<div><span class="eyebrow">Your build</span><h3>${currentTier()?'Tier '+currentTier():'Mixed build'}</h3></div>
     <div class="sumrows">${rows}</div>
     <div class="totals"><span>Before GST</span><span class="num">${money(tot)}</span><span>GST 5%</span><span class="num">${money(tot*0.05)}</span><span><b>Total</b></span><span class="big">${money(tot*1.05)}</span></div>
@@ -723,35 +731,64 @@ function shopLines(){
   const m=new Map();
   for(const r of ROLES){ const o=optById(S.sel[r.id]);
     for(const [p,q] of o.lines){ const e=m.get(p)||{p,q:0,roles:[]}; e.q+=q; if(!e.roles.includes(r.id)) e.roles.push(r.id); m.set(p,e);} }
-  return [...m.values()].sort((a,b)=>(P[a.p].kind==='owned')-(P[b.p].kind==='owned')||P[b.p].price*b.q-P[a.p].price*a.q);
+  const rank=k=>k==='owned'?2:k==='scout'?1:0;
+  return [...m.values()].sort((a,b)=>rank(P[a.p].kind)-rank(P[b.p].kind)||P[b.p].price*b.q-P[a.p].price*a.q);
 }
 const NEXT={needed:'ordered',ordered:'arrived',arrived:'rigged',rigged:'needed'};
 const LABEL={needed:'Needed',ordered:'Ordered',arrived:'Arrived',rigged:'Rigged'};
+const checkedLabel = d => { const [y,m,dd]=d.split('-').map(Number); return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1]+' '+dd; };
 function renderShop(){
   $('#shop').innerHTML=shopLines().map(e=>{const pr=P[e.p]; const own=pr.kind==='owned';
     const st=own?'rigged':(S.status[e.p]?.s||'needed');
     return `<tr><td><b>${esc(pr.n)}</b><br><span class="note">${esc(pr.d)}</span></td>
       <td>${e.roles.map(r=>roleChip(r,false)).join(' ')}</td><td class="num">${e.q}</td>
-      <td class="num">${own?'—':money(pr.price)}</td><td class="num">${own?'Owned':money(pr.price*e.q)}</td>
-      <td>${pr.url?`<a href="${esc(pr.url)}" target="_blank" rel="noopener">${esc(pr.src)}</a>`:esc(pr.src)}</td>
-      <td>${own?'<span class="status" data-s="rigged">Owned</span>':`<button class="status" data-s="${st}" data-status="${e.p}" ${S.canWrite?'':'disabled'}>${LABEL[st]}</button>`}</td></tr>`;}).join('');
+      <td class="num">${own||pr.kind==='scout'?'—':money(pr.price)}</td><td class="num">${own?'Owned':pr.kind==='scout'?'To scout':money(pr.price*e.q)}</td>
+      <td>${pr.url?`<a href="${esc(pr.url)}" target="_blank" rel="noopener">${esc(pr.src)}</a>`:esc(pr.src)}${pr.checked?`<span class="note"> · ${pr.kind==='mp'?'stale offer, ':''}checked ${checkedLabel(pr.checked)}</span>`:''}</td>
+      <td>${own?'<span class="status" data-s="rigged">Owned</span>':`<button class="status" data-s="${st}" data-status="${e.p}" data-fk="st-${e.p}" ${S.canWrite?'':'disabled'}>${LABEL[st]}</button>`}</td></tr>`;}).join('');
 }
 
 /* ---------- place ---------- */
-const FACES={H1:[22,56,44],H2:[67,52,42],H3:[91,52,42]};
-const FIX={
-  K1:{x:30,y:86,z:80,aim:'H1',where:'Front-left of the armchair, stand outside the wide frame',tilt:'Down 35°, at the armchair face'},
-  K2:{x:104,y:86,z:80,aim:'H3',where:'Front-right of the couch, stand outside the wide frame',tilt:'Down 35°, between the couch seats'},
-  F:{x:77,y:113,z:56,aim:'H2',where:'Beside CAM1, against the front wall',tilt:'Level, at the middle of the set'},
-  R:{x:86,y:30,z:94,aim:'H2',where:'Over the gap behind the couch, boom base against the right wall just in front of the shelf',tilt:'Down 60°, forward onto hair and shoulders'},
+const LAYOUTS={
+  interview:{name:'Interview · 3 seats',
+    faces:{H1:[22,56,44],H2:[67,52,42],H3:[91,52,42]},
+    fix:{
+  K1:{x:30,y:86,z:80,aim:['H1'],where:'Front-left of the armchair, stand outside the wide frame',tilt:'Down 35°, at the armchair face'},
+  K2:{x:104,y:86,z:80,aim:['H3','H2'],where:'Front-right of the couch, stand outside the wide frame',tilt:'Down 35°, between the couch seats'},
+  F:{x:77,y:113,z:56,aim:['H2'],where:'Beside CAM1, against the front wall',tilt:'Level, at the middle of the set'},
+  R:{x:86,y:30,z:94,aim:['H2','H3'],boom:[114,24],where:'Over the gap behind the couch, boom base against the right wall just in front of the shelf',tilt:'Down 60°, forward onto hair and shoulders'},
   BG:{x:60,y:5,z:2,aim:null,where:'Floor at the baseboard: one behind the armchair, one behind the couch',tilt:'Up the slats, grazing'},
   AC:{x:8,y:30,z:60,aim:null,where:'Govee bars at the wall edges (right one behind the shelf), warm lamp on the marble side table',tilt:'In frame as practicals'},
-};
-const CAMS=[
+},
+    cams:[
   {id:'CAM1',x:60,y:112,aim:[60,50],fov:72.6,lens:'16mm'},
   {id:'CAM2',x:94,y:102,aim:[22,56],fov:42.8,lens:'30mm'},
   {id:'CAM3',x:42,y:100,aim:[79,52],fov:42.8,lens:'30mm'},
-];
+],
+    lamp:[45,38],
+    detail:'Seats: H1 armchair (guest), H2 and H3 couch (host and second host). Cameras sit at 48 in. CAM2 shoots the armchair from front-right and CAM3 shoots the couch from front-left, so the singles cross.'},
+  table:{name:'Open table · 4 seats',
+    faces:{H1:[42,40,44],H2:[33,70,44],H3:[100,44,42],H4:[100,82,42]},
+    fix:{
+      K1:{x:112,y:108,z:84,aim:['H2','H1'],where:'Front-right corner, stand against the right wall just in front of the couch arm',tilt:'Down 30°, across the table at both armchair faces'},
+      K2:{x:34,y:98,z:84,aim:['H4','H3'],where:'Front-left, in front of the front armchair and clear of the door swing',tilt:'Down 30°, across the table at both couch faces'},
+      F:{x:60,y:116,z:66,aim:['H2','H4'],where:'Above and behind CAM1, against the front wall',tilt:'Down 10°, down the middle of the table'},
+      R:{x:106,y:63,z:94,aim:['H3','H4'],boom:[114,20],vert:true,where:'Over the back of the couch, boom base in the gap between the shelf and the couch\'s back arm',tilt:'Down 60°, onto hair and shoulders of both couch seats'},
+      BG:{x:60,y:5,z:2,aim:null,where:'Floor at the baseboard either side of the TV console: one behind the back armchair, one behind the couch\'s back arm',tilt:'Up the slats, grazing'},
+      AC:{x:8,y:30,z:60,aim:null,where:'Govee bars at the wall edges (right one behind the shelf), warm lamp on the right end of the TV console',tilt:'In frame as practicals'},
+    },
+    cams:[
+      {id:'CAM1',x:60,y:114,aim:[62,62],fov:72.6,lens:'16mm'},
+      {id:'CAM2',x:100,y:114,aim:[36,56],fov:42.8,lens:'30mm'},
+      {id:'CAM3',x:38,y:112,aim:[100,64],fov:42.8,lens:'30mm'},
+    ],
+    lamp:[82,9],
+    detail:'Seats: H1 back armchair and H2 front armchair face the couch. H3 and H4 sit on the couch facing them across the table. The open end of the table points at the wide. CAM2 shoots the armchairs from front-right and CAM3 shoots the couch from front-left, so the singles cross. The armchairs sit in front of the left wall (the white curtain until the charcoal drape goes up) and separate from it without a rim, so the rim strip goes over the couch, where hair meets the brown panels.'},
+};
+let layout='interview';
+try{ if(localStorage.getItem('rmsb-layout')==='table') layout='table'; }catch(e){}
+let FACES, FIX, CAMS;
+function useLayout(k){ layout=LAYOUTS[k]?k:'interview'; const L=LAYOUTS[layout]; FACES=L.faces; FIX=L.fix; CAMS=L.cams; }
+useLayout(layout);
 let hlRole=null;
 function dist3(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);}
 function ftin(i){const f=Math.floor(i/12), r=Math.round(i-f*12); return r===12?`${f+1}′0″`:`${f}′${r}″`;}
@@ -779,21 +816,32 @@ function renderPlace(){
   g+=`<path d="M0.6,14 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8" fill="none" stroke="var(--fg)" stroke-width="1.1" opacity=".55"/><text x="5" y="104" class="lbl">CURTAIN</text>`;
   g+=`<rect x="98" y="4" width="20" height="12" fill="none" stroke="var(--muted)" stroke-width=".6"/><line x1="98" y1="10" x2="118" y2="10" stroke="var(--muted)" stroke-width=".3"/><text x="108" y="21" text-anchor="middle" class="lbl">SHELF</text>`;
   g+=`<circle cx="36" cy="14" r="5" fill="none" stroke="var(--ok)" stroke-width=".6"/><text x="36" y="23" text-anchor="middle" class="lbl">PLANT</text>`;
-  g+=`<rect x="50" y="36" width="58" height="34" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="50" y="36" width="58" height="9" rx="4" fill="var(--line)" opacity=".7"/><text x="79" y="66" text-anchor="middle" class="lbl">COUCH</text>`;
-  g+=`<g transform="rotate(-28 24 60)"><rect x="8" y="44" width="32" height="32" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="8" y="44" width="32" height="8" rx="4" fill="var(--line)" opacity=".7"/></g><text x="24" y="82" text-anchor="middle" class="lbl">ARMCHAIR</text>`;
-  g+=`<circle cx="45" cy="38" r="6" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><text x="45" y="30" text-anchor="middle" class="lbl">SIDE TABLE</text>`;
+  if(layout==='table'){
+    g+=`<rect x="34" y="5" width="52" height="8" rx="1" fill="var(--furn)" stroke="var(--line)" stroke-width=".5"/><circle cx="89" cy="15" r="4" fill="none" stroke="var(--ok)" stroke-width=".6"/>`;
+    const chair=(cx,cy,rot)=>`<g transform="rotate(${rot} ${cx} ${cy})"><rect x="${cx-15}" y="${cy-15}" width="30" height="30" rx="9" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="${cx-15}" y="${cy-15}" width="8" height="30" rx="4" fill="var(--line)" opacity=".7"/></g>`;
+    g+=chair(38,38,20)+chair(28,70,0)+`<text x="3" y="88" class="lbl">ARMCHAIRS</text>`;
+    g+=`<rect x="50" y="54" width="22" height="44" rx="2" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><text x="61" y="78" text-anchor="middle" class="lbl">TABLE</text>`;
+    g+=`<rect x="84" y="24" width="32" height="76" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="108" y="24" width="8" height="76" rx="4" fill="var(--line)" opacity=".7"/><text x="92" y="65" text-anchor="middle" class="lbl" transform="rotate(90 92 65)">COUCH</text>`;
+  } else {
+    g+=`<rect x="50" y="36" width="58" height="34" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="50" y="36" width="58" height="9" rx="4" fill="var(--line)" opacity=".7"/><text x="79" y="66" text-anchor="middle" class="lbl">COUCH</text>`;
+    g+=`<g transform="rotate(-28 24 60)"><rect x="8" y="44" width="32" height="32" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="8" y="44" width="32" height="8" rx="4" fill="var(--line)" opacity=".7"/></g><text x="24" y="82" text-anchor="middle" class="lbl">ARMCHAIR</text>`;
+    g+=`<circle cx="45" cy="38" r="6" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><text x="45" y="30" text-anchor="middle" class="lbl">SIDE TABLE</text>`;
+  }
   // faces
   for(const [k,f] of Object.entries(FACES)) g+=`<circle cx="${f[0]}" cy="${f[1]}" r="3.4" fill="var(--fg)"/><text x="${f[0]}" y="${f[1]-5}" text-anchor="middle" class="lblb">${k}</text>`;
   // fixtures
   const fx=(role,inner)=>`<g class="fx ${hlRole===role?'hl':''}" data-fx="${role}" style="color:var(--rc)" data-role="${role}">${inner}</g>`;
   const beam=(f,tgt)=>showBeam&&tgt?`<line x1="${f.x}" y1="${f.y}" x2="${tgt[0]}" y2="${tgt[1]}" stroke="currentColor" stroke-width=".7" stroke-dasharray="2 1.2" opacity=".8"/>`:'';
   const k1=FIX.K1,k2=FIX.K2,F=FIX.F,R=FIX.R;
-  g+=fx('K1',`${beam(k1,FACES.H1)}<circle cx="${k1.x}" cy="${k1.y}" r="13" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${k1.x}" y="${k1.y+3}" text-anchor="middle" class="lblb">K1</text>`);
-  g+=fx('K2',`${beam(k2,FACES.H3)}${showBeam?`<line x1="${k2.x}" y1="${k2.y}" x2="${FACES.H2[0]}" y2="${FACES.H2[1]}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2" opacity=".6"/>`:''}<circle cx="${k2.x}" cy="${k2.y}" r="13" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${k2.x}" y="${k2.y+3}" text-anchor="middle" class="lblb">K2</text>`);
-  g+=fx('F',`${beam(F,FACES.H2)}<path d="M${F.x-15},${F.y+4} L${F.x-11},${F.y-6} L${F.x+11},${F.y-6} L${F.x+15},${F.y+4} Z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${F.x}" y="${F.y+1.5}" text-anchor="middle" class="lblb">F</text>`);
-  g+=fx('R',`<line x1="114" y1="24" x2="${R.x+24}" y2="${R.y}" stroke="currentColor" stroke-width="1"/><circle cx="114" cy="24" r="2.2" fill="currentColor"/><rect x="${R.x-24}" y="${R.y-4}" width="48" height="8" rx="1.5" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1"/><text x="${R.x}" y="${R.y+2.6}" text-anchor="middle" class="lblb">R</text>${showBeam?`<line x1="${R.x-12}" y1="${R.y+4}" x2="${FACES.H2[0]}" y2="${FACES.H2[1]-3}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2"/><line x1="${R.x+8}" y1="${R.y+4}" x2="${FACES.H3[0]}" y2="${FACES.H3[1]-3}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2"/>`:''}`);
+  const beams=f=>showBeam&&f.aim?f.aim.map((h,i)=>`<line x1="${f.x}" y1="${f.y}" x2="${FACES[h][0]}" y2="${FACES[h][1]}" stroke="currentColor" stroke-width="${i?.5:.7}" stroke-dasharray="2 1.2" opacity="${i?.6:.8}"/>`).join(''):'';
+  for(const [id,k] of [['K1',k1],['K2',k2]]) g+=fx(id,`${beams(k)}<circle cx="${k.x}" cy="${k.y}" r="13" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${k.x}" y="${k.y+3}" text-anchor="middle" class="lblb">${id}</text>`);
+  g+=fx('F',`${beams(F)}<path d="M${F.x-15},${F.y+4} L${F.x-11},${F.y-6} L${F.x+11},${F.y-6} L${F.x+15},${F.y+4} Z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${F.x}" y="${F.y+1.5}" text-anchor="middle" class="lblb">F</text>`);
+  const rb=R.boom, rEnd=R.vert?[R.x+4,R.y-24]:[R.x+24,R.y];
+  const rRect=R.vert?`<rect x="${R.x-4}" y="${R.y-24}" width="8" height="48" rx="1.5"`:`<rect x="${R.x-24}" y="${R.y-4}" width="48" height="8" rx="1.5"`;
+  const rBeams=showBeam?R.aim.map(h=>`<line x1="${R.x}" y1="${R.y}" x2="${FACES[h][0]}" y2="${FACES[h][1]-3}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2"/>`).join(''):'';
+  g+=fx('R',`<line x1="${rb[0]}" y1="${rb[1]}" x2="${rEnd[0]}" y2="${rEnd[1]}" stroke="currentColor" stroke-width="1"/><circle cx="${rb[0]}" cy="${rb[1]}" r="2.2" fill="currentColor"/>${rRect} fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1"/><text x="${R.x}" y="${R.y+1.5}" text-anchor="middle" class="lblb">R</text>${rBeams}`);
   g+=fx('BG',`<rect x="10" y="6" width="24" height="2.6" rx="1.3" fill="currentColor"/><rect x="86" y="6" width="24" height="2.6" rx="1.3" fill="currentColor"/><text x="22" y="14" text-anchor="middle" class="lblb">BG</text><text x="98" y="14" text-anchor="middle" class="lblb">BG</text>`);
-  g+=fx('AC',`<rect x="3.5" y="3.4" width="3" height="5" fill="currentColor"/><rect x="113.5" y="3.4" width="3" height="5" fill="currentColor"/><line x1="3" y1="12" x2="3" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><line x1="118.8" y1="12" x2="118.8" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><circle cx="45" cy="38" r="2.6" fill="currentColor" fill-opacity=".6" stroke="currentColor"/><text x="45" y="47" text-anchor="middle" class="lbl">LAMP</text>`);
+  g+=fx('AC',`<rect x="3.5" y="3.4" width="3" height="5" fill="currentColor"/><rect x="113.5" y="3.4" width="3" height="5" fill="currentColor"/><line x1="3" y1="12" x2="3" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><line x1="118.8" y1="12" x2="118.8" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><circle cx="${LAYOUTS[layout].lamp[0]}" cy="${LAYOUTS[layout].lamp[1]}" r="2.6" fill="currentColor" fill-opacity=".6" stroke="currentColor"/><text x="${LAYOUTS[layout].lamp[0]}" y="${LAYOUTS[layout].lamp[1]+9}" text-anchor="middle" class="lbl">LAMP</text>`);
   // cameras
   for(const c of CAMS){ const a=Math.atan2(c.aim[1]-c.y,c.aim[0]-c.x)*180/Math.PI;
     g+=`<g transform="translate(${c.x} ${c.y}) rotate(${a.toFixed(1)})"><rect x="-4" y="-3.2" width="7" height="6.4" rx="1" fill="var(--accent)"/><rect x="3" y="-2" width="3" height="4" fill="var(--accent)"/></g><text x="${c.x}" y="${c.y+(c.y>108?-6:9)}" text-anchor="middle" class="lblb" style="fill:var(--accent)">${c.id}</text>`;}
@@ -802,72 +850,97 @@ function renderPlace(){
   const svg=$('#planSvg');
   svg.innerHTML=`<defs><clipPath id="roomClip"><rect x="0" y="0" width="120" height="120"/></clipPath></defs>`+g;
   svg.classList.toggle('dimmed',!!hlRole);
-  $('#legend').innerHTML=ROLES.filter(r=>r.id!=='SK').map(r=>`<button data-role="${r.id}" data-hl="${r.id}" class="${hlRole===r.id?'on':''}">${roleChip(r.id)}</button>`).join('');
+  $('#layoutSegs').innerHTML=Object.entries(LAYOUTS).map(([k,v])=>`<button data-layout="${k}" data-fk="layout-${k}" class="${layout===k?'on':''}">${esc(v.name)}</button>`).join('');
+  $('#legend').innerHTML=ROLES.filter(r=>r.id!=='SK').map(r=>`<button data-role="${r.id}" data-hl="${r.id}" data-fk="hl-${r.id}" class="${hlRole===r.id?'on':''}">${roleChip(r.id)}</button>`).join('');
   // table
   $('#placeTable').innerHTML=ROLES.filter(r=>FIX[r.id]).map(r=>{const f=FIX[r.id], o=optById(S.sel[r.id]);
     const names=o.lines.filter(([p])=>!['kf','ras280','sb','sr5321','sr3757','power'].includes(p)).map(([p,q])=>(q>1?q+'× ':'')+P[p].n).join(' + ');
-    const d=f.aim?ftin(dist3([f.x,f.y,f.z],FACES[f.aim])):'—';
+    const d=f.aim?ftin(dist3([f.x,f.y,f.z],FACES[f.aim[0]])):'—';
     return `<tr><td>${roleChip(r.id)}</td><td>${esc(names)} ${tierBadge(o.tier)}</td><td>${esc(f.where)}</td><td class="num">${f.z?f.z+' in':''}</td><td>${esc(f.tilt)}</td><td class="num">${d}</td><td class="mono">${esc(o.out||'')}</td></tr>`;}).join('');
   const det=hlRole?ROLES.find(r=>r.id===hlRole):null;
   $('#placeDetail').innerHTML=det?`${roleChip(det.id)}<p style="margin-top:6px">${esc(det.job)}</p>${FIX[det.id]?`<p class="mono" style="margin-top:6px;font-size:12px">${esc(FIX[det.id].where)} · ${FIX[det.id].z} in high · ${esc(FIX[det.id].tilt)}</p>`:''}`:
-    'Seats: H1 armchair (guest), H2 and H3 couch (host and second host). Cameras sit at 48 in. CAM2 shoots the armchair from front-right and CAM3 shoots the couch from front-left, so the singles cross.';
+    esc(LAYOUTS[layout].detail);
 }
 
 /* ---------- camera ---------- */
 const MODES={
-  show:{name:'Show', lede:'Default for every episode. Matches the RØDECaster Video at 1080p 29.97, and CAM2 and CAM3 record 4K internally for vertical clips.'},
-  p60:{name:'60p reels', lede:'For a separate reels or slow-motion session. Every RØDECaster Video input must run the same rate, so do not mix 60p into a 29.97 show.'},
-  vert:{name:'Native vertical', lede:'A ZV-E10 II turned 90° on an L-bracket records 2160×3840 with no crop. Use it for solo, teleprompter and ad reads. For shows, cropping 9:16 from the 4K singles is enough.'},
+  show:{name:'Show', lede:'Default for every episode: every camera at 1080p 29.97 into the RØDECaster Video. No internal recording for now.'},
+  p60:{name:'60p reels (future)', lede:'Not planned for now. For a separate reels or slow-motion session later. Every RØDECaster Video input must run the same rate, so do not mix 60p into a 29.97 show.'},
+  vert:{name:'Native vertical (future)', lede:'Not planned for now. A ZV-E10 II turned 90° on an L-bracket records 2160×3840 with no crop. Use it for solo, teleprompter and ad reads. For shows, crop 9:16 from the singles.'},
 };
 let mode='show';
+const SKINS={
+  fair:{name:'Fair', lede:'Light skin reflects the most light. Protect the forehead and nose from clipping.',
+    zebra:70, ire:'60–70 IRE', keyLux:300, fillStops:1.5,
+    look:['Creative Look ST, Highlights −1, Picture Profile off','Creative Style Standard, sharpness −1'],
+    lookWhy:'Highlights −1 on the singles keeps forehead shine from clipping. The wide keeps Standard.',
+    notes:['Shine shows first on fair skin. Blot foreheads and noses before the show.','Keep the lanterns\' inner diffusion in. A bare COB makes hot spots on pale skin.']},
+  medium:{name:'Medium', lede:'Olive, tan and light brown skin. Expose a little lower than fair skin so it stays rich instead of washed out.',
+    zebra:60, ire:'50–60 IRE', keyLux:300, fillStops:1.5,
+    look:['Creative Look ST, Picture Profile off','Creative Style Standard, sharpness −1'],
+    lookWhy:'Ready for air with no grade. Sharpness −1 stops moiré on the slats.',
+    notes:['Warm skin turns orange if the Kelvin drifts. Check the grey card, never the face, when matching cameras.']},
+  deep:{name:'Deep', lede:'Dark brown and deep skin reflects less light. Add light to the face rather than gain to the camera, and keep detail in the shadow side.',
+    zebra:50, ire:'40–50 IRE', keyLux:480, fillStops:1,
+    look:['Creative Look ST, Contrast −1, Shadows +1, Picture Profile off','Creative Style Standard, contrast −1, sharpness −1'],
+    lookWhy:'Lower contrast keeps detail in the shadow side of the face instead of crushing it to black.',
+    notes:['Sheen reads as white patches on deep skin. Blot before the show and keep the lanterns fully diffused.']},
+};
+let skin='fair';
+try{ const v=localStorage.getItem('rmsb-skin'); if(SKINS[v]) skin=v; }catch(e){}
 function camRows(){
-  const k=S.kelvin, m=mode;
+  const k=S.kelvin, m=mode, sk=SKINS[skin];
   const rate=m==='p60'?'NTSC · 60p (59.94)':'NTSC · 30p (29.97)';
   const sh=m==='p60'?'1/125':'1/60';
-  const zvFile=m==='p60'?'XAVC S 4K 60p (check the crop) or HD 60p':m==='vert'?'XAVC S 4K 30p, body rotated, 2160×3840':'XAVC S 4K 30p 100M 4:2:2 10-bit';
+  const zvFile=m==='p60'?'XAVC S HD 60p 50M':m==='vert'?'XAVC S 4K 30p, body rotated, 2160×3840':'None for now (HDMI only). Later: XAVC S 4K 30p';
   return [
     ['Region and rate', rate, m==='p60'?'NTSC · 60p (59.94)':'NTSC · 30p (29.97)', 'In Sony\'s NTSC menu "30p" is 29.97. Every input has to match the switcher.'],
-    ['Internal file', zvFile, m==='p60'?'XAVC S HD 60p 50M':'XAVC S HD 30p 50M (no 4K)', 'The 4K files are for vertical crops and re-framing in the edit.'],
-    ['HDMI out', '1080p, info display off', '1080p, info display off, CTRL FOR HDMI off', 'Confirm on rig day that 1080p HDMI keeps running while 4K records internally.'],
+    ['Internal file', zvFile, m==='p60'?'XAVC S HD 60p 50M':'None (HDMI only)', m==='show'?'The RØDECaster Video ISO-records every input, so the cameras only feed HDMI.':'Only for this future mode.'],
+    ['HDMI out', '1080p, info display off', '1080p, info display off, CTRL FOR HDMI off', 'Confirm on rig day that every input holds 1080p 29.97 for the whole show.'],
     ['Shutter', sh, sh, m==='p60'?'Double the frame rate needs double the shutter speed, so one stop less light reaches the sensor.':'180° shutter: natural motion blur.'],
     ['Aperture', 'f/2.0', 'f/2.8', 'The wide needs depth across all three seats. The singles get softer backgrounds.'],
-    ['ISO (fixed)', m==='p60'?'400':'200', m==='p60'?'800':'400', 'f/2.0 at ISO 200 and f/2.8 at ISO 400 give the same exposure, so all three cameras match under one light level.'],
+    ['ISO (fixed)', m==='p60'?'400':'200', m==='p60'?'800':'400', 'f/2.0 at ISO 200 and f/2.8 at ISO 400 give the same exposure, so all three cameras match under one light level. ISO stays put for every skin tone; the key changes instead.'],
     ['White balance', `${k}K, tint 0`, `${k}K, tint 0`, 'Same Kelvin as every face light. Never auto.'],
-    ['Look', 'Creative Look ST, Picture Profile off', 'Creative Style Standard, sharpness −1', 'Ready for air with no grade. Sharpness −1 stops moiré on the slats.'],
+    ['Look', sk.look[0], sk.look[1], sk.lookWhy],
     ['Focus', 'AF-C, Human, eye on', 'AF once, then MF, centre area', 'The wide stays put. The singles follow the face.'],
-    ['Exposure aid', 'Zebra 70', 'Zebra 70', 'Forehead highlights just touching 70 means skin is right.'],
+    ['Exposure aid', `Zebra ${sk.zebra}`, `Zebra ${sk.zebra}`, `For ${sk.name.toLowerCase()} skin, forehead highlights just touching ${sk.zebra} means skin is right.`],
+    ['Skin level', sk.ire, sk.ire, 'Where the lit cheek sits on the waveform. Check it on each single during the grey-card match.'],
     ['Stabilisation', 'Off', 'SteadyShot off', 'Locked off on tripods.'],
     ['Power', 'USB-C PD, Power Save off', 'NP-FW50 dummy + AC-PW20, Power Save 30 min', 'Shows run past battery life.'],
-    ['Record', 'Press REC on each body at the start', 'Never press record (HDMI only)', 'Clap on camera to sync the 4K files.'],
+    ['Record', 'Never press record (HDMI only)', 'Never press record (HDMI only)', 'Recording happens on the RØDECaster Video. Clap on camera at the start.'],
     ['Audio', 'Off', 'Off', 'Sound comes from the RØDECaster Pro II.'],
   ];
 }
 function renderCamera(){
   const cams=[
-    {id:'CAM1', t:'Wide · three-shot', b:'a6000 + Sigma 16mm f/1.4', s:'Centre, 48 in. f/2.8. HDMI 1. Carries the teleprompter.', n:'Proposed move: the a6000 shoots the wide because it cannot record 4K.'},
-    {id:'CAM2', t:'Single · armchair', b:'ZV-E10 II + Sigma 30mm f/1.4', s:'Front-right, crossed onto H1, 48 in. f/2.0. HDMI 2. 4K internal.', n:''},
-    {id:'CAM3', t:'Single · couch', b:'ZV-E10 II + Sigma 30mm f/1.4', s:'Front-left, crossed onto H2 and H3, 48 in. f/2.0. HDMI 3. 4K internal.', n:''},
+    {id:'CAM1', t:'Wide · three-shot', b:'a6000 + Sigma 16mm f/1.4', s:'Centre, 48 in. f/2.8. HDMI 1, 1080p 29.97. Carries the teleprompter.', n:''},
+    {id:'CAM2', t:'Single · armchair', b:'ZV-E10 II + Sigma 30mm f/1.4', s:'Front-right, crossed onto H1, 48 in. f/2.0. HDMI 2, 1080p 29.97.', n:''},
+    {id:'CAM3', t:'Single · couch', b:'ZV-E10 II + Sigma 30mm f/1.4', s:'Front-left, crossed onto H2 and H3, 48 in. f/2.0. HDMI 3, 1080p 29.97.', n:''},
     {id:'CAM4', t:'Remote and screens', b:'Mac HDMI out', s:'Riverside guests and screen shares. HDMI 4 (approved Oct 20).', n:''},
   ];
   $('#camcards').innerHTML=cams.map(c=>`<div class="cam"><span class="id">${c.id}</span><b>${esc(c.t)}</b><span class="mono" style="font-size:12.5px">${esc(c.b)}</span><span class="note">${esc(c.s)}</span>${c.n?`<span class="warnline">${esc(c.n)}</span>`:''}</div>`).join('');
-  $('#modeSegs').innerHTML=Object.entries(MODES).map(([k,v])=>`<button data-mode="${k}" class="${mode===k?'on':''}">${esc(v.name)}</button>`).join('');
+  $('#modeSegs').innerHTML=Object.entries(MODES).map(([k,v])=>`<button data-mode="${k}" data-fk="mode-${k}" class="${mode===k?'on':''}">${esc(v.name)}</button>`).join('');
   $('#modeTitle').textContent=MODES[mode].name; $('#modeLede').textContent=MODES[mode].lede;
+  $('#skinSegs').innerHTML=Object.entries(SKINS).map(([k,v])=>`<button data-skin="${k}" data-fk="skin-${k}" class="${skin===k?'on':''}">${esc(v.name)}</button>`).join('');
+  const sk=SKINS[skin]; $('#skinTitle').textContent=sk.name; $('#skinLede').textContent=sk.lede;
   $('#camTable').innerHTML=camRows().map(r=>`<tr><td><b>${esc(r[0])}</b></td><td class="mono" style="font-size:13px">${esc(r[1])}</td><td class="mono" style="font-size:13px">${esc(r[2])}</td><td class="note">${esc(r[3])}</td></tr>`).join('');
   const t=currentTier(); const fill=optById(S.sel.F);
   let eff=[];
   if(mode==='p60'){
-    eff.push('Lighting: keys need about 600 lux at the face, or ISO doubles (singles 400, wide 800). The output ranges on the Place tab roughly double.');
+    eff.push(`Lighting: keys need about ${sk.keyLux*2} lux at the face, or ISO doubles (singles 400, wide 800). The output ranges on the Place tab roughly double.`);
     eff.push('Flicker: dimmed LEDs can band at 1/125. Run the flicker test on rig day before any reels session.'+(fill.id==='f1'?' The owned NiceVeedi bulb fill is the most likely to flicker.':''));
-    eff.push('Files are about twice the size. The ZV-E10 II crops in at 4K 60p, so frame the singles a little looser.');
+    eff.push('Files are about twice the size. Every input on the RØDECaster Video has to run 60p for that session.');
     if(t===1) eff.push('Tier 1 SL60IID keys have the output for 60p at about 4 ft. Expect 85 to 100%.');
   } else if(mode==='vert'){
     eff.push('Lighting is unchanged. The rim and wall wash matter more because a vertical frame shows more wall above the head.');
     eff.push('The camera needs an L-bracket and a second tripod position. It can\'t feed the switcher as a landscape shot.');
   } else {
-    eff.push('4K internal runs about 45 GB an hour per body. Use V60 cards of 128 GB or more and offload after each show.');
-    eff.push('Run a 60-minute heat soak on rig day with HDMI out and internal 4K running at once.');
+    eff.push('Vertical clips crop from 1080p for now, so a 9:16 single is about 608×1080 and looks soft on phones. 4K inside the ZV-E10 IIs fixes that later.');
+    eff.push('Run a 60-minute power soak on rig day with all three bodies feeding HDMI.');
   }
-  $('#modeEffects').innerHTML=eff.map(e=>`<div class="alert">${esc(e)}</div>`).join('');
+  const skinEff=[`Key ${sk.keyLux} lux at the face${sk.keyLux>300?' (about 2/3 stop over the 300 lux house reference), from more key output, never more ISO, because noise lands in the shadows first':', the house reference'}. Fill ${sk.fillStops} stop${sk.fillStops>1?'s':''} under the key, about ${sk.fillStops>1?'3:1':'2:1'}${sk.fillStops<1.5?', so the shadow side keeps its detail':''}.`, ...sk.notes,
+    'Mixed panel: set each single for the person it shoots, and set its key for them. On the wide, keep the fairest forehead under its zebra and lift the deepest face with its own key, not with exposure.'];
+  $('#modeEffects').innerHTML=eff.map(e=>`<div class="alert">${esc(e)}</div>`).join('')+skinEff.map(e=>`<div class="alert good">${esc(e)}</div>`).join('');
 }
 
 /* ---------- run ---------- */
@@ -881,7 +954,7 @@ const RIGDAY=[
   ['r7','TV on a slide. Lower its brightness until whites don\'t clip on the wide.'],
   ['r8','Grey card match across all three cameras within 2 IRE. Save the PowerGrade.'],
   ['r9','Flicker test: record 10 s of every light at 1/60 and 1/125.'],
-  ['r10','Heat and power soak: 60 minutes, internal 4K and HDMI out together.'],
+  ['r10','Power soak: 60 minutes with all three bodies feeding HDMI at 1080p 29.97.'],
   ['r11','Tape seat marks on the rug. Shoot reference stills from all three cameras.'],
   ['r12','Fill in the Rig Log below. The measured values become the house standard.'],
 ];
@@ -892,11 +965,11 @@ const PRESHOW=[
   ['p4','TV slides at 01, brightness at the Rig Log value','Whites must not clip on the wide'],
   ['p5','Seats on the tape marks, mics just out of frame','Arms come in from below and the side, mic about 45° under the chin, no arm across the TV text'],
   ['p5b','Drinks in glasses on the side table, no bottles in shot',''],
-  ['p5c','Curtain behind the armchair reads at least 1 stop under the face on CAM2',''],
+  ['p5c','Left wall behind the armchair reads at least 1 stop under the face on CAM2','Charcoal drape once it is hung'],
   ['p6','Exposure, ISO and white balance locked on all three bodies',''],
-  ['p7','Zebra check: forehead highlights just touching 70',''],
-  ['p8','Card space checked on CAM2 and CAM3 (45 GB per hour in 4K)',''],
-  ['p9','Press REC on CAM2 and CAM3, then start the RØDECaster Video',''],
+  ['p7','Zebra check: forehead highlights just touching the level for each guest\'s skin tone','Camera tab: Fair 70, Medium 60, Deep 50'],
+  ['p8','At least 100 GB free for the RØDECaster Video recording',''],
+  ['p9','Start the RØDECaster Video recording with ISO on',''],
   ['p10','Clap on camera',''],
   ['p11','Phones and the Studio Echo on Do Not Disturb',''],
 ];
@@ -913,7 +986,7 @@ const RIG=[
   {id:'iso', l:'Final ISO (singles / wide)', t:'Planned 200 / 400', u:''},
   {id:'ire', l:'Camera match gap', t:'2 IRE or less', u:'IRE'},
   {id:'flicker', l:'Flicker at 1/60 and 1/125', t:'Note any light that bands', u:''},
-  {id:'hdmi4k', l:'HDMI 1080p while recording 4K', t:'Works / fails', u:''},
+  {id:'hdmi4k', l:'All HDMI inputs hold 1080p 29.97 for 60 min', t:'Works / fails', u:''},
   {id:'heat', l:'60-minute heat soak', t:'Pass / overheat at minute …', u:''},
 ];
 const SCENES=[
@@ -933,14 +1006,14 @@ const FIXES=[
   ['Skin is a different colour between cameras','A Kelvin or tint mismatch. Set every body and every face light to the same Kelvin, tint 0.'],
   ['Rolling bands in the picture','LED flicker. Keep the shutter at 1/60 and raise the light\'s output rather than dimming it very low.'],
   ['Stand or lantern edge in the wide','Slide the stand outward. The wide\'s edges cross 3.4 ft in from each side wall at the seats.'],
-  ['White curtain glows behind the armchair','Skirt the K1 lantern on the curtain side, aim CAM2 a few degrees right, or swap to a dark drape.'],
+  ['White curtain glows behind the armchair','Hang the charcoal drape. Until then, skirt the K1 lantern on the curtain side and aim CAM2 a few degrees right.'],
   ['Hot spots on the leather couch','The key is too low and frontal. Raise it and move it to the side, the short-side position on the Place tab.'],
   ['Mic arm through the TV logo','Drop the arm below the TV text zone and bring it in from the side.'],
   ['Hair melts into the wall','Rim too low or aimed at the face. Re-aim it at the crown and shoulders and raise it half a stop.'],
 ];
 function renderRun(){
   const mk=(list,doc,withSub)=>list.map(([id,t,sub])=>{const on=!!S.checks[doc]?.[id];
-    return `<label class="check ${on?'done':''}"><input type="checkbox" data-check="${doc}" data-id="${id}" ${on?'checked':''} ${S.canWrite?'':'disabled'}><span>${esc(t)}${withSub&&sub?`<small>${esc(sub)}</small>`:''}</span></label>`;}).join('');
+    return `<label class="check ${on?'done':''}"><input type="checkbox" data-check="${doc}" data-id="${id}" data-fk="ck-${doc}-${id}" ${on?'checked':''} ${S.canWrite?'':'disabled'}><span>${esc(t)}${withSub&&sub?`<small>${esc(sub)}</small>`:''}</span></label>`;}).join('');
   $('#rigChecks').innerHTML=mk(RIGDAY,'rigday',false);
   $('#preChecks').innerHTML=mk(PRESHOW,'preshow',true);
   const rc=RIGDAY.filter(([id])=>S.checks.rigday?.[id]).length, pc=PRESHOW.filter(([id])=>S.checks.preshow?.[id]).length;
@@ -967,7 +1040,7 @@ const NOW_ORDER=[['Serif 65','Solid bright cyan slide, near clipping in every sh
 const PLAN_ORDER=[['Rim on hair','Half a stop over the key, separates from the slats'],['Faces','300 lux key, 1.5-stop fill, short-side shape'],['Serif 65','Near-black slides, whites just under the faces'],['Slat wall and LEDs','1 to 2 stops under the faces, show colour'],['Curtain','At least 1 stop under the faces']];
 const ISSUES=[
   {id:'t1',sev:'first',shot:'All three shots',role:'AC',title:'The TV is the brightest thing in frame',see:'The solid cyan slide sits near clipping in every shot. Faces read darker than the screen behind them, so the eye goes to the TV first.',fix:'Lower Serif 65 brightness until its whites sit just under the faces on the wide. Switch to the near-black slide backgrounds from the Runbook with text in the upper two thirds. Free.',tab:'run'},
-  {id:'t2',sev:'first',shot:'Armchair single',role:'K1',title:'The white curtain blows out behind the armchair',see:'On the armchair single the sheer curtain is the brightest area in frame. The left third of the picture is close to white and pulls attention off the face.',fix:'Keep light off it: skirt the K1 lantern on the curtain side and aim CAM2 a few degrees right so the slats and plant fill more of the background. Meter the curtain at least 1 stop under the face. If it still glows, swap it for a charcoal or deep-blue drape.',tab:'place'},
+  {id:'t2',sev:'first',shot:'Armchair single',role:'K1',title:'The white curtain blows out behind the armchair',see:'On the armchair single the sheer curtain is the brightest area in frame. The left third of the picture is close to white and pulls attention off the face.',fix:'Decided: swap it for a charcoal drape (on the shopping list to scout). Until it is up, skirt the K1 lantern on the curtain side and aim CAM2 a few degrees right so the slats and plant fill more of the background.',tab:'place'},
   {id:'t3',sev:'first',shot:'All three shots',role:'K2',title:'Faces are flat and front-lit',see:'Light comes from close to the camera, so faces have little shape and the shadow side is almost as bright as the key side. The leather couch shows hot spots from the same light.',fix:'Move to short-side keys in 26 in lanterns (K1, K2), high and to the side, with fill 1.5 stops under from beside CAM1. Higher keys also take the glare off the leather.',tab:'buy'},
   {id:'t4',sev:'next',shot:'Couch single and wide',role:'R',title:'Dark hair melts into the dark slats',see:'There is no rim light. Dark hair and a navy top sit against near-black panels, and the couch back is close to the wall.',fix:'Add the rim strip over the gap behind the couch. Pull the couch forward to 3 ft off the slat wall if the cameras allow it.',tab:'place'},
   {id:'t5',sev:'next',shot:'Couch single and wide',role:null,title:'Mic arms cross the TV and the faces',see:'On the couch single a boom arm cuts through the TV logo. On the wide both mics sit in front of the mouths.',fix:'Bring arms in from below and the side, mic about 45° under the chin, arm below the TV text zone. Check each single for an arm crossing a face or the logo.',tab:'run'},
@@ -982,7 +1055,7 @@ function renderToday(){
   ord('#orderNow',NOW_ORDER); ord('#orderPlan',PLAN_ORDER);
   const tabName={run:'Run',place:'Place',buy:'Buy',camera:'Camera'};
   $('#issues').innerHTML=ISSUES.map(i=>{const on=!!S.checks.today?.[i.id];
-    return `<label class="issue ${on?'done':''}"><input type="checkbox" data-check="today" data-id="${i.id}" ${on?'checked':''} ${S.canWrite?'':'disabled'} aria-label="Fixed: ${esc(i.title)}"><div>
+    return `<label class="issue ${on?'done':''}"><input type="checkbox" data-check="today" data-id="${i.id}" data-fk="ck-today-${i.id}" ${on?'checked':''} ${S.canWrite?'':'disabled'} aria-label="Fixed: ${esc(i.title)}"><div>
       <div class="ihead"><span class="sev ${i.sev}">${i.sev==='first'?'Fix first':i.sev==='next'?'Next':'Polish'}</span><h4>${esc(i.title)}</h4></div>
       <div class="ihead" style="margin-top:4px"><span class="note mono" style="font-size:12px">${esc(i.shot)}</span>${i.role?roleChip(i.role):''}<a class="note" href="#${i.tab}">${tabName[i.tab]} tab →</a></div>
       <div class="cols"><div><b>In the still</b>${esc(i.see)}</div><div><b>Fix</b>${esc(i.fix)}</div></div></div></label>`;}).join('');
@@ -991,8 +1064,20 @@ function renderToday(){
   $('#keeps').innerHTML=KEEPS.map(k=>`<li>${esc(k)}</li>`).join('');
 }
 
+/* ---------- keep scroll and focus across re-renders ---------- */
+function keep(fn){ return function(...args){
+  const sx={}; document.querySelectorAll('[data-sx]').forEach(e=>{ sx[e.dataset.sx]=e.scrollLeft; });
+  const a=document.activeElement, fk=a&&a.dataset?a.dataset.fk:null, y=window.scrollY;
+  const out=fn.apply(this,args);
+  document.querySelectorAll('[data-sx]').forEach(e=>{ const v=sx[e.dataset.sx]; if(v!=null&&e.scrollLeft!==v) e.scrollLeft=v; });
+  if(fk&&document.activeElement!==a){ const n=[...document.querySelectorAll('[data-fk]')].find(x=>x.dataset.fk===fk); if(n) n.focus({preventScroll:true}); }
+  if(Math.abs(window.scrollY-y)>1) window.scrollTo(window.scrollX,y);
+  return out; }; }
+
 /* ---------- render all ---------- */
 function renderAll(){ renderToday(); renderChips(); renderPlan(); renderTiers(); renderKelvin(); renderPicker(); renderSummary(); renderShop(); renderPlace(); renderCamera(); renderRun(); }
+renderAll=keep(renderAll); renderShop=keep(renderShop); renderRun=keep(renderRun); renderPlace=keep(renderPlace);
+renderToday=keep(renderToday); renderCamera=keep(renderCamera); renderPlan=keep(renderPlan); renderRig=keep(renderRig);
 
 /* ---------- routing ---------- */
 const TABS=['today','plan','buy','place','camera','run'];
@@ -1024,6 +1109,8 @@ document.addEventListener('click',e=>{
   const st=e.target.closest('[data-status]'); if(st&&S.canWrite){ const id=st.dataset.status; const cur=S.status[id]?.s||'needed'; const nx=NEXT[cur];
     S.status[id]={s:nx,at:Date.now(),by:S.uid}; renderShop(); renderPlan(); writeDoc('status/'+id,S.status[id]); return; }
   const h=e.target.closest('[data-hl],[data-fx]'); if(h){ const r=h.dataset.hl||h.dataset.fx; hlRole=hlRole===r?null:r; renderPlace(); return; }
+  const lay=e.target.closest('[data-layout]'); if(lay){ useLayout(lay.dataset.layout); try{localStorage.setItem('rmsb-layout',layout);}catch(_){} hlRole=null; renderPlace(); return; }
+  const sb=e.target.closest('[data-skin]'); if(sb){ skin=sb.dataset.skin; try{localStorage.setItem('rmsb-skin',skin);}catch(_){} renderCamera(); return; }
   const m=e.target.closest('[data-mode]'); if(m){ mode=m.dataset.mode; renderCamera(); return; }
   if(e.target.id==='preReset'&&S.canWrite){ S.checks.preshow={}; renderRun(); writeDoc('checks/preshow',{items:{},at:Date.now()}); }
 });
