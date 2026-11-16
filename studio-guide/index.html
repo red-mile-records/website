@@ -1,10 +1,10 @@
 <meta charset="utf-8">
-<title>Red Mile Set Bible</title>
+<title>Gear Scout 2.0</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: sticky header with six stage tabs and two desk tabs; one stage visible at a time; content column 1180px. Dark-first studio palette. */
+/* Layout: sticky header with an area picker and six stage tabs; one stage visible at a time; content column 1180px. Dark-first studio palette. */
 :root{
   --bg:#0f1012; --surface:#17191c; --surface2:#1e2125; --line:#2b2f34; --fg:#ece8e0; --muted:#9a9ea5;
   --accent:#e8542f; --accent-fg:#ffffff; --ok:#4cc38a; --warn:#f0b43c; --bad:#ff6b5e;
@@ -47,6 +47,11 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background
 .head-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:12px 8px}
 .brand{display:flex;align-items:baseline;gap:10px;min-width:0}
 .brand h1{font-size:20px;font-weight:800}
+.brand{flex-wrap:wrap}
+.areapick{display:inline-flex;align-items:center;gap:8px}
+.areapick select{font:600 15px var(--body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;max-width:100%}
+.empty{border:1px dashed var(--line);border-radius:10px;padding:22px;color:var(--muted);display:grid;gap:6px}
+.empty b{color:var(--fg)}
 .brand .addr{font:400 12px var(--mono);color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
 .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 10px;font:500 12px var(--mono);white-space:nowrap}
@@ -229,19 +234,10 @@ svg.dimmed .fx:not(.hl){opacity:.18}
 <header class="top">
   <div class="wrap">
     <div class="head-row">
-      <div class="brand"><h1>Red Mile Set Bible</h1><span class="addr">1865 17 Ave SW · podcast room 10×10 ft · 8.5 ft ceiling</span></div>
+      <div class="brand"><h1>Gear Scout 2.0</h1><label class="areapick"><span class="eyebrow">Area</span><select id="areaSel" aria-label="Business area"></select></label><span class="addr" id="areaSub"></span></div>
       <div class="chips" id="chips"></div>
     </div>
-    <nav class="tabs" aria-label="Stages">
-      <a href="#today" data-tab="today"><span class="n">0</span>Room today</a>
-      <a href="#plan" data-tab="plan"><span class="n">1</span>Plan</a>
-      <a href="#buy" data-tab="buy"><span class="n">2</span>Buy</a>
-      <a href="#place" data-tab="place"><span class="n">3</span>Place</a>
-      <a href="#camera" data-tab="camera"><span class="n">4</span>Camera</a>
-      <a href="#run" data-tab="run"><span class="n">5</span>Run</a>
-      <a href="#junior" data-tab="junior"><span class="n">JD</span>Junior Desk</a>
-      <a href="#trading" data-tab="trading"><span class="n">TD</span>Trading Desk</a>
-    </nav>
+    <nav class="tabs" aria-label="Stages" id="stageNav"></nav>
     <div class="sync" id="sync">Connecting to the shared build…</div>
   </div>
 </header>
@@ -422,7 +418,7 @@ svg.dimmed .fx:not(.hl){opacity:.18}
 <!-- CAMERA -->
 <section class="stage" id="camera" hidden>
   <div class="lede">
-    <span class="eyebrow">Stage 4 · Camera</span>
+    <span class="eyebrow">Stage 4 · Settings</span>
     <h2>Three bodies that cut together</h2>
     <p>Every camera runs the same Kelvin as the face lights, the same shutter and the same exposure. All three run 1080p 29.97 for now into the RØDECaster Video, which switches and ISO-records each one. Recording 4K inside the two ZV-E10 IIs is the later upgrade for sharper vertical clips. For still photos, pick Photo under Camera mode.</p>
   </div>
@@ -514,8 +510,7 @@ svg.dimmed .fx:not(.hl){opacity:.18}
 </section>
 
 <!-- DESKS -->
-<section class="stage" id="trading" hidden></section>
-<section class="stage" id="junior" hidden></section>
+<section class="stage" id="areaView" hidden></section>
 </main>
 
 <script>
@@ -664,7 +659,7 @@ function renderPlan(){
   const steps=[
     {t:'Plan the look and the roles', d:'This tab. Rules, ladder and roles are set.', done:true},
     {t:'Pick the build and buy it', d:'Buy tab. Choose a tier, swap roles, track each item to Rigged.', done:bought},
-    {t:'Rig day: place, meter, match', d:'Place tab for positions, Camera tab for settings, Run tab for the checklist.', done:rigDone===RIG.length},
+    {t:'Rig day: place, meter, match', d:'Place tab for positions, Settings tab for settings, Run tab for the checklist.', done:rigDone===RIG.length},
     {t:'Lock the house standard', d:'Measured values from the Rig Log replace every starting point on this page (v2).', done:false},
     {t:'Run every show from the pre-show list', d:'Run tab. Same marks, same levels, same Kelvin every time.', done:false},
   ];
@@ -679,7 +674,7 @@ function renderPlan(){
     ['Settled','The a6000 shoots the wide (CAM1). The two ZV-E10 IIs take the singles.'],
     ['Settled','Lenses owned: 2× Sigma 30mm f/1.4 for the singles, 1× Sigma 16mm f/1.4 for the wide.'],
     ['Settled','Landlord approved ceiling mounting in writing. Keys and rim move to ceiling clamps once the hardware is scouted.'],
-    ['Settled','No 60p reels sessions for now. The 60p mode stays on the Camera tab as a future option.'],
+    ['Settled','No 60p reels sessions for now. The 60p mode stays on the Settings tab as a future option.'],
     ['Settled','Swap the white curtain for a charcoal drape. To scout and price.'],
     ['Open','Exact Govee bar and strip models. Check the device list in the Govee Home app.'],
   ];
@@ -982,7 +977,7 @@ const RIGDAY=[
   ['r1','Clear the floor, place furniture: couch back 3 ft off the slat wall, armchair angled 28° toward the couch.'],
   ['r2','Stand every light at its Place-tab position and height. Sandbag every base.'],
   ['r3','Set every face light to the camera Kelvin, tint 0. Start at the Place-tab output levels.'],
-  ['r4','Cameras on tripods at 48 in, settings from the Camera tab. Check both key stands and the rim strip are outside the wide frame.'],
+  ['r4','Cameras on tripods at 48 in, settings from the Settings tab. Check both key stands and the rim strip are outside the wide frame.'],
   ['r5','Meter each face with the key only, then add fill and rim. Adjust output until the ratios on the Plan tab read true.'],
   ['r6','Bring up the wall wash and Govee bars. Wall between the hosts sits 1 to 2 stops under the faces.'],
   ['r7','TV on a slide. Lower its brightness until whites don\'t clip on the wide.'],
@@ -1001,7 +996,7 @@ const PRESHOW=[
   ['p5b','Drinks in glasses on the side table, no bottles in shot',''],
   ['p5c','Left wall behind the armchair reads at least 1 stop under the face on CAM2','Charcoal drape once it is hung'],
   ['p6','Exposure, ISO and white balance locked on all three bodies',''],
-  ['p7','Zebra check: forehead highlights just touching the level for each guest\'s skin tone','Camera tab: Fair 70, Medium 60, Deep 50'],
+  ['p7','Zebra check: forehead highlights just touching the level for each guest\'s skin tone','Settings tab: Fair 70, Medium 60, Deep 50'],
   ['p8','At least 100 GB free for the RØDECaster Video recording',''],
   ['p9','Start the RØDECaster Video recording with ISO on',''],
   ['p10','Clap on camera',''],
@@ -1087,11 +1082,11 @@ const KEEPS=['The layout already matches the plan: armchair left of frame, couch
 function renderToday(){
   const ord=(el,list)=>{$(el).innerHTML=list.map(([t,d])=>`<li><div><b>${esc(t)}</b><br><span class="note">${esc(d)}</span></div></li>`).join('');};
   ord('#orderNow',NOW_ORDER); ord('#orderPlan',PLAN_ORDER);
-  const tabName={run:'Run',place:'Place',buy:'Buy',camera:'Camera'};
+  const tabName={run:'Run',place:'Place',buy:'Buy',camera:'Settings'};
   $('#issues').innerHTML=ISSUES.map(i=>{const on=!!S.checks.today?.[i.id];
     return `<label class="issue ${on?'done':''}"><input type="checkbox" data-check="today" data-id="${i.id}" data-fk="ck-today-${i.id}" ${on?'checked':''} ${S.canWrite?'':'disabled'} aria-label="Fixed: ${esc(i.title)}"><div>
       <div class="ihead"><span class="sev ${i.sev}">${i.sev==='first'?'Fix first':i.sev==='next'?'Next':'Polish'}</span><h4>${esc(i.title)}</h4></div>
-      <div class="ihead" style="margin-top:4px"><span class="note mono" style="font-size:12px">${esc(i.shot)}</span>${i.role?roleChip(i.role):''}<a class="note" href="#${i.tab}">${tabName[i.tab]} tab →</a></div>
+      <div class="ihead" style="margin-top:4px"><span class="note mono" style="font-size:12px">${esc(i.shot)}</span>${i.role?roleChip(i.role):''}<a class="note" href="#lighting-${i.tab==='camera'?'settings':i.tab}">${tabName[i.tab]} tab →</a></div>
       <div class="cols"><div><b>In the still</b>${esc(i.see)}</div><div><b>Fix</b>${esc(i.fix)}</div></div></div></label>`;}).join('');
   const d=ISSUES.filter(i=>S.checks.today?.[i.id]).length;
   $('#todayProg').textContent=`${d} of ${ISSUES.length} fixed`; $('#todayBar').style.width=(d/ISSUES.length*100)+'%';
@@ -1185,7 +1180,7 @@ const DESKS={
         'The studio M1 already has DisplayLink software on it: a "DisplayLink USB Audio" device shows in its audio device list. Whether the adapter is still there and could go with it is not recorded.',
       ],
       runs:[
-        ['c','On the studio Mac mini (M1, 16 GB / 512 GB)','Music: Ableton Live 12 Suite, UAD Console and the Apollo x6 on Thunderbolt, about 226 UAD plugins and 285 Audio Units. Shows: RØDECaster Pro II and RØDECaster Video, with the Mac\'s HDMI output feeding RØDECaster Video input 4 as the clean picture for Riverside guests and screens. Also the podcast audio lab and the Claude sessions that work on the studio.','Studio control skill, "The rig, as verified"; seven studio bots, reported Nov 16; Camera tab, CAM4'],
+        ['c','On the studio Mac mini (M1, 16 GB / 512 GB)','Music: Ableton Live 12 Suite, UAD Console and the Apollo x6 on Thunderbolt, about 226 UAD plugins and 285 Audio Units. Shows: RØDECaster Pro II and RØDECaster Video, with the Mac\'s HDMI output feeding RØDECaster Video input 4 as the clean picture for Riverside guests and screens. Also the podcast audio lab and the Claude sessions that work on the studio.','Studio control skill, "The rig, as verified"; seven studio bots, reported Nov 16; Settings tab, CAM4'],
         ['c','Planned for the studio Mac mini','The always-on background jobs for the Junior Desk.','Nov 5 planning session'],
         ['c','On the Skytech (Windows)','Govee lighting control, the archive, copy jobs and the Windows production console. None of this needs to move to the Mac.','Reported by Miller, Nov 16'],
         ['u','Not measured yet','How full the M1\'s 512 GB is, and its memory pressure during a full session. More hardware audit evidence is pending.','Open'],
@@ -1265,40 +1260,108 @@ const DESKS={
 };
 const OWN={owned:['Owned','c'],planned:['Planned','l'],none:['No record','u']};
 const EVL={p:['Named, not re-checked','g'],x:['Sources differ','x'],u:['Unknown','u']};
-function renderDesk(id){
-  const d=DESKS[id]; const it=d.items;
-  const cnt=f=>it.filter(f).length;
+/* ---------- areas ---------- */
+const AREAS={
+  lighting:{name:'Lighting and set', sub:'1865 17 Ave SW · podcast room 10×10 ft · 8.5 ft ceiling'},
+  desk:{name:'Trading Desk', sub:'Junior Latency Desk · home office and studio computers'},
+  storage:{name:'Storage', sub:'Record, edit, archive and offsite drives'},
+  music:{name:'Music', sub:'Recording and mixing rig at the studio'},
+};
+const STAGES=[['today','Room today'],['plan','Plan'],['buy','Buy'],['place','Place'],['settings','Settings'],['run','Run']];
+const LIGHT_SEC={today:'today',plan:'plan',buy:'buy',place:'place',settings:'camera',run:'run'};
+let area='lighting', stage='plan';
+const STORE={"checked": "Oct 31, 2026", "need": "A storage plan that gets every Red Mile recording into three places and gets the T7 back to recording only. Oct 31 2026 state: the T7 (RCV_Disk) is full with 959 GB waiting for ingest plus 246 GB of imports and cache; the editing PC's C: has 16 GB free of 930; Google Drive has 15 GB free of 930 and is currently acting as RMR_ARCHIVE; about 1 TB of new footage landed in October alone. Red Mile Ingest v2 is built and waits on a physical drive labelled RMR_ARCHIVE.", "rules": ["Tier 1 Record: the T7 and the Pro II card carry a session only until ingest clears them. Nothing new to buy.", "Tier 2 Edit: a 2 TB NVMe takes the console cache, Drive_Imports and renders off C:, so the PC stops swapping.", "Tier 3 Archive: RMR_ARCHIVE on a new 8 TB CMR NAS drive, mirrored to a second identical drive in the same host. A mirrored pair gives 8 TB usable; after the 1.2 TB already waiting on the T7 and about 0.9 TB coming back from Google Drive, 1 TB a month fills it in about 6 months, so plan the next pair or a capacity swap for spring 2027.", "Tier 4 Offsite: an 8 TB external that copies the archive once a month and lives away from the studio. Google Drive drops back to deliverables and the knowledge base only once the local archive is verified.", "Archive drives must be 3.5 in CMR NAS class, 8 TB or more, 3 year warranty or longer; SMR and desktop-class drives never hold the archive.", "Everything on the editing PC side runs at USB 3.2 Gen 2 (10 Gbps) or faster so a 55 GB session copies in minutes, not an hour.", "A copy exists and verifies before anything is removed. The ingest already enforces this."], "roles": [{"id": "archive", "must": "3.5 in CMR NAS class, 8 TB or more, 3 year warranty or longer. One is RMR_ARCHIVE, the other its mirror.", "name": "Archive drives", "qty": 2}, {"id": "host", "must": "Holds both archive drives: either a 2-bay NAS with 2.5 GbE or a 2-bay USB-C 10 Gbps enclosure. 5 Gbps docks fail.", "name": "Archive host", "qty": 1}, {"id": "edit", "must": "2 TB NVMe PCIe 4.0, TLC with DRAM, 5 year warranty.", "name": "Edit SSD", "qty": 1}, {"id": "enclosure", "must": "USB-C 10 Gbps M.2 NVMe enclosure, only needed if the PC has no free M.2 slot.", "name": "SSD enclosure", "qty": 1}, {"id": "offsite", "must": "New 8 TB external desktop HDD, CMR preferred, 2 year warranty or longer.", "name": "Offsite drive", "qty": 1}, {"id": "reader", "must": "USB-C 10 Gbps with UHS-II SD and microSD slots for the Pro II card.", "name": "Card reader", "qty": 1}], "builds": {"fit": {"name": "Best fit build", "note": "Two IronWolf Pro 8 TB, the Orico enclosure and the Seagate Expansion 8 TB from the Canada Computers shelf on Macleod Trail, the SN850X 2 TB shipped from Canada Computers, and the UGREEN DXP2800 NAS and Unitek reader from Amazon for Nov 1 and 2. Both the PC and the Mac mini can then map RMR_ARCHIVE over 2.5 GbE."}, "value": {"name": "Best value build", "note": "Two WD Red Plus 8 TB from Amazon for Nov 1, the TerraMaster D2-320 USB-C enclosure from Amazon for Nov 2 (the archive stays a plain drive letter on the editing PC, so Red Mile Ingest and repoint.py need no changes), the same SN850X, Orico enclosure, Seagate Expansion and Unitek reader. $280 less than the best fit, with a 3 year warranty on the drives instead of 5."}}, "notes": "Prices are CAD before 5 percent GST, read from each product's own page on Oct 31 2026. Best value assumes delivery within about a week. Marketplace prices are asking prices; offer and walk-away figures are ours. Best fit total $2,481.71, best value total $2,201.71. Two Marketplace deals can lower either build: the sealed recertified IronWolf Pro 12 TB at $500 firm (one archive bay, check the serial on Seagate's warranty page first) and the sealed SN850X 2 TB at $400 from an unrated seller. Order of operations once the drives land: label the archive drive RMR_ARCHIVE, run Red Mile Ingest once by hand, run Console\\tools\\repoint.py --apply, run Optimize, then move the 246 GB of imports and cache off the T7, then set the monthly offsite copy. Decide the host first: NAS if both machines need the archive, enclosure if only the editing PC does. Open question for Miller: does the skytech PC have a free M.2 slot? If yes, skip the Orico enclosure. Not scouted: the 32 GB RAM kit from the Oct 30 audit, cables, a UPS.", "items": [{"role": "archive", "product": "Seagate IronWolf Pro 8TB ST8000NT001", "source": "Canada Computers", "price": 509.99, "fit_qty": 2, "value_qty": 0, "specs": "3.5 in CMR 7200 rpm 256 MB, 5 year warranty, 300 TB per year workload", "reason": "Meets every must-have with the longest warranty of any 8 TB in the hunt (5 years) and 5 units on the Calgary shelf, so both archive drives come home today. $509.99 each, $1,019.98 for the pair before GST, $10 more than the best value pair.", "url": "https://www.canadacomputers.com/en/desktop-internal-hard-drives/239798/seagate-ironwolf-pro-8-tb-hard-drive-st8000nt001.html"}, {"role": "archive", "product": "WD Red Plus 8TB WD80EFPX", "source": "Amazon.ca", "price": 504.99, "fit_qty": 0, "value_qty": 2, "specs": "3.5 in CMR 5640 rpm 256 MB, 3 year warranty", "reason": "Cheapest new 8 TB CMR NAS drive that can supply two within a week: $504.99 each, $1,009.98 for the pair, sold and shipped by Amazon.ca for Nov 1. Quieter 5640 rpm drive with a 3 year warranty instead of the IronWolf Pro's 5.", "url": "https://www.amazon.ca/dp/B0CMQ6SK7W"}, {"role": "host", "product": "UGREEN NASync DXP2800 2-bay NAS, diskless", "source": "Amazon.ca", "price": 469.99, "fit_qty": 1, "value_qty": 0, "specs": "Intel N100, 8 GB DDR5, 2.5 GbE, HDMI, 2 bays, SMB share the console can map", "reason": "The NAS option: two bays in a mirror and 2.5 GbE so the editing PC and the Mac mini both see RMR_ARCHIVE as a network drive. $469.99 shipped by Amazon for Nov 1, $30 under the Calgary shelf price.", "url": "https://www.amazon.ca/dp/B0D22HBFK1"}, {"role": "host", "product": "TerraMaster D2-320 2-bay USB 3.2 Gen 2 enclosure, diskless", "source": "Amazon.ca", "price": 199.99, "fit_qty": 0, "value_qty": 1, "specs": "Two 3.5 in bays, USB-C 10 Gbps, single, JBOD or hardware RAID 1 selectable", "reason": "The dock option: both archive drives in one 10 Gbps USB-C box on the editing PC for $199.99, $270 less than the NAS, and it shows up as a plain drive letter so Red Mile Ingest and repoint.py need no changes. A 15 percent coupon appeared at checkout but is not counted in the total.", "url": "https://www.amazon.ca/dp/B0C8GCZP5K"}, {"role": "edit", "product": "WD Black SN850X 2TB NVMe WDBB9G0020BNC", "source": "Canada Computers", "price": 549.99, "fit_qty": 1, "value_qty": 1, "specs": "PCIe 4.0 x4, TLC with DRAM, 7300 MB/s read, 5 year warranty", "reason": "Fastest qualifying 2 TB drive at a sane price ($549.99) from a store with Calgary returns; the 990 Pro is $874.99 at both Canada Computers and Best Buy right now. Ships from the warehouse, Calgary has none on the shelf.", "url": "https://www.canadacomputers.com/en/desktop-laptop-internal-ssds/282003/wd-black-sn850x-2tb-pcie-gen4-nvme-m-2-ssd-wdbb9g0020bnc.html"}, {"role": "enclosure", "product": "Orico M2PV-C3 USB-C 10 Gbps NVMe enclosure", "source": "Canada Computers", "price": 21.29, "fit_qty": 1, "value_qty": 1, "specs": "USB 3.2 Gen 2, 10 Gbps, M.2 2280 NVMe, tool free", "reason": "Puts the SN850X on any USB-C port for $21.29, on the Calgary shelf, so the edit drive can move between the PC and the Mac mini. Skip it if the PC turns out to have a free M.2 slot.", "url": "https://www.canadacomputers.com/en/m-2-nvme-ssd-enclosures/253301/orico-m2pv-m-2-nvme-ssd-enclosure-with-usb-3-2-type-c-gen-2-and-speed-up-to-10gbps-orico-m2pv-c3-bk-ep.html"}, {"role": "offsite", "product": "Seagate Expansion Desktop 8TB STKP8000400", "source": "Canada Computers", "price": 394.99, "fit_qty": 1, "value_qty": 1, "specs": "3.5 in desktop external, USB 3.0 micro-B, 2 year warranty", "reason": "Cheapest in-stock new 8 TB external: $394.99 with one on the Calgary shelf and 10+ to ship. Amazon has the same drive at the same price but not until Nov 11 to 15, and Best Buy's $354.99 listing is sold out.", "url": "https://www.canadacomputers.com/en/external-hard-drives/196410/seagate-8tb-expansion-desktop-external-drive-usb3-0-3-5e-stkp8000400.html"}, {"role": "reader", "product": "Unitek 4-in-1 CFexpress B, SD UHS-II and microSD reader, USB-C 10 Gbps", "source": "Amazon.ca", "price": 25.47, "fit_qty": 1, "value_qty": 1, "specs": "USB-C 10 Gbps, SD 4.0 UHS-II, microSD UHS-II, CFexpress Type B", "reason": "The only reader found with UHS-II SD and microSD on a 10 Gbps USB-C port, $25.47 for Nov 2; it also takes CFexpress B if a camera upgrade ever needs it.", "url": "https://www.amazon.ca/dp/B0D738KQFB"}], "fit": 2481.71, "value": 2201.71};
+const MUSIC_OWNED=[
+  ['Universal Audio Apollo x6','Audio interface, on Thunderbolt','Studio control skill, "The rig, as verified"'],
+  ['Neumann U87 Ai','Primary vocal microphone','Studio control skill'],
+  ['Neumann TLM 103','Secondary microphone','Studio control skill'],
+  ['Avalon VT-737sp','Channel strip, into an Apollo line input','Studio control skill'],
+  ['Neve 1073LB','500-series preamp, into an Apollo line input','Studio control skill'],
+  ['Yamaha HS8 pair and HS8 sub','Main monitors','Studio control skill'],
+  ['KRK Rokit 6 pair','Second pair of monitors','Studio control skill'],
+  ['Mac mini M1, 16 GB / 512 GB','Runs Ableton Live 12 Suite and UAD Console','Studio control skill; size reported Nov 16'],
+  ['Ableton Live 12 Suite, UAD Console 1.3.0','About 226 UAD plugins, 285 Audio Units and 54 VST3','Studio control skill'],
+];
+const DESK_NEXT=[
+  'Check the studio M1: how full its 512 GB is (Apple menu, About This Mac, Storage) and its memory pressure during a full session (Activity Monitor).',
+  'Confirm Apple Canada\'s price for the Mac mini M6 at 24 GB / 512 GB.',
+  'Choose the deployment: Option 1 or Option 2 on the Plan tab.',
+  'Choose the portrait screen (Dell 27 or LG 32UN880) and the right-hand 27 in 4K monitor.',
+  'Inventory what the trader already owns at the home-office desk. Any existing screen could fill a slot.',
+  'Buy, then mark each item here as it arrives.',
+  'Option 2 only: rebuild the studio setup on the new Mac mini (Ableton, UAD, plugins, licences), then wipe the M1 and take it to the home office with the USB graphics adapter.',
+];
+function areaHTML(){
   const tag=([t,c])=>`<span class="ev ${c}">${t}</span>`;
-  $('#'+id).innerHTML=`<div class="lede"><span class="eyebrow">${d.code} · Hardware buying guide</span><h2>${esc(d.name)}</h2><p>${esc(d.lede)}</p></div>
-    <div class="deskkey"><span>${tag(OWN.owned)} ${cnt(x=>x.own==='owned')}</span><span>${tag(OWN.planned)} ${cnt(x=>x.own==='planned')}, none bought per the records</span><span>${tag(EVL.p)} ${cnt(x=>x.ev==='p')} named products</span><span>${tag(EVL.x)} ${cnt(x=>x.ev==='x')}</span><span>${tag(EVL.u)} ${cnt(x=>x.ev==='u')} still to identify</span></div>
-    <div class="panel"><span class="eyebrow">Sources</span><h3>Where this list comes from</h3><div class="tbl desk"><table><tbody>${d.sources.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td><b>${esc(r[1])}</b></td><td class="note">${esc(r[2])}</td></tr>`).join('')}</tbody></table></div></div>
-    ${d.conflicts.length?`<div class="panel"><span class="eyebrow">Source conflicts</span><h3>Where the two sources disagree</h3><div class="tbl desk"><table><thead><tr><th>Item</th><th>What each says</th><th>What to do</th></tr></thead><tbody>${d.conflicts.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`).join('')}</tbody></table></div></div>`:''}
-    ${d.deploy?(()=>{const D=d.deploy; const evt=k=>k==='c'?tag(['Confirmed','c']):tag(['Unknown','u']);
-      return `<div class="panel"><span class="eyebrow">Deployment options</span><h3>Which Mac mini goes where</h3>
-        <p class="note">Two ways to place the computers. Option 1 is the Nov 5 plan. Option 2 sends the studio's existing M1 to the home office and buys the new machine for the studio.</p>
-        <div class="tbl desk" data-sx="deploy"><table><thead><tr><th></th><th>Option 1 · New Mac mini at the desk</th><th>Option 2 · M1 to the desk, new Mac mini at the studio</th></tr></thead><tbody>${D.rows.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td style="min-width:210px">${esc(r[1])}</td><td style="min-width:210px">${esc(r[2])}</td></tr>`).join('')}</tbody></table></div></div>
-      <div class="grid2">
-        <div class="panel"><span class="eyebrow">Recommendation</span><h3>The studio machine to buy</h3><ul class="clean">${D.rec.map(o=>`<li>${esc(o)}</li>`).join('')}</ul></div>
-        <div class="panel"><span class="eyebrow">Option 2 only</span><h3>Two screens direct, the third by adapter</h3><ul class="clean">${D.third.map(o=>`<li>${esc(o)}</li>`).join('')}</ul></div>
-      </div>
-      <div class="panel"><span class="eyebrow">What runs where</span><h3>Studio workloads, by evidence</h3><div class="tbl desk"><table><tbody>${D.runs.map(r=>`<tr><td>${evt(r[0])}</td><td><b>${esc(r[1])}</b><small>${esc(r[2])}</small></td><td class="note">${esc(r[3])}</td></tr>`).join('')}</tbody></table></div></div>
-      <div class="panel"><span class="eyebrow">Option 2 · Studio machine</span><h3>Where everything plugs into the new Mac mini</h3>
-        <p class="note">The M6 Mac mini has three Thunderbolt ports and one HDMI on the back, and two USB-C ports on the front. It runs three screens by itself.</p>
-        <div class="tbl desk"><table><thead><tr><th>Connection</th><th>Needs</th><th>Goes to</th></tr></thead><tbody>${D.ports.map(r=>`<tr><td style="min-width:170px"><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table></div></div>
-      <div class="panel"><span class="eyebrow">Apple Canada check · ${esc(D.checked)}</span><h3>What is on sale, and at what price</h3>
-        <p class="note">Apple's own Canadian store could not be opened from where this guide is built. These facts come from Canadian tech press, retailer listings and spec sites found on ${esc(D.checked)}. Prices are CAD before tax. Confirm on apple.com/ca before buying.</p>
-        <div class="tbl desk"><table><tbody>${D.apple.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`).join('')}</tbody></table></div>
-        <p class="note">Sources: ${D.links.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])}</a>`).join(' · ')}</p></div>`;})():''}
-    <div class="panel"><span class="eyebrow">Setup</span><h3>What goes where</h3>
-      <div class="tbl desk"><table><thead><tr><th>Position</th><th>Item</th><th>Why there</th></tr></thead><tbody>${d.layout.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`).join('')}</tbody></table></div>
-      ${d.history?`<p class="note">${esc(d.history)}</p>`:''}</div>
-    <div class="panel"><span class="eyebrow">Products</span><h3>What to buy, how many, and why</h3>
-      <div class="tbl desk" data-sx="desk-${id}"><table><thead><tr><th>Item</th><th>Qty</th><th>Placement</th><th>Why this choice</th><th>Status</th><th class="num">Price</th></tr></thead><tbody>${it.map(x=>`<tr><td style="white-space:normal;min-width:190px"><b>${esc(x.n)}</b><small>${esc(x.spec)}</small></td><td>${esc(x.q)}</td><td>${esc(x.where||'—')}</td><td class="note" style="min-width:200px">${esc(x.why||'—')}<small>${esc(x.src)}</small></td><td>${tag(OWN[x.own])}<br><span style="display:inline-block;margin-top:4px">${tag(EVL[x.ev])}</span></td><td class="num mono">${esc(x.price)}</td></tr>`).join('')}</tbody></table></div></div>
-    <div class="grid2">
-      <div class="panel"><span class="eyebrow">Budget</span><h3>CAD before tax</h3><div class="tbl"><table><tbody>${d.money.map(m=>`<tr><td><b>${esc(m[0])}</b></td><td class="num mono">${esc(m[1])}</td><td class="note">${esc(m[2])}</td></tr>`).join('')}</tbody></table></div><p class="note">These are ranges spoken in the Nov 5 planning session. The priced items above do not add up to them, because most items have no recorded price.</p></div>
-      <div class="panel"><span class="eyebrow">Still to decide or find out</span><h3>Open items</h3><ul class="clean">${d.open.map(o=>`<li>${esc(o)}</li>`).join('')}</ul></div>
-    </div>`;
+  const A=AREAS[area], stName=STAGES.find(x=>x[0]===stage)[1];
+  const head=(h,p)=>`<div class="lede"><span class="eyebrow">${esc(A.name)} · ${esc(stName)}</span><h2>${h}</h2>${p?`<p>${p}</p>`:''}</div>`;
+  const empty=(t,d)=>`<div class="empty"><b>${t}</b><span>${d}</span></div>`;
+  const ul=a=>`<ul class="clean">${a.map(o=>`<li>${esc(o)}</li>`).join('')}</ul>`;
+  const ol=a=>`<ol class="steps">${a.map(o=>`<li><div>${esc(o)}</div></li>`).join('')}</ol>`;
+  const panel=(eye,h,body)=>`<div class="panel"><span class="eyebrow">${eye}</span><h3>${h}</h3>${body}</div>`;
+  const tbl=(heads,rows,sx)=>`<div class="tbl desk"${sx?` data-sx="${sx}"`:''}><table>${heads?`<thead><tr>${heads.map(x=>`<th>${x}</th>`).join('')}</tr></thead>`:''}<tbody>${rows.join('')}</tbody></table></div>`;
+
+  if(area==='desk'){
+    const J=DESKS.junior, T=DESKS.trading, D=J.deploy;
+    const all=[...J.items,...T.items];
+    const itemRow=x=>`<tr><td style="white-space:normal;min-width:190px"><b>${esc(x.n)}</b><small>${esc(x.spec)}</small></td><td>${esc(x.q)}</td><td>${esc(x.where||'—')}</td><td class="note" style="min-width:200px">${esc(x.why||'—')}<small>${esc(x.src)}</small></td><td>${tag(OWN[x.own])}<br><span style="display:inline-block;margin-top:4px">${tag(EVL[x.ev])}</span></td><td class="num mono">${esc(x.price)}</td></tr>`;
+    const itemHeads=['Item','Qty','Placement','Why this choice','Status','<span class="num">Price</span>'];
+    if(stage==='today') return head('What exists today','Trading Desk and Junior Desk are one project, the Junior Latency Desk: a three-screen desk in the trader\'s home office, plus the always-on computer at the studio. Hardware only. Nothing planned for it has been bought.')
+      +`<div class="deskkey"><span>${tag(OWN.owned)} ${all.filter(x=>x.own==='owned').length}</span><span>${tag(OWN.planned)} ${all.filter(x=>x.own==='planned').length}, none bought per the records</span><span>${tag(EVL.x)} ${all.filter(x=>x.ev==='x').length}</span><span>${tag(EVL.u)} ${all.filter(x=>x.ev==='u').length} still to identify</span></div>`
+      +panel('Owned','Already in hand',tbl(itemHeads,all.filter(x=>x.own==='owned').map(itemRow),'desk-owned')+'<p class="note">The home-office desk itself has not been inventoried. The trader\'s existing screens, desk and chair are unknown.</p>')
+      +panel('What runs where','Studio workloads, by evidence',tbl(null,D.runs.map(r=>`<tr><td>${r[0]==='c'?tag(['Confirmed','c']):tag(['Unknown','u'])}</td><td><b>${esc(r[1])}</b><small>${esc(r[2])}</small></td><td class="note">${esc(r[3])}</td></tr>`)))
+      +panel('Sources','Where this guide\'s facts come from',tbl(null,J.sources.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td><b>${esc(r[1])}</b></td><td class="note">${esc(r[2])}</td></tr>`)))
+      +panel('Source conflicts','Where the two sources disagree',tbl(['Item','What each says','What to do'],J.conflicts.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`)));
+    if(stage==='plan') return head('Which computer goes where','Two ways to place the computers. Option 1 is the Nov 5 plan. Option 2 sends the studio\'s M1 to the home office and buys the new machine for the studio.')
+      +panel('Deployment options','Side by side',tbl(['','Option 1 · New Mac mini at the desk','Option 2 · M1 to the desk, new Mac mini at the studio'],D.rows.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td style="min-width:210px">${esc(r[1])}</td><td style="min-width:210px">${esc(r[2])}</td></tr>`),'deploy'))
+      +panel('Recommendation','The studio machine to buy',ul(D.rec))
+      +panel('Optional','A second desk at the trader\'s office','<p class="note">Only if a desk is wanted at the office as well as at home: a third Mac mini and the same three-screen map, left in place. On Nov 5 the answer was that the desk will probably just be at home.</p>');
+    if(stage==='buy') return head('What to buy, how many, and why','Prices are CAD before tax. Each row says whether the item is owned or planned and how well its details are confirmed.')
+      +panel('Products','Home-office desk and studio',tbl(itemHeads,all.filter(x=>x.own!=='owned').map(itemRow),'desk-buy'))
+      +`<div class="panel"><span class="eyebrow">Apple Canada check · ${esc(D.checked)}</span><h3>What is on sale, and at what price</h3><p class="note">Apple's own Canadian store could not be opened from where this guide is built. These facts come from Canadian tech press, retailer listings and spec sites found on ${esc(D.checked)}. Confirm on apple.com/ca before buying.</p>${tbl(null,D.apple.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`))}<p class="note">Sources: ${D.links.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])}</a>`).join(' · ')}</p></div>`
+      +panel('Budget','CAD before tax',tbl(null,[...J.money,...T.money.filter(m=>m[0]!=='One desk')].map(m=>`<tr><td><b>${esc(m[0])}</b></td><td class="num mono">${esc(m[1])}</td><td class="note">${esc(m[2])}</td></tr>`))+'<p class="note">These are ranges spoken in the Nov 5 planning session. The priced items above do not add up to them, because most items have no recorded price.</p>');
+    if(stage==='place') return head('What goes where')
+      +panel('Home-office desk','Three screens and one computer',tbl(['Position','Item','Why there'],J.layout.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`))+`<p class="note">${esc(J.history)}</p>`)
+      +panel('Studio and optional office',"The other two locations",tbl(['Location','Item','Why there'],T.layout.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`)))
+      +panel('Option 2 · Studio machine','Where everything plugs into the new Mac mini','<p class="note">The M6 Mac mini has three Thunderbolt ports and one HDMI on the back, and two USB-C ports on the front. It runs three screens by itself.</p>'+tbl(['Connection','Needs','Goes to'],D.ports.map(r=>`<tr><td style="min-width:170px"><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`)));
+    if(stage==='settings') return head('Setting up the screens')
+      +panel('Option 2 only','Two screens direct, the third by adapter',ul(D.third))
+      +empty('No other settings are recorded.','This area is a hardware guide. Software, data sources and trading workflow are kept out of it.');
+    return head('Next steps, in order')+panel('To do','From here to a working desk',ol(DESK_NEXT))+panel('Still to decide or find out','Open items',ul([...J.open,...T.open.filter(o=>!/Trading Desk|Deployment options/.test(o))]));
+  }
+
+  if(area==='storage'){
+    const R=STORE; const roleName=id=>R.roles.find(r=>r.id===id).name;
+    const dated=`From the Gear Scout storage hunt, read ${esc(R.checked)}. Prices and stock have not been re-checked since.`;
+    if(stage==='today') return head('Where storage stands',esc(R.need))+`<p class="note">${dated}</p>`;
+    if(stage==='plan') return head('Four tiers, three copies')+panel('Rules','How the storage plan works',ul(R.rules))
+      +panel('Roles','What each piece has to do',tbl(['Role','Qty','Must have'],R.roles.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${r.qty}</td><td class="note">${esc(r.must)}</td></tr>`)));
+    if(stage==='buy'){
+      const row=x=>`<tr><td style="min-width:200px"><b>${esc(x.product)}</b><small>${esc(x.specs)}</small></td><td>${esc(roleName(x.role))}</td><td class="num">${x.fit_qty||'—'}</td><td class="num">${x.value_qty||'—'}</td><td class="num mono">${money(x.price)}</td><td><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.source)}</a></td><td class="note" style="min-width:220px">${esc(x.reason)}</td></tr>`;
+      return head('Two builds','Best fit puts the archive on a small network box that both computers can reach. Best value puts it in a USB enclosure on the editing PC.')+`<p class="note">${dated} CAD before GST.</p>`
+        +`<div class="tiers"><div class="tier"><div class="t-top"><h3>Best fit</h3></div><div class="price">${money(R.fit)}</div><p class="note">${esc(R.builds.fit.note)}</p></div><div class="tier"><div class="t-top"><h3>Best value</h3></div><div class="price">${money(R.value)}</div><p class="note">${esc(R.builds.value.note)}</p></div></div>`
+        +panel('Products','Picked items',tbl(['Item','Role','<span class="num">Fit qty</span>','<span class="num">Value qty</span>','<span class="num">Each</span>','Where','Why'],R.items.map(row),'store-buy'))
+        +`<p class="note">The full list of 40 scouted items is on the <a href="https://claude.ai/artifact/FePPhRJnKVvXG71UQNfhWQ#studio-storage-2026-10" target="_blank" rel="noopener">original Gear Scout board</a>.</p>`;
+    }
+    if(stage==='place') return head('Where each drive lives')+panel('By tier','Location',tbl(['Tier','Drive','Where it lives'],[
+        ['Record','Samsung T7 and the RØDECaster Pro II card (owned)','On the recording rig. Cleared after every ingest'],
+        ['Edit','2 TB NVMe SSD','In the editing PC, or in the USB-C enclosure if the PC has no free slot'],
+        ['Archive','Two 8 TB drives, mirrored','In the archive host at the studio'],
+        ['Offsite','8 TB external','Away from the studio. Comes in once a month for a copy'],
+      ].map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td class="note">${r[2]}</td></tr>`)));
+    if(stage==='settings') return head('Choices that set everything else')+panel('Decide first','Archive host',ul(['A network box (NAS) if both the editing PC and the Mac mini need the archive.','A USB enclosure if only the editing PC does. The archive then stays a plain drive letter and the ingest tools need no changes.','Open question: does the Skytech PC have a free M.2 slot? If yes, skip the SSD enclosure.','Not scouted: the 32 GB RAM kit from the Oct 30 audit, cables, a UPS.']));
+    return head('Once the drives land')+panel('Order of operations','Do these in order',ol(['Label the new archive drive.','Run Red Mile Ingest once by hand.','Run the console repoint tool, then Optimize.','Clear the 246 GB of imports and cache from the T7 once the copy has verified.','Set the monthly offsite copy.']))+`<p class="note">${dated}</p>`;
+  }
+
+  // music
+  if(stage==='today') return head('What the music side owns','The recording and mixing rig at the studio, as verified on the machine. Nothing here is planned or priced.')
+    +panel('Owned','In the room today',tbl(['Item','Role','Source'],MUSIC_OWNED.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`)));
+  if(stage==='buy') return head('Nothing on the music buying list yet')
+    +empty('One related purchase sits in another area.','The new studio Mac mini would run Ableton and the Apollo x6. It is planned under Trading Desk, on the Plan and Buy tabs.')
+    +empty('No music gear hunt is recorded.','Start one in chat with "scout:" and what the studio needs. The picks land here.');
+  return head(`No ${stName.toLowerCase()} recorded for Music yet`)+empty('This stage is empty.','Nothing in the project records covers it. Start a hunt in chat with "scout:" and what the studio needs.');
 }
+function renderArea(){ if(area==='lighting') return; $('#areaView').innerHTML=areaHTML(); }
 
 /* ---------- keep scroll and focus across re-renders ---------- */
 function keep(fn){ return function(...args){
@@ -1311,16 +1374,26 @@ function keep(fn){ return function(...args){
   return out; }; }
 
 /* ---------- render all ---------- */
-function renderAll(){ renderDesk('trading'); renderDesk('junior'); renderToday(); renderChips(); renderPlan(); renderTiers(); renderKelvin(); renderPicker(); renderSummary(); renderShop(); renderPlace(); renderCamera(); renderRun(); }
+function renderAll(){ renderArea(); renderToday(); renderChips(); renderPlan(); renderTiers(); renderKelvin(); renderPicker(); renderSummary(); renderShop(); renderPlace(); renderCamera(); renderRun(); }
 renderAll=keep(renderAll); renderShop=keep(renderShop); renderRun=keep(renderRun); renderPlace=keep(renderPlace);
 renderToday=keep(renderToday); renderCamera=keep(renderCamera); renderPlan=keep(renderPlan); renderRig=keep(renderRig);
 
 /* ---------- routing ---------- */
-const TABS=['today','plan','buy','place','camera','run','junior','trading'];
-function route(){ const h=(location.hash||'').slice(1); const t=TABS.includes(h)?h:'plan';
-  for(const id of TABS){ $('#'+id).hidden=id!==t; }
-  document.querySelectorAll('nav.tabs a').forEach(a=>{ if(a.dataset.tab===t) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+const LEGACY={today:['lighting','today'],plan:['lighting','plan'],buy:['lighting','buy'],place:['lighting','place'],camera:['lighting','settings'],run:['lighting','run'],junior:['desk','today'],trading:['desk','today']};
+function route(){
+  const h=(location.hash||'').slice(1); const m=h.split('-');
+  if(AREAS[m[0]]&&STAGES.some(x=>x[0]===m[1])){ area=m[0]; stage=m[1]; }
+  else if(AREAS[m[0]]&&m.length===1){ area=m[0]; stage=area==='lighting'?'plan':'today'; }
+  else if(LEGACY[h]){ [area,stage]=LEGACY[h]; }
+  else { area='lighting'; stage='plan'; }
+  document.querySelectorAll('main section.stage').forEach(x=>{x.hidden=true;});
+  if(area==='lighting') $('#'+LIGHT_SEC[stage]).hidden=false; else { renderArea(); $('#areaView').hidden=false; }
+  $('#stageNav').innerHTML=STAGES.map(([k,n],i)=>`<a href="#${area}-${k}" data-tab="${k}" ${k===stage?'aria-current="page"':''}><span class="n">${i}</span>${n}</a>`).join('');
+  const sel=$('#areaSel'); if(!sel.options.length) sel.innerHTML=Object.entries(AREAS).map(([k,v])=>`<option value="${k}">${esc(v.name)}</option>`).join('');
+  sel.value=area; $('#areaSub').textContent=AREAS[area].sub;
+  $('#chips').hidden=area!=='lighting'; $('#sync').hidden=area!=='lighting';
 }
+$('#areaSel').addEventListener('change',e=>{ const a=e.target.value; location.hash=a+'-'+(a==='lighting'?'plan':'today'); });
 window.addEventListener('hashchange',()=>{route();window.scrollTo(0,0);});
 
 /* ---------- writes ---------- */
