@@ -1143,7 +1143,7 @@ const DESKS={
        spec:'Nothing recorded for this desk.', why:'', src:'No record.'},
     ],
     conflicts:[
-      ['Mac mini memory and storage','A: 32 GB and 1 TB, with a warning against smaller. B: 24 GB and 512 GB.','Decide which. A is the only source that gives reasons.'],
+      ['Mac mini memory and storage','A: 32 GB and 1 TB, with a warning against smaller. B: 24 GB and 512 GB.','B matches what Apple Canada lists (reported Nov 16). No Canadian listing for 32 GB was found. See the recommendation below.'],
       ['Mac mini model name','Both say "M6". Neither shows a listing.','Resolved in part on Nov 16: Canadian tech press and a Best Buy Canada listing show an M6 Mac mini on sale since Sep 22. Apple\'s own page was not reachable, so the exact memory and storage menu is still to confirm.'],
       ['Dell portrait monitor model','A: U2725QE. B: U2723QE.','Confirm which model the plan means before pricing.'],
     ],
@@ -1152,7 +1152,8 @@ const DESKS={
       apple:[
         ['On sale in Canada','M6 Mac mini and M5 Pro Mac mini, since Sep 22, 2026.','iPhone in Canada, Sep 22 and Aug 25'],
         ['Base M6','12-core CPU, 12-core GPU, 16 GB memory, 256 GB storage. $1,249 CAD at Apple; $1,199.99 at Best Buy Canada.','iPhone in Canada; Jump+; Best Buy Canada listing'],
-        ['M6, 24 GB / 512 GB','$1,849.99 CAD on a Best Buy Canada listing. Seen in one search result and not confirmed by a second.','Best Buy Canada'],
+        ['Apple Canada store','Lists the M6 at 24 GB / 512 GB and the M5 Pro at 24 GB / 512 GB.','Reported by Miller, Nov 16. Not opened for this guide'],
+        ['M6, 24 GB / 512 GB','$1,849.99 CAD on a Best Buy Canada listing. Seen in one search result and not confirmed by a second. Apple\'s own price not recorded.','Best Buy Canada'],
         ['M6, 32 GB / 1 TB','No Canadian listing found. The only figure is the "about $2,600" spoken on Nov 5. Sources disagree on whether 32 GB is offered: MacRumors-based reports and TechRepublic say yes, EveryMac lists only 16 and 24 GB.','MacRumors; TechRepublic; EveryMac'],
         ['M5 Pro Mac mini','From $2,399 CAD. A Best Buy Canada listing shows 24 GB / 512 GB at $2,399.99.','iPhone in Canada; Best Buy Canada'],
         ['M6 ports and screens','Back: 3 Thunderbolt 4, 1 HDMI, 2.5 Gb Ethernet. Front: 2 USB-C, headphone jack. Runs three screens by itself.','9to5Mac; AppleInsider'],
@@ -1163,16 +1164,17 @@ const DESKS={
         ['Computer at the studio','The M1 Mac mini stays (owned)','New Mac mini bought for the studio (planned)'],
         ['What you buy','1 Mac mini for the desk','1 Mac mini for the studio, plus 1 USB graphics adapter for the desk'],
         ['Load at the desk','Three screens of dashboards and charts. Light work.','The same light work'],
-        ['Load at the studio','The M1 keeps recording and mixing (Ableton Live 12, UAD Console, the Apollo x6, about 226 UAD plugins) and adds the always-on background jobs on top','The new machine takes all of that. The always-on jobs get a current chip and more memory'],
-        ['Memory at the desk','16, 24 or 32 GB, your choice at purchase','8 or 16 GB. Which one the studio M1 has is not recorded, and it can\'t be upgraded'],
-        ['Memory at the studio','8 or 16 GB (not recorded), shared by recording and the always-on jobs','Your choice at purchase'],
-        ['Storage','Desk: your choice. Studio: the M1\'s internal size is not recorded','Desk: the M1\'s internal size (not recorded). Studio: your choice'],
+        ['Load at the studio','The M1 keeps music sessions (Ableton Live 12, UAD Console, the Apollo x6, about 226 UAD plugins), show days (RØDECaster Pro II and Video, clean guest picture on HDMI) and adds the always-on background jobs on top','The new machine takes all of that. The always-on jobs get a current chip and more memory'],
+        ['Memory at the desk','24 GB on the configuration Apple Canada lists','16 GB (reported Nov 16). Enough for three screens of dashboards'],
+        ['Memory at the studio','16 GB, shared by music, shows and the always-on jobs','24 GB: the 16 GB that carries the studio today plus 8 GB for the always-on jobs'],
+        ['Storage','Desk: 512 GB. Studio: the M1\'s 512 GB, already holding Ableton and the plugins','Desk: the M1\'s 512 GB, wiped. Studio: 512 GB new, with projects and recordings on the studio drives'],
         ['Screens the desk computer runs by itself','3 of 3','2 of 3. The third needs a USB graphics adapter'],
+        ['Screens the studio computer runs by itself','2: the operator monitor and the clean guest picture to the RØDECaster Video. Any second monitor needs adapter software','3: the operator monitor, the clean guest picture, and one spare for a second monitor'],
         ['Ports at the studio','M1: 2 Thunderbolt, one taken by the Apollo x6','M6: 3 Thunderbolt, one for the Apollo x6 and two spare'],
         ['Studio data drives (2 × 1 TB, owned)','Stay at the studio','Stay at the studio. Nothing on them moves with the M1'],
         ['Disruption','None at the studio. The desk is a clean install','The studio\'s recording setup has to be rebuilt on the new machine: Ableton, UAD, plugins and their licences. The M1 is then wiped for the desk'],
-        ['Main risk','Background jobs competing with a paid recording session on an older machine with unknown memory','A third screen that depends on adapter software, and studio downtime during the move'],
-        ['Cost to buy (CAD before tax)','About $1,850 (24 GB / 512 GB, Best Buy listing, Nov 16) up to about $2,600 (32 GB / 1 TB, spoken Nov 5)','About $2,600 for a 32 GB / 1 TB studio machine (spoken Nov 5, not confirmed) plus about $140 for the adapter'],
+        ['Main risk','Background jobs competing with a paid recording session on a 16 GB machine from 2020','A third screen that depends on adapter software, and studio downtime during the move'],
+        ['Cost to buy (CAD before tax)','About $1,850 (24 GB / 512 GB, Best Buy listing, Nov 16) up to about $2,600 (32 GB / 1 TB, spoken Nov 5)','About $1,850 for the M6 at 24 GB / 512 GB (Best Buy listing, Nov 16), plus about $140 for the desk adapter and a powered USB-C hub for the studio (not priced)'],
       ],
       third:[
         'The M1 Mac mini sends a picture to two screens by itself. A third screen only works through a USB graphics adapter, a small box that uses DisplayLink software on the Mac to draw the picture and send it down a USB cable.',
@@ -1183,26 +1185,39 @@ const DESKS={
         'The studio M1 already has DisplayLink software on it: a "DisplayLink USB Audio" device shows in its audio device list. Whether the adapter is still there and could go with it is not recorded.',
       ],
       runs:[
-        ['c','On the studio Mac mini','Ableton Live 12 Suite, UAD Console and the Apollo x6 on Thunderbolt, about 226 UAD plugins and 285 Audio Units, the RØDECaster apps over USB, the podcast audio lab (Python), and the Claude sessions that work on the studio.','Studio control skill, "The rig, as verified"; podcast lab skill'],
+        ['c','On the studio Mac mini (M1, 16 GB / 512 GB)','Music: Ableton Live 12 Suite, UAD Console and the Apollo x6 on Thunderbolt, about 226 UAD plugins and 285 Audio Units. Shows: RØDECaster Pro II and RØDECaster Video, with the Mac\'s HDMI output feeding RØDECaster Video input 4 as the clean picture for Riverside guests and screens. Also the podcast audio lab and the Claude sessions that work on the studio.','Studio control skill, "The rig, as verified"; seven studio bots, reported Nov 16; Camera tab, CAM4'],
         ['c','Planned for the studio Mac mini','The always-on background jobs for the Junior Desk.','Nov 5 planning session'],
-        ['u','On the Skytech','No record available to this guide names what runs on the Skytech. Records mention a Windows editing PC with about 16 GB free on its C: drive, and do not say it is the Skytech.','Gear Scout storage hunt notes; no direct record'],
-        ['u','Checked on the machines themselves','Not possible from here: the studio Mac does not offer its folder to cloud sessions, so its memory, storage and running apps could not be read.','Remote Control folder list, Nov 16'],
+        ['c','On the Skytech (Windows)','Govee lighting control, the archive, copy jobs and the Windows production console. None of this needs to move to the Mac.','Reported by Miller, Nov 16'],
+        ['u','Not measured yet','How full the M1\'s 512 GB is, and its memory pressure during a full session. More hardware audit evidence is pending.','Open'],
+      ],
+      ports:[
+        ['Apollo x6','Thunderbolt, plugged straight in','Rear Thunderbolt 1'],
+        ['Operator monitor','One screen','Rear Thunderbolt 2'],
+        ['Clean guest picture to RØDECaster Video input 4','HDMI','The HDMI port'],
+        ['Studio drive 1','One port (connector type not recorded)','Rear Thunderbolt 3'],
+        ['Studio drive 2','One port (connector type not recorded)','Powered hub'],
+        ['RØDECaster Pro II and RØDECaster Video, when connected to the Mac','One USB port each','Front USB-C, or the powered hub'],
+        ['Network','Ethernet','Built in'],
+        ['Second monitor, if wanted','One screen','Moves a drive to the hub and takes a Thunderbolt port. No adapter software needed'],
       ],
       rec:[
-        'Recommended, on the evidence so far: Option 2, with a new studio Mac mini at M6, 32 GB memory and 1 TB storage. The studio is where the heavy and always-on work lives, and the Nov 5 reasons for 32 GB and 1 TB (journals and fixtures) describe that work. Keep both 1 TB data drives at the studio.',
-        'Check first: the M1\'s memory. If it is 16 GB it suits the desk. If it is 8 GB, three screens of live dashboards with adapter software will be tight, and Option 1 with a 24 GB / 512 GB desk machine is the safer buy.',
-        'If Apple Canada does not sell the M6 with 32 GB: take 24 GB / 1 TB, or step up to the M5 Pro only if video editing or AI voice work is moving from the Skytech onto the Mac.',
-        'If the Skytech already carries the heavy editing and stays in service: 24 GB / 1 TB is enough for the studio Mac.',
-        'Under Option 1 the two source specs stop conflicting: 24 GB / 512 GB fits a desk machine that only runs screens, and 32 GB / 1 TB fits whichever machine carries the always-on jobs.',
+        'Buy for the studio: Apple Mac mini, M6 chip (12-core CPU, 12-core GPU), 24 GB memory, 512 GB storage. This is the M6 configuration Apple Canada lists. About $1,850 CAD before tax on a Best Buy Canada listing seen Nov 16; confirm Apple\'s price.',
+        'Why 24 GB: the M1 runs the whole studio today on 16 GB. 24 GB keeps that and adds 8 GB for the always-on jobs, so a music session or a show is not competing with them.',
+        'Why the M6 and not the M5 Pro: the Skytech already carries the archive, copy jobs and the production console, and the Apollo x6 runs the UAD plugins on its own processors. The M5 Pro at 24 GB / 512 GB costs about $550 more for the same memory and storage.',
+        'Why 512 GB works: the M1 runs the same software on 512 GB now, and projects and recordings stay on the two studio drives. If the M1\'s disk is more than about three quarters full, order 1 TB instead (price not confirmed).',
+        'Add one powered USB-C hub. The studio needs six USB-C or Thunderbolt connections and the M6 has five. Keep the Apollo x6 and the monitor plugged straight into the Mac; the drives and RØDE gear can share the hub. The M6 has no USB-A ports, so older cables need the hub or adapters.',
+        'Step up to the M5 Pro only if the audit shows the M1 under memory pressure or with Ableton\'s CPU meter running high during normal sessions today.',
+        'The M1 at 16 GB / 512 GB then suits the home-office desk under Option 2, with the third screen on the USB graphics adapter.',
+        'This replaces the earlier 32 GB / 1 TB suggestion. That was made before the M1\'s size and the Skytech\'s jobs were known, and no Canadian listing for 32 GB was found.',
       ],
       links:[['iPhone in Canada, Sep 22','https://www.iphoneincanada.ca/2026/09/22/mac-mini-mac-studio-canada-available/'],['iPhone in Canada, Aug 25','https://www.iphoneincanada.ca/2026/08/25/apple-debuts-m6-and-m5-pro-mac-mini-with-price-hike-in-canada/'],['Best Buy Canada, Mac mini','https://www.bestbuy.ca/en-ca/category/apple-mac-mini/26226'],['Jump+, M6 Mac mini','https://www.jumpplus.com/products/mac-mini-m6-mhqk4vc-a'],['9to5Mac','https://9to5mac.com/2026/08/25/apple-announces-new-mac-mini-heres-everything-new/'],['MacRumors','https://www.macrumors.com/2026/08/25/apple-announces-2026-mac-mini/'],['TechRepublic','https://www.techrepublic.com/article/news-mac-mini-m6-cheat-sheet/'],['EveryMac, M6','https://everymac.com/systems/apple/mac_mini/specs/mac-mini-m6-12-core-cpu-12-core-gpu-2026-specs.html'],['AppleInsider','https://appleinsider.com/inside/mac-mini/vs/m6-mac-mini-vs-m4-mac-mini-compact-powerhouses-compared'],['Apple Support, M1 displays','https://support.apple.com/guide/mac-mini/connect-a-display-apd8e4fbbb97/2020'],['The Apple Wiki, M1 Mac mini','https://theapplewiki.com/wiki/Mac_mini_(M1,_2020)'],['Staples.ca, OWC adapter','https://www.staples.ca/products/3119330-en-owc-usb-c-to-dual-hdmi-4k-display-adapter-with-displaylink'],['Fleet Network, Sonnet adapter','https://fleetnetwork.ca/products/usbc-dhdmi/']],
     },
     money:[['One desk, complete','$3,200 to $4,200','Spoken estimate in source A, made before the UPS and microphone were on the list']],
     open:[
       'Deployment: Option 1 or Option 2.',
-      'The studio M1\'s memory and storage. Apple menu, About This Mac.',
-      'What runs on the Skytech.',
-      'Mac mini: 32 GB and 1 TB, or 24 GB and 512 GB, confirmed against Apple Canada\'s menu.',
+      'How full the studio M1\'s 512 GB is, and its memory pressure in a full session. These decide 512 GB or 1 TB, and M6 or M5 Pro.',
+      'Apple Canada\'s own price for the M6 at 24 GB / 512 GB.',
+      'The powered USB-C hub: model and price, or whether one is already owned.',
       'Portrait screen: the Dell 27 or the LG 32UN880, and which Dell model.',
       'The right-hand 27 in 4K monitor model.',
       'How the third screen is mounted, and how many arms.',
@@ -1219,11 +1234,11 @@ const DESKS={
     ],
     items:[
       {n:'Mac mini M1 at the studio', q:'1', where:'Red Mile studio, fixed', own:'owned', ev:'p', price:'owned',
-       spec:'B confirms it is an M1. Its memory and storage are not recorded.',
+       spec:'M1, 16 GB memory, 512 GB storage.',
        why:'Keeps the heavy background work at the studio and out of the trader\'s room.',
-       src:'Owned per source B. In source A, "check specs on the current Mac Mini at the studio" is still an open step.'},
-      {n:'1 TB drives', q:'2', where:'not recorded', own:'owned', ev:'p', price:'owned',
-       spec:'Make, model and type are not recorded.', why:'Reason not stated in the list.', src:'Owned per source B.'},
+       src:'Owned per source B. Size reported by seven studio bots, Nov 16.'},
+      {n:'1 TB drives', q:'2', where:'Red Mile studio. They stay at the studio under either deployment option', own:'owned', ev:'p', price:'owned',
+       spec:'Make, model and connector are not recorded.', why:'Hold the studio\'s projects and recordings.', src:'Owned per source B.'},
       {n:'New Mac mini for the studio', q:'0 or 1', where:'Red Mile studio, fixed', own:'planned', ev:'u', price:'about $2,600 if needed',
        spec:'Same spec as the desk computer, if the M1 falls short.',
        why:'Only needed if the existing M1 is not capable enough.',
@@ -1242,8 +1257,7 @@ const DESKS={
     conflicts:[],
     money:[['Matched pair of desks','$6,500 to $8,500','Spoken estimate in source A'],['One desk','$3,200 to $4,200','Spoken estimate in source A']],
     open:[
-      'Memory and storage of the studio M1, and whether it is capable enough.',
-      'Where the two owned 1 TB drives go.',
+      'Whether the studio M1 stays or moves to the home-office desk. See Deployment options on the Junior Desk tab.',
       'Whether an office desk is wanted at all. On Nov 5 the answer was that the desk will probably just be at home.',
       'Whether "Trading Desk" means a setup that is not in these records.',
     ],
@@ -1264,10 +1278,13 @@ function renderDesk(id){
         <p class="note">Two ways to place the computers. Option 1 is the Nov 5 plan. Option 2 sends the studio's existing M1 to the home office and buys the new machine for the studio.</p>
         <div class="tbl desk" data-sx="deploy"><table><thead><tr><th></th><th>Option 1 · New Mac mini at the desk</th><th>Option 2 · M1 to the desk, new Mac mini at the studio</th></tr></thead><tbody>${D.rows.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td style="min-width:210px">${esc(r[1])}</td><td style="min-width:210px">${esc(r[2])}</td></tr>`).join('')}</tbody></table></div></div>
       <div class="grid2">
-        <div class="panel"><span class="eyebrow">Recommendation</span><h3>Right-sizing the studio machine</h3><ul class="clean">${D.rec.map(o=>`<li>${esc(o)}</li>`).join('')}</ul></div>
+        <div class="panel"><span class="eyebrow">Recommendation</span><h3>The studio machine to buy</h3><ul class="clean">${D.rec.map(o=>`<li>${esc(o)}</li>`).join('')}</ul></div>
         <div class="panel"><span class="eyebrow">Option 2 only</span><h3>Two screens direct, the third by adapter</h3><ul class="clean">${D.third.map(o=>`<li>${esc(o)}</li>`).join('')}</ul></div>
       </div>
       <div class="panel"><span class="eyebrow">What runs where</span><h3>Studio workloads, by evidence</h3><div class="tbl desk"><table><tbody>${D.runs.map(r=>`<tr><td>${evt(r[0])}</td><td><b>${esc(r[1])}</b><small>${esc(r[2])}</small></td><td class="note">${esc(r[3])}</td></tr>`).join('')}</tbody></table></div></div>
+      <div class="panel"><span class="eyebrow">Option 2 · Studio machine</span><h3>Where everything plugs into the new Mac mini</h3>
+        <p class="note">The M6 Mac mini has three Thunderbolt ports and one HDMI on the back, and two USB-C ports on the front. It runs three screens by itself.</p>
+        <div class="tbl desk"><table><thead><tr><th>Connection</th><th>Needs</th><th>Goes to</th></tr></thead><tbody>${D.ports.map(r=>`<tr><td style="min-width:170px"><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('')}</tbody></table></div></div>
       <div class="panel"><span class="eyebrow">Apple Canada check · ${esc(D.checked)}</span><h3>What is on sale, and at what price</h3>
         <p class="note">Apple's own Canadian store could not be opened from where this guide is built. These facts come from Canadian tech press, retailer listings and spec sites found on ${esc(D.checked)}. Prices are CAD before tax. Confirm on apple.com/ca before buying.</p>
         <div class="tbl desk"><table><tbody>${D.apple.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`).join('')}</tbody></table></div>
