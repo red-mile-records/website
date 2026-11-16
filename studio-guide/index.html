@@ -418,11 +418,11 @@ svg.dimmed .fx:not(.hl){opacity:.18}
   <div class="lede">
     <span class="eyebrow">Stage 4 · Camera</span>
     <h2>Three bodies that cut together</h2>
-    <p>Every camera runs the same Kelvin as the face lights, the same shutter and the same exposure. All three run 1080p 29.97 for now into the RØDECaster Video, which switches and ISO-records each one. Recording 4K inside the two ZV-E10 IIs is the later upgrade for sharper vertical clips.</p>
+    <p>Every camera runs the same Kelvin as the face lights, the same shutter and the same exposure. All three run 1080p 29.97 for now into the RØDECaster Video, which switches and ISO-records each one. Recording 4K inside the two ZV-E10 IIs is the later upgrade for sharper vertical clips. For still photos, pick Photo under Camera mode.</p>
   </div>
   <div class="camcards" id="camcards"></div>
   <div class="panel">
-    <div class="rowhead"><div><span class="eyebrow">Recording mode</span><h3 id="modeTitle">Show</h3></div><div class="segs" id="modeSegs"></div></div>
+    <div class="rowhead"><div><span class="eyebrow">Camera mode</span><h3 id="modeTitle">Show</h3></div><div class="segs" id="modeSegs"></div></div>
     <p id="modeLede" class="note"></p>
     <div class="rowhead"><div><span class="eyebrow">Skin tone on camera</span><h3 id="skinTitle">Fair</h3></div><div class="segs" id="skinSegs"></div></div>
     <p id="skinLede" class="note"></p>
@@ -866,6 +866,7 @@ function renderPlace(){
 /* ---------- camera ---------- */
 const MODES={
   show:{name:'Show', lede:'Default for every episode: every camera at 1080p 29.97 into the RØDECaster Video. No internal recording for now.'},
+  photo:{name:'Photo', lede:'Still photos on the set with the same lights and the same Kelvin as the show. Shoot before or after a recording, never during one.'},
   p60:{name:'60p reels (future)', lede:'Not planned for now. For a separate reels or slow-motion session later. Every RØDECaster Video input must run the same rate, so do not mix 60p into a 29.97 show.'},
   vert:{name:'Native vertical (future)', lede:'Not planned for now. A ZV-E10 II turned 90° on an L-bracket records 2160×3840 with no crop. Use it for solo, teleprompter and ad reads. For shows, crop 9:16 from the singles.'},
 };
@@ -893,6 +894,22 @@ function camRows(){
   const k=S.kelvin, m=mode, sk=SKINS[skin];
   const rate=m==='p60'?'NTSC · 60p (59.94)':'NTSC · 30p (29.97)';
   const sh=m==='p60'?'1/125':'1/60';
+  if(m==='photo') return [
+    ['Mode', 'Still/Movie/S&Q switch to Still, exposure mode M', 'Mode dial to M', 'Manual keeps every frame the same brightness under the fixed set lights.'],
+    ['File format', 'RAW + JPEG, JPEG Fine, size L (26 MP), 3:2', 'RAW & JPEG, Fine, size L (24 MP), 3:2', 'The JPEG is ready to post. The RAW leaves room to fix exposure and colour later.'],
+    ['Shutter', '1/125', '1/125', 'Freezes a seated person and a handheld camera. Neither the bodies nor the Sigma lenses are stabilised. Use 1/60 only on a tripod.'],
+    ['Aperture', 'f/2.0', 'f/2.8', 'f/2.0 on the 30mm blurs the wall behind one person. For two people go to f/2.8 and double the ISO. The 16mm needs f/2.8 for depth across the seats.'],
+    ['ISO (fixed)', '400', '800', 'Same light as the show. The faster shutter costs one stop, so ISO is double the video setting.'],
+    ['White balance', `${k}K, tint 0`, `${k}K, tint 0`, 'Same Kelvin as the face lights, so the JPEGs match the video. The RAW can still be changed later.'],
+    ['Look', sk.look[0], sk.look[1], 'Same look as the video for this skin tone, so stills and clips sit together.'],
+    ['Focus', 'AF-S, Human, eye on, Focus Area Wide', 'AF-S, Flexible Spot M on the nearest eye, Face Detection on', 'The video standard leaves the a6000 on manual focus with Face Detection off. Turn both back on for stills.'],
+    ['Drive', 'Single. Continuous Lo for groups', 'Single. Continuous Lo for groups', 'A short burst beats blinks in a group shot.'],
+    ['Shutter type', 'Electronic (the body has no mechanical shutter)', 'Mechanical, e-Front Curtain on', 'An electronic shutter can show bands under dimmed LEDs. If bands appear on a ZV-E10 II, use 1/60 on a tripod or raise the light output.'],
+    ['Exposure aid', `Zebra ${sk.zebra}, then check the histogram`, `Zebra ${sk.zebra}, then check the histogram`, `For ${sk.name.toLowerCase()} skin, forehead highlights just touching ${sk.zebra}. Nothing piled against the right edge of the histogram.`],
+    ['Flash', 'None', 'Off, pop-up flash down', 'The set lights are the look. Flash flattens it.'],
+    ['Card', 'SD card in the body', 'The SDXC card already in the body', 'Stills save to the card. Video goes to the RØDECaster Video.'],
+    ['Power', 'Battery for handheld, USB-C PD on the tripod', 'NP-FW50 battery for handheld, AC dummy on the tripod', 'Unplug HDMI and power before lifting a camera off its tripod.'],
+  ];
   const zvFile=m==='p60'?'XAVC S HD 60p 50M':m==='vert'?'XAVC S 4K 30p, body rotated, 2160×3840':'None for now (HDMI only). Later: XAVC S 4K 30p';
   return [
     ['Region and rate', rate, m==='p60'?'NTSC · 60p (59.94)':'NTSC · 30p (29.97)', 'In Sony\'s NTSC menu "30p" is 29.97. Every input has to match the switcher.'],
@@ -927,7 +944,13 @@ function renderCamera(){
   $('#camTable').innerHTML=camRows().map(r=>`<tr><td><b>${esc(r[0])}</b></td><td class="mono" style="font-size:13px">${esc(r[1])}</td><td class="mono" style="font-size:13px">${esc(r[2])}</td><td class="note">${esc(r[3])}</td></tr>`).join('');
   const t=currentTier(); const fill=optById(S.sel.F);
   let eff=[];
-  if(mode==='p60'){
+  if(mode==='photo'){
+    eff.push('Shoot stills before or after a recording. In Still mode a camera stops sending a clean video picture to the RØDECaster Video.');
+    eff.push('Lights stay at show levels. For portraits, put the Serif 65 on a dark slide or turn it down so it does not outshine the face.');
+    eff.push('Back to video, ZV-E10 II: flip the switch back to Movie. With "Different Set for Still/Mv" turned on for aperture, shutter, ISO, white balance and focus mode, the video standard comes back as it was. Turn that on once, then confirm the video settings.');
+    eff.push('Back to video, a6000: mode dial to Movie, then set 1/60, f/2.8, ISO 400, manual focus and Face Detection off again. Check them against the Show mode table before the next recording.');
+    eff.push('Not tested in the room yet. On rig day take three frames per body at these settings and look for LED bands on the ZV-E10 II frames.');
+  } else if(mode==='p60'){
     eff.push(`Lighting: keys need about ${sk.keyLux*2} lux at the face, or ISO doubles (singles 400, wide 800). The output ranges on the Place tab roughly double.`);
     eff.push('Flicker: dimmed LEDs can band at 1/125. Run the flicker test on rig day before any reels session.'+(fill.id==='f1'?' The owned NiceVeedi bulb fill is the most likely to flicker.':''));
     eff.push('Files are about twice the size. Every input on the RØDECaster Video has to run 60p for that session.');
