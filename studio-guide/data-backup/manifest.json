@@ -1,0 +1,33 @@
+{
+  "artifact": "https://claude.ai/artifact/4xRxXwSDcz7S2bwNcxczri",
+  "exported_at": "2026-11-05",
+  "method": "ArtifactData list (read-only), one file per document at <collection>/<doc_id>.json",
+  "collections": {
+    "build": {
+      "count": 1,
+      "documents": [
+        {
+          "id": "current",
+          "version": 1,
+          "updatedAt": "2026-11-05T01:25:52.813997Z",
+          "file": "build/current.json"
+        }
+      ]
+    },
+    "status": {
+      "count": 0,
+      "documents": [],
+      "result": "No documents matched in collection \"status\"."
+    },
+    "checks": {
+      "count": 0,
+      "documents": [],
+      "result": "No documents matched in collection \"checks\"."
+    },
+    "riglog": {
+      "count": 0,
+      "documents": [],
+      "result": "No documents matched in collection \"riglog\"."
+    }
+  }
+}

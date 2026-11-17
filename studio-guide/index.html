@@ -1,10 +1,10 @@
 <meta charset="utf-8">
-<title>Red Mile Set Bible</title>
+<title>Gear Scout 2.0</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: sticky header with five stage tabs; one stage visible at a time; content column 1180px. Dark-first studio palette. */
+/* Layout: sticky header with setup navigation; lighting keeps six stage tabs; other setups are one planner page each; one stage visible at a time; content column 1180px. Dark-first studio palette. */
 :root{
   --bg:#0f1012; --surface:#17191c; --surface2:#1e2125; --line:#2b2f34; --fg:#ece8e0; --muted:#9a9ea5;
   --accent:#e8542f; --accent-fg:#ffffff; --ok:#4cc38a; --warn:#f0b43c; --bad:#ff6b5e;
@@ -47,6 +47,37 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background
 .head-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding-block:12px 8px}
 .brand{display:flex;align-items:baseline;gap:10px;min-width:0}
 .brand h1{font-size:20px;font-weight:800}
+.brand{flex-wrap:wrap}
+.areapick{display:inline-flex;align-items:center;gap:8px}
+.areapick select{font:600 15px var(--body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;max-width:100%}
+.setups{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:8px}
+.setups a{flex:none;text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:600;font-size:14px;white-space:nowrap}
+.setups a[aria-current="page"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.jump{display:flex;flex-wrap:wrap;gap:6px}
+.jump button{border:1px solid var(--line);background:var(--surface2);border-radius:7px;padding:5px 10px;font-size:13px;font-weight:500}
+.pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:12px}
+.pcard{border:1px solid var(--line);background:var(--surface2);border-radius:10px;padding:13px;display:grid;gap:7px;align-content:start;text-align:left;min-width:0}
+button.pcard:hover{border-color:var(--muted)}
+.pcard.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset;background:color-mix(in srgb,var(--accent) 8%,var(--surface2))}
+.pcard[disabled]{opacity:.5;cursor:not-allowed}
+.pcard .pt{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.pcard h4{margin:0;font:700 15px/1.3 var(--display)}
+.pcard .pp{font:500 19px var(--mono)}
+.pcard .pp small{font:400 11.5px var(--mono);color:var(--muted);display:block}
+.pcard ul{margin:0;padding-left:16px;font-size:12.5px;color:var(--muted);display:grid;gap:2px}
+.pcard .fit{font-size:12.5px}
+.pcard .lk{font-size:12.5px;display:flex;flex-wrap:wrap;gap:4px 10px}
+.pcard .save{font-size:12.5px;color:var(--ok)}
+.slot{display:grid;gap:10px;border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--surface)}
+.slot>div:first-child{display:grid;gap:3px}
+.leadform{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:8px;align-items:end}
+.leadform label{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.leadform input,.leadform select{font:500 14px var(--body);background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:7px 8px;width:100%}
+details.more{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:0 16px}
+details.more>summary{cursor:pointer;padding:14px 0;font:700 15px var(--display)}
+details.more>div{display:grid;gap:14px;padding-bottom:16px}
+.empty{border:1px dashed var(--line);border-radius:10px;padding:22px;color:var(--muted);display:grid;gap:6px}
+.empty b{color:var(--fg)}
 .brand .addr{font:400 12px var(--mono);color:var(--muted)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto}
 .chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:3px 10px;font:500 12px var(--mono);white-space:nowrap}
@@ -118,11 +149,11 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
 /* role picker */
 .picker{display:grid;gap:14px}
-.prow{display:grid;grid-template-columns:230px 1fr;gap:14px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--rc);border-radius:10px;padding:14px;min-width:0}
-.prow .about{display:grid;gap:6px;align-content:start;min-width:0}
-.prow .about p{font-size:13px;color:var(--muted)}
-.opts{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;min-width:0}
-.opt{flex:0 0 230px;text-align:left;border:1px solid var(--line);background:var(--surface2);border-radius:8px;padding:11px;display:grid;gap:6px;align-content:start}
+.prow{display:grid;grid-template-columns:1fr;gap:12px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--rc);border-radius:10px;padding:14px;min-width:0}
+.prow .about{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;min-width:0}
+.prow .about p{font-size:13px;color:var(--muted);flex:1 1 280px}
+.opts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr));gap:10px;min-width:0}
+.opt{text-align:left;min-width:0;border:1px solid var(--line);background:var(--surface2);border-radius:8px;padding:11px;display:grid;gap:6px;align-content:start}
 .opt:hover{border-color:var(--muted)}
 .opt.on{border-color:var(--rc);box-shadow:0 0 0 1px var(--rc) inset;background:color-mix(in srgb,var(--rc) 10%,var(--surface2))}
 .opt .o-top{display:flex;justify-content:space-between;gap:6px;align-items:center}
@@ -203,6 +234,10 @@ svg.dimmed .fx:not(.hl){opacity:.18}
 .issue.done h4{text-decoration:line-through}
 .sev{font:500 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;border:1px solid var(--line)}
 .sev.first{border-color:var(--bad);color:var(--bad)} .sev.next{border-color:var(--warn);color:var(--warn)} .sev.polish{color:var(--muted)}
+.ev{font:500 10.5px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;border:1px solid var(--line);white-space:nowrap}
+.ev.x{border-color:var(--bad);color:var(--bad)} .ev.c{border-color:var(--ok);color:var(--ok)} .ev.u{border-color:var(--warn);color:var(--warn)} .ev.g{color:var(--muted)} .ev.l{border-style:dashed;color:var(--muted)}
+.desk td small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.deskkey{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13px;color:var(--muted)}
 .camcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px}
 .cam{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:6px;align-content:start}
 .cam .id{font:700 13px var(--mono);color:var(--accent)}
@@ -225,17 +260,11 @@ svg.dimmed .fx:not(.hl){opacity:.18}
 <header class="top">
   <div class="wrap">
     <div class="head-row">
-      <div class="brand"><h1>Red Mile Set Bible</h1><span class="addr">1865 17 Ave SW · podcast room 10×10 ft · 8.5 ft ceiling</span></div>
+      <div class="brand"><h1>Gear Scout 2.0</h1><span class="addr" id="areaSub"></span></div>
       <div class="chips" id="chips"></div>
     </div>
-    <nav class="tabs" aria-label="Stages">
-      <a href="#today" data-tab="today"><span class="n">0</span>Room today</a>
-      <a href="#plan" data-tab="plan"><span class="n">1</span>Plan</a>
-      <a href="#buy" data-tab="buy"><span class="n">2</span>Buy</a>
-      <a href="#place" data-tab="place"><span class="n">3</span>Place</a>
-      <a href="#camera" data-tab="camera"><span class="n">4</span>Camera</a>
-      <a href="#run" data-tab="run"><span class="n">5</span>Run</a>
-    </nav>
+    <nav class="setups" aria-label="Setups" id="setupNav"></nav>
+    <nav class="tabs" aria-label="Lighting stages" id="stageNav"></nav>
     <div class="sync" id="sync">Connecting to the shared build…</div>
   </div>
 </header>
@@ -326,7 +355,7 @@ svg.dimmed .fx:not(.hl){opacity:.18}
   <div class="panel flat">
     <span class="eyebrow">Built from</span>
     <div class="links">
-      <a href="https://claude.ai/artifact/FePPhRJnKVvXG71UQNfhWQ#studio-lighting-2026-10" target="_blank" rel="noopener"><b>Gear Scout</b><span>Lighting hunt, prices re-checked Oct 31</span></a>
+      <a href="https://claude.ai/artifact/FePPhRJnKVvXG71UQNfhWQ#studio-lighting-2026-10" target="_blank" rel="noopener"><b>Gear Scout</b><span>Lighting hunt, prices re-checked Nov 14</span></a>
       <a href="https://claude.ai/artifact/HWzfrZ5GBR2wU1hJponTsh" target="_blank" rel="noopener"><b>The Room on 17th</b><span>Room, seven layouts, phase 1 and 2 gear</span></a>
       <a href="https://claude.ai/artifact/P14EaJ1MD19oUd3jq7pRrE" target="_blank" rel="noopener"><b>Studio Light Roles</b><span>Five-layer plan, replaced by this page</span></a>
       <a href="https://claude.ai/artifact/VzrHmYAAuiRM7R1VEokQKb" target="_blank" rel="noopener"><b>a6000 Camera 3 Setup</b><span>Body settings and framing rules</span></a>
@@ -343,7 +372,8 @@ svg.dimmed .fx:not(.hl){opacity:.18}
   <div class="lede">
     <span class="eyebrow">Stage 2 · Buy</span>
     <h2>Pick a tier, then swap any role</h2>
-    <p>Start from a tier, then change any single role to an option from another tier. The build is shared, so everyone on the team sees the same list. Prices are CAD before 5% GST, from Gear Scout's Oct 31 re-check. Marketplace prices are asking prices.</p>
+    <p>Start from a tier, then change any single role to an option from another tier. The build is shared, so everyone on the team sees the same list. Prices are CAD before 5% GST. The shopping list shows each price's date. Marketplace prices are asking prices. A seller can still sell or withdraw, so confirm before driving over.</p>
+    <span class="note" id="priceStamp">Prices refreshed Nov 14, 11:24 to 11:30 p.m. MST. The Camera Store and Amazon.ca were re-read from each product page, and Scout read the six linked Marketplace listings (asking prices; seller availability unconfirmed). The K&amp;F stand is currently unavailable, so its price is the Oct 31 reference. Vistek could not be read and the TL30 pair has no listing link, so those keep their earlier dates.</span>
   </div>
 
   <div class="tiers" id="tiers"></div>
@@ -363,8 +393,9 @@ svg.dimmed .fx:not(.hl){opacity:.18}
 
   <div class="panel">
     <div class="rowhead"><div><span class="eyebrow">Shopping list</span><h3>What this build needs</h3></div><span class="note">Tap a status to move it on: Needed → Ordered → Arrived → Rigged</span></div>
-    <div class="tbl"><table><thead><tr><th>Item</th><th>For</th><th class="num">Qty</th><th class="num">Each</th><th class="num">Line</th><th>Where</th><th>Status</th></tr></thead><tbody id="shop"></tbody></table></div>
+    <div class="tbl" data-sx="shop"><table><thead><tr><th>Item</th><th>For</th><th class="num">Qty</th><th class="num">Each</th><th class="num">Line</th><th>Where</th><th>Status</th></tr></thead><tbody id="shop"></tbody></table></div>
   </div>
+  <div class="panel" id="lightLeads"></div>
 </section>
 
 <!-- PLACE -->
@@ -375,8 +406,10 @@ svg.dimmed .fx:not(.hl){opacity:.18}
     <p>Top-down plan to scale (1 square = 1 ft). The back wall is the slat wall with the Serif 65. Heights are to the centre of each light. Output levels are starting points for the build you picked. Meter them on rig day and write the real values in the Run tab.</p>
   </div>
   <div class="planwrap">
-    <div class="svgbox"><svg id="planSvg" viewBox="-34 -30 192 186" role="img" aria-label="Top-down studio plan"></svg></div>
+    <div class="svgbox" data-sx="plan"><svg id="planSvg" viewBox="-34 -30 192 186" role="img" aria-label="Top-down studio plan"></svg></div>
     <div class="panel">
+      <span class="eyebrow">Layout</span>
+      <div class="segs" id="layoutSegs"></div>
       <div class="toggles">
         <label><input type="checkbox" id="tFov" checked> Camera frames</label>
         <label><input type="checkbox" id="tBeam" checked> Light direction</label>
@@ -386,7 +419,7 @@ svg.dimmed .fx:not(.hl){opacity:.18}
       <div id="placeDetail" class="note"></div>
     </div>
   </div>
-  <div class="tbl"><table><thead><tr><th>Role</th><th>Fixture in your build</th><th>Where</th><th class="num">Height</th><th>Aim</th><th class="num">To face</th><th>Start output</th></tr></thead><tbody id="placeTable"></tbody></table></div>
+  <div class="tbl" data-sx="placetbl"><table><thead><tr><th>Role</th><th>Fixture in your build</th><th>Where</th><th class="num">Height</th><th>Aim</th><th class="num">To face</th><th>Start output</th></tr></thead><tbody id="placeTable"></tbody></table></div>
   <div class="grid2">
     <div class="panel">
       <span class="eyebrow">Frame checks</span>
@@ -395,15 +428,15 @@ svg.dimmed .fx:not(.hl){opacity:.18}
         <li>The wide (CAM1, 16mm) sees about 72° across. Its edges cross 3.4 ft in from each side wall at the seats, so both key stands sit outside them.</li>
         <li>The rim strip hangs at 94 in. That leaves about 8 in to the 8.5 ft ceiling and keeps its bottom edge above the wide's top edge. Lower it only until it peeks into the wide, then back off 2 in.</li>
         <li>The shelf takes the back-right corner, so the rim boom's base sits against the right wall just in front of it, behind the couch's right arm. Check it in the wide.</li>
-        <li>CAM2's background is the left wall and the white curtain. Keep the skirt on the K1 lantern's curtain side and meter the curtain at least 1 stop under the armchair face.</li>
+        <li>CAM2's background is the left wall, where the charcoal drape replaces the white curtain. Until it is up, keep the skirt on the K1 lantern's curtain side.</li>
         <li>The wash tubes lie on the floor at the baseboard behind the armchair and couch. The furniture hides them from every camera.</li>
         <li>Tape seat marks on the rug once faces meter right. Every show then starts from the same place.</li>
       </ul>
     </div>
     <div class="panel">
       <span class="eyebrow">Mounting</span>
-      <h3>Stands now, ceiling later</h3>
-      <p>Everything here sits on stands, so nothing needs drilling. The lease needs the landlord's written approval before anything goes on the walls or ceiling. Once that's approved, moving both lanterns and the rim to ceiling clamps would free the floor and is the next upgrade.</p>
+      <h3>Ceiling approved, stands until the hardware is in</h3>
+      <p>The landlord has approved ceiling mounting in writing. Hang both lanterns and the rim from ceiling clamps with drop arms at the same positions and heights shown here. That frees the floor and takes every stand out of the wide. The hardware is on the shopping list to scout. Until it is up, use the stands.</p>
       <p class="note">Sandbag every stand base. The 10×10 room has one exit, and a lantern on a tipped stand lands on a guest.</p>
       <p class="note">Power: 3 to 4 COBs, 2 tubes and the RØDECaster share one circuit. Run lights on their own power bar and keep them off the audio power bar.</p>
     </div>
@@ -413,15 +446,17 @@ svg.dimmed .fx:not(.hl){opacity:.18}
 <!-- CAMERA -->
 <section class="stage" id="camera" hidden>
   <div class="lede">
-    <span class="eyebrow">Stage 4 · Camera</span>
+    <span class="eyebrow">Stage 4 · Settings</span>
     <h2>Three bodies that cut together</h2>
-    <p>Every camera runs the same Kelvin as the face lights, the same shutter and the same exposure. The RØDECaster Video switches 1080p. The two ZV-E10 II singles also record 4K inside the camera, so vertical clips are cut from 4K and stay sharp.</p>
+    <p>Every camera runs the same Kelvin as the face lights, the same shutter and the same exposure. All three run 1080p 29.97 for now into the RØDECaster Video, which switches and ISO-records each one. Recording 4K inside the two ZV-E10 IIs is the later upgrade for sharper vertical clips. For still photos, pick Photo under Camera mode.</p>
   </div>
   <div class="camcards" id="camcards"></div>
   <div class="panel">
-    <div class="rowhead"><div><span class="eyebrow">Recording mode</span><h3 id="modeTitle">Show</h3></div><div class="segs" id="modeSegs"></div></div>
+    <div class="rowhead"><div><span class="eyebrow">Camera mode</span><h3 id="modeTitle">Show</h3></div><div class="segs" id="modeSegs"></div></div>
     <p id="modeLede" class="note"></p>
-    <div class="tbl"><table><thead><tr><th>Setting</th><th>ZV-E10 II · CAM2, CAM3</th><th>a6000 · CAM1</th><th>Why</th></tr></thead><tbody id="camTable"></tbody></table></div>
+    <div class="rowhead"><div><span class="eyebrow">Skin tone on camera</span><h3 id="skinTitle">Fair</h3></div><div class="segs" id="skinSegs"></div></div>
+    <p id="skinLede" class="note"></p>
+    <div class="tbl" data-sx="camtbl"><table><thead><tr><th>Setting</th><th>ZV-E10 II · CAM2, CAM3</th><th>a6000 · CAM1</th><th>Why</th></tr></thead><tbody id="camTable"></tbody></table></div>
     <div id="modeEffects" class="alerts"></div>
   </div>
   <div class="grid2">
@@ -442,7 +477,7 @@ svg.dimmed .fx:not(.hl){opacity:.18}
       <ul class="clean">
         <li>Lens height 48 to 50 in, about seated eye level, tilted down 2 to 3°. Raising the cameras was the Oct 28 call.</li>
         <li>Head 8 to 10% from the top of frame. People inside the middle 80% of the width.</li>
-        <li>On CAM2 and CAM3, keep the face in the centre third. A 9:16 crop from 3840×2160 is 1215×2160, scaled to 1080×1920, so it stays sharp. The face has to be inside it.</li>
+        <li>On CAM2 and CAM3, keep the face in the centre third so a 9:16 crop holds it. From 1080p that crop is about 608×1080 and soft; once the ZV-E10 IIs record 4K it is 1215×2160 and sharp.</li>
         <li>Level the wide using the vertical slats as the check. Show the whole shelf on the right or frame it out. Half a shelf looks like a mistake.</li>
         <li>CAM1 carries the teleprompter for solo and ad reads.</li>
       </ul>
@@ -493,14 +528,17 @@ svg.dimmed .fx:not(.hl){opacity:.18}
     <span class="eyebrow">Wrap</span>
     <h3>Reset the room</h3>
     <ul class="clean">
-      <li>Stop the RØDECaster Video and the internal recordings on CAM2 and CAM3 before lights go down.</li>
+      <li>Stop the RØDECaster Video recording before lights go down.</li>
       <li>Face lights off from their apps. Background scene back to the house Work scene.</li>
       <li>Leave stands, sandbags and seat marks where they are. Only move what a booking needs.</li>
-      <li>Offload the 4K files and keep at least 100 GB free on STUDIOSSD. 4K runs about 45 GB an hour per camera.</li>
+      <li>Offload the RØDECaster Video files and keep at least 100 GB free on STUDIOSSD.</li>
       <li>Displays back to Red Mile branding (SOP 03).</li>
     </ul>
   </div>
 </section>
+
+<!-- DESKS -->
+<section class="stage" id="areaView" hidden></section>
 </main>
 
 <script>
@@ -515,34 +553,36 @@ const ROLES = [
   {id:'SK', name:'Shared kit', job:'Sandbags, clamps, power bars, 14 AWG cords and gaffer tape.', skin:false},
 ];
 const P = {
-  sl60iid:{n:'Godox SL60IID', d:'70 W COB, 5600K only, CRI 96, Bowens', src:'Marketplace Calgary (5 listings, $155 to $230)', kind:'mp', price:155, cct:[5600,5600], url:'https://www.facebook.com/marketplace/item/37831808123133428/'},
-  cb60b:{n:'Neewer CB60B', d:'70 W bi-colour COB, 2700 to 6500K, CRI 97+, Bowens, app', src:'Amazon.ca', kind:'new', price:219.99, cct:[2700,6500], url:'https://www.amazon.ca/NEEWER-Continuous-2700K-6500K-Photography-Recording/dp/B0C1CBP7LF'},
-  halo100:{n:'Amaran Halo 100x', d:'100 W bi-colour COB, 2700 to 6500K, CRI 96+, Bowens, amaran app', src:'Amazon.ca', kind:'new', price:250.95, cct:[2700,6500], url:'https://www.amazon.ca/Bi-Color-Ultra-Compact-Shooting-Creators-Vloggers/dp/B0GJ481N9C'},
-  sl60bi:{n:'Godox SL60IIBi (new in box)', d:'75 W bi-colour, 2800 to 6500K, CRI 96, Bowens, app', src:'Marketplace Calgary, one listing', kind:'mp', price:180, cct:[2800,6500], url:'https://www.facebook.com/marketplace/item/4575527462767518/'},
-  gvm80:{n:'GVM SD80D kit', d:'80 W bi-colour, 2700 to 7500K, CRI 97+, with stand and mini lantern', src:'Amazon.ca', kind:'new', price:189, cct:[2700,7500], url:'https://www.amazon.ca/dp/B0DXVH39MT'},
+  sl60iid:{n:'Godox SL60IID', d:'70 W COB, 5600K only, CRI 96, Bowens', src:'Marketplace Calgary (5 listings, $155 to $230)', kind:'mp', price:155, cct:[5600,5600], url:'https://www.facebook.com/marketplace/item/37831808123133428/', checked:'2026-11-14', obs:'Scout'},
+  cb60b:{n:'Neewer CB60B', d:'70 W bi-colour COB, 2700 to 6500K, CRI 97+, Bowens, app', src:'Amazon.ca', kind:'new', price:219.99, cct:[2700,6500], url:'https://www.amazon.ca/NEEWER-Continuous-2700K-6500K-Photography-Recording/dp/B0C1CBP7LF', checked:'2026-11-14'},
+  halo100:{n:'Amaran Halo 100x', d:'100 W bi-colour COB, 2700 to 6500K, CRI 96+, Bowens, amaran app. $253.50 is the featured price before import fees; landed price unverified. Nov 5 landed read: $252.69', src:'Amazon.ca', kind:'new', price:253.5, cct:[2700,6500], url:'https://www.amazon.ca/Bi-Color-Ultra-Compact-Shooting-Creators-Vloggers/dp/B0GJ481N9C', checked:'2026-11-14'},
+  sl60bi:{n:'Godox SL60IIBi (new in box)', d:'75 W bi-colour, 2800 to 6500K, CRI 96, Bowens, app', src:'Marketplace Calgary, one listing', kind:'mp', price:180, cct:[2800,6500], url:'https://www.facebook.com/marketplace/item/4575527462767518/', checked:'2026-11-14', obs:'Scout'},
+  gvm80:{n:'GVM SD80D kit', d:'80 W bi-colour, 2700 to 7500K, CRI 97+, with stand and mini lantern', src:'Amazon.ca', kind:'new', price:189, cct:[2700,7500], url:'https://www.amazon.ca/dp/B0DXVH39MT', checked:'2026-11-14'},
   nice:{n:'NiceVeedi 20 in softbox', d:'85 W LED bulb, 3000 to 6000K, remote, stand included', src:'Owned (×4)', kind:'owned', price:0, cct:[3000,6000], url:''},
-  ns26l:{n:'Neewer NS26L 26 in lantern', d:'65 cm Bowens lantern, quick release', src:'Amazon.ca', kind:'new', price:90.99, url:'https://www.amazon.ca/dp/B0CC1LMW9W'},
-  aplant:{n:'Aputure Lantern 26 in', d:'66 cm Bowens lantern, skirt set, case', src:'Vistek Calgary', kind:'new', price:112.5, url:'https://www.vistek.ca/store/436544/aputure-lantern-softbox'},
-  aplantU:{n:'Aputure Lantern (used)', d:'Lantern with bag, size not stated', src:'Marketplace Calgary', kind:'mp', price:80, url:'https://www.facebook.com/marketplace/item/1044360098511059/'},
-  gue80:{n:'Godox SB-GUE80 octa + grid', d:'80 cm umbrella octa, Bowens, honeycomb grid', src:'The Camera Store', kind:'new', price:76.87, url:'https://thecamerastore.com/products/copy-of-godox-sb-ue-80cm-octabox-bowens-mount'},
-  fs60b:{n:'Neewer FS60B', d:'Compact bi-colour COB; listing gives no CRI or wattage', src:'Marketplace Calgary', kind:'mp', price:90, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1373359324407474/'},
-  ms60b:{n:'Neewer MS60B', d:'65 W bi-colour, CRI 97+, Bowens, app, 2 batteries', src:'Marketplace Airdrie', kind:'mp', price:140, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1752167802766308/'},
-  halo60:{n:'Amaran Halo 60x', d:'63 W bi-colour, 2700 to 6500K, CRI 96+, Bowens, amaran app', src:'Amazon.ca (ships Nov 25 to Dec 16)', kind:'new', price:169, cct:[2700,6500], url:'https://www.amazon.ca/Aputure-2700K-6500K-Bluetooth-Photography-Production/dp/B0BTTFV42Z'},
-  fw30120:{n:'Godox SB-FW30120 strip + grid', d:'30×120 cm, Bowens, grid', src:'The Camera Store', kind:'new', price:56.87, url:'https://thecamerastore.com/products/godox-30x120cm-strip-box-bowens'},
-  abox:{n:'Amaran Light Box 30x120 + grid', d:'30×120 cm, Bowens, grid, one-snap setup', src:'Amazon.ca', kind:'new', price:102, url:'https://www.amazon.ca/amaran-Light-Box-Quick-Setup-30x120/dp/B0DP46JKNK'},
-  mpcs:{n:'C-stand with boom arm', d:'146 to 320 cm, 128 cm arm, 2 grip heads', src:'Marketplace Calgary', kind:'mp', price:100, url:'https://www.facebook.com/marketplace/item/900124516024271/'},
-  sc172:{n:'Neewer SC172 C-stand + arm', d:'Turtle base, 83 cm arm rated 8 kg', src:'Amazon.ca', kind:'new', price:155.99, url:'https://www.amazon.ca/dp/B0CQQ97T1T'},
-  kf:{n:'K&F Concept 2.8 m stand', d:'Air-cushioned, 8 kg load', src:'Amazon.ca', kind:'new', price:60.99, url:'https://www.amazon.ca/dp/B0GWLP2MZV'},
-  ras280:{n:'SmallRig RA-S280 stand', d:'Air-cushioned, 2.8 m, 8 kg, 2-year warranty', src:'Amazon.ca', kind:'new', price:89.99, url:'https://www.amazon.ca/SMALLRIG-Photography-Air-Cushioned-Reflector-RA-S280-3736/dp/B0B13X1'},
-  tl30:{n:'Godox TL30 pair', d:'2 ft RGB tubes, app. Sept 29 listing, re-check', src:'Marketplace (Studio Light Roles)', kind:'mp', price:120, cct:[2700,6500], url:''},
-  tl60:{n:'Neewer TL60 RGB tube', d:'66 cm RGBWW, 2500 to 10000K, CRI 97+, app, DMX', src:'Amazon.ca', kind:'new', price:196.99, cct:[2500,10000], url:'https://www.amazon.ca/NEEWER-Photography-Handheld-Lighting-2500K-10000K/dp/B0C89Z85L2'},
-  pt2c:{n:'Amaran PT2c 2-light kit', d:'2 ft RGBWW pixel tubes, 2700 to 10000K, CRI 95', src:'Amazon.ca', kind:'new', price:448.5, cct:[2700,10000], url:'https://www.amazon.ca/Aputure-2-Light-to10000K-Handheld-Photography/dp/B0BR9W6DQD'},
-  pavo:{n:'Nanlite PavoTube II 15C kit', d:'2× 2 ft RGBWW, CRI 96+, mounts and case', src:'Amazon.ca', kind:'new', price:389, cct:[2700,6500], url:'https://www.amazon.ca/NANLITE-PavoTube-RGBWW-Tube-Light/dp/B0F48GJPX1'},
+  ns26l:{n:'Neewer NS26L 26 in lantern', d:'65 cm Bowens lantern, quick release', src:'Amazon.ca', kind:'new', price:90.99, url:'https://www.amazon.ca/dp/B0CC1LMW9W', checked:'2026-11-14'},
+  aplant:{n:'Aputure Lantern 26 in', d:'66 cm Bowens lantern, skirt set, case. Vistek webcode 436544. Gear Scout read $112.50 on Oct 31', src:'Vistek Calgary · in stock', kind:'new', price:133.5, url:'https://www.vistek.ca/store/436544/aputure-lantern-softbox', checked:'2026-11-05'},
+  aplantU:{n:'Aputure Lantern (used)', d:'Lantern with bag, size not stated', src:'Marketplace Calgary', kind:'mp', price:80, url:'https://www.facebook.com/marketplace/item/1044360098511059/', checked:'2026-11-14', obs:'Scout'},
+  gue80:{n:'Godox SB-GUE80 octa + grid', d:'80 cm umbrella octa, Bowens, honeycomb grid', src:'The Camera Store', kind:'new', price:76.87, url:'https://thecamerastore.com/products/copy-of-godox-sb-ue-80cm-octabox-bowens-mount', checked:'2026-11-14'},
+  fs60b:{n:'Neewer FS60B', d:'Compact bi-colour COB; listing gives no CRI or wattage', src:'Marketplace Calgary', kind:'mp', price:90, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1373359324407474/', checked:'2026-11-14', obs:'Scout'},
+  ms60b:{n:'Neewer MS60B', d:'65 W bi-colour, CRI 97+, Bowens, app, 2 batteries', src:'Marketplace Airdrie', kind:'mp', price:140, cct:[2700,6500], url:'https://www.facebook.com/marketplace/item/1752167802766308/', checked:'2026-11-14', obs:'Scout'},
+  halo60:{n:'Amaran Halo 60x', d:'63 W bi-colour, 2700 to 6500K, CRI 96+, Bowens, amaran app. ASIN B0BTTFV42Z, exact model title, no redirect', src:'Amazon.ca', kind:'new', price:169, cct:[2700,6500], url:'https://www.amazon.ca/Aputure-2700K-6500K-Bluetooth-Photography-Production/dp/B0BTTFV42Z', checked:'2026-11-14'},
+  fw30120:{n:'Godox SB-FW30120 strip + grid', d:'30×120 cm, Bowens, grid', src:'The Camera Store', kind:'new', price:56.87, url:'https://thecamerastore.com/products/godox-30x120cm-strip-box-bowens', checked:'2026-11-14'},
+  abox:{n:'Amaran Light Box 30x120 + grid', d:'30×120 cm, Bowens, grid, one-snap setup', src:'Amazon.ca', kind:'new', price:102, url:'https://www.amazon.ca/amaran-Light-Box-Quick-Setup-30x120/dp/B0DP46JKNK', checked:'2026-11-14'},
+  mpcs:{n:'C-stand with boom arm', d:'146 to 320 cm, 128 cm arm, 2 grip heads', src:'Marketplace Calgary', kind:'mp', price:100, url:'https://www.facebook.com/marketplace/item/900124516024271/', checked:'2026-11-14', obs:'Scout'},
+  sc172:{n:'Neewer SC172 C-stand + arm', d:'Turtle base, 83 cm arm rated 8 kg', src:'Amazon.ca', kind:'new', price:155.99, url:'https://www.amazon.ca/dp/B0CQQ97T1T', checked:'2026-11-14'},
+  kf:{n:'K&F Concept 2.8 m stand', d:'Air-cushioned, 8 kg load. Currently unavailable on Nov 14 with no featured price; $60.99 is the Oct 31 reference only', src:'Amazon.ca', kind:'new', price:60.99, url:'https://www.amazon.ca/dp/B0GWLP2MZV', checked:'2026-10-31', unavail:'2026-11-14'},
+  ras280:{n:'SmallRig RA-S280 stand', d:'Model 3736, air-cushioned, 2.8 m, 8 kg, 2-year warranty. Read $80.99 on Nov 5', src:'Amazon.ca', kind:'new', price:89.99, url:'https://www.amazon.ca/SMALLRIG-Photography-Air-Cushioned-Reflector-RA-S280-3736/dp/B0B13X1Y1H', checked:'2026-11-14'},
+  tl30:{n:'Godox TL30 pair', d:'2 ft RGB tubes, app. Sept 29 listing, re-check', src:'Marketplace (Studio Light Roles)', kind:'mp', price:120, cct:[2700,6500], url:'', checked:'2026-09-29'},
+  tl60:{n:'Neewer TL60 RGB tube', d:'66 cm RGBWW, 2500 to 10000K, CRI 97+, app, DMX', src:'Amazon.ca', kind:'new', price:196.99, cct:[2500,10000], url:'https://www.amazon.ca/NEEWER-Photography-Handheld-Lighting-2500K-10000K/dp/B0C89Z85L2', checked:'2026-11-14'},
+  pt2c:{n:'Amaran PT2c 2-light kit', d:'2 ft RGBWW pixel tubes, 2700 to 10000K, CRI 95', src:'Amazon.ca', kind:'new', price:448.5, cct:[2700,10000], url:'https://www.amazon.ca/Aputure-2-Light-to10000K-Handheld-Photography/dp/B0BR9W6DQD', checked:'2026-11-14'},
+  pavo:{n:'Nanlite PavoTube II 15C kit', d:'2× 2 ft RGBWW, CRI 96+, mounts and case', src:'Amazon.ca', kind:'new', price:389, cct:[2700,6500], url:'https://www.amazon.ca/NANLITE-PavoTube-RGBWW-Tube-Light/dp/B0F48GJPX1', checked:'2026-11-14'},
   govee:{n:'Govee bars + floor strips', d:'Left and right wall bars, side-wall floor strips', src:'Owned', kind:'owned', price:0, url:''},
   lamp:{n:'Practical table lamp', d:'Warm 2700K bulb, on the marble side table in the wide', src:'Owned', kind:'owned', price:0, url:''},
-  sb:{n:'Neewer SB-BL4 sandbags ×4', d:'9 kg each, ship empty', src:'Amazon.ca', kind:'new', price:35.99, url:'https://www.amazon.ca/Neewer%C2%AE-Photographic-Sandbag-Studio-Stands/dp/B00LIRRLBU'},
-  sr5321:{n:'SmallRig 5321 mini clamp 2-pack', d:'Dual ball heads, 1.5 kg each', src:'Amazon.ca', kind:'new', price:39.99, url:'https://www.amazon.ca/dp/B0F18P1LQ3'},
-  sr3757:{n:'SmallRig 3757B crab clamp', d:'Ball-head arm, 3.5 kg', src:'Amazon.ca', kind:'new', price:26.99, url:'https://www.amazon.ca/SmallRig-Ballhead-Crab-Shaped-Threaded-Stabilizer/dp/B0B5LFC6L3'},
+  sb:{n:'Neewer SB-BL4 sandbags ×4', d:'9 kg each, ship empty', src:'Amazon.ca', kind:'new', price:35.99, url:'https://www.amazon.ca/Neewer%C2%AE-Photographic-Sandbag-Studio-Stands/dp/B00LIRRLBU', checked:'2026-11-14'},
+  sr5321:{n:'SmallRig 5321 mini clamp 2-pack', d:'Dual ball heads, 1.5 kg each', src:'Amazon.ca', kind:'new', price:39.99, url:'https://www.amazon.ca/dp/B0F18P1LQ3', checked:'2026-11-14'},
+  sr3757:{n:'SmallRig 3757B crab clamp', d:'Ball-head arm, 3.5 kg', src:'Amazon.ca', kind:'new', price:26.99, url:'https://www.amazon.ca/SmallRig-Ballhead-Crab-Shaped-Threaded-Stabilizer/dp/B0B5LFC6L3', checked:'2026-11-14'},
+  drape:{n:'Charcoal drape, left wall', d:'Replaces the white curtain behind the armchair. Decided Nov 6. Size and model to scout', src:'To scout', kind:'scout', price:0, url:''},
+  ceil:{n:'Ceiling mounts for K1, K2 and rim', d:'Landlord approved in writing. Clamps and drop arms to scout; stands stay until they are up', src:'To scout', kind:'scout', price:0, url:''},
   power:{n:'Power kit (estimate)', d:'2× 1080J power bars, 2× 14 AWG cords, gaffer tape', src:'Estimate from Studio Light Roles', kind:'est', price:116, url:''},
 };
 const OPTS = {
@@ -570,12 +610,12 @@ const OPTS = {
     {id:'ba', tier:'alt', lines:[['pavo',1]], out:'20–35%'},
   ],
   AC:[
-    {id:'a0', tier:'own', own:true, lines:[['govee',1],['lamp',1]], out:'Per scene'},
+    {id:'a0', tier:'own', own:true, lines:[['govee',1],['lamp',1],['drape',1]], out:'Per scene', note:'The charcoal drape is still to scout and price.'},
   ],
   SK:[
-    {id:'s1', tier:1, lines:[['sb',1],['sr5321',1],['power',1]]},
-    {id:'s2', tier:2, lines:[['sb',1],['sr5321',2],['power',1]]},
-    {id:'s3', tier:3, lines:[['sb',1],['sr3757',4],['power',1]]},
+    {id:'s1', tier:1, lines:[['sb',1],['sr5321',1],['power',1],['ceil',1]]},
+    {id:'s2', tier:2, lines:[['sb',1],['sr5321',2],['power',1],['ceil',1]]},
+    {id:'s3', tier:3, lines:[['sb',1],['sr3757',4],['power',1],['ceil',1]]},
   ],
 };
 const optKey = r => (r==='K1'||r==='K2') ? 'K' : r;
@@ -598,6 +638,7 @@ function tierSel(t){
 const S = { sel:tierSel(2), kelvin:4500, status:{}, checks:{}, rig:{}, db:null, uid:null, canWrite:true };
 const optById = id => { for(const k in OPTS){const o=OPTS[k].find(x=>x.id===id); if(o) return o;} return null; };
 const optPrice = o => o.lines.reduce((a,[p,q])=>a+P[p].price*q,0);
+const hasScout = o => o.lines.some(([p])=>P[p].kind==='scout');
 const lightOf = o => { const l=o.lines.find(([p])=>P[p].cct); return l?P[l[0]]:null; };
 const money = n => '$'+n.toLocaleString('en-CA',{minimumFractionDigits:2,maximumFractionDigits:2});
 const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -605,6 +646,7 @@ const $ = (s,r=document)=>r.querySelector(s);
 const roleChip = (id,label=true)=>{const r=ROLES.find(x=>x.id===id);return `<span class="role" data-role="${id}"><i>${id}</i>${label?esc(r.name):''}</span>`;};
 const tierBadge = t => t==='alt'?'<span class="badge alt">Swap-in</span>':t==='own'?'<span class="badge own">Owned</span>':`<span class="badge t${t}">Tier ${t}</span>`;
 function buildTotal(sel=S.sel){ let n=0; for(const r of ROLES) n+=optPrice(optById(sel[r.id])); return n; }
+function staleSplit(sel=S.sel){ let n=0; const ps=new Set(); for(const r of ROLES) for(const [p,q] of optById(sel[r.id]).lines){ if((P[p].kind==='mp'&&!P[p].obs)||P[p].unavail) ps.add(p); else n+=P[p].price*q; } return {fresh:n, stale:ps.size}; }
 function currentTier(){ for(const t of [1,2,3]){ const s=tierSel(t); if(ROLES.every(r=>s[r.id]===S.sel[r.id])) return t; } return null; }
 
 function issues(){
@@ -645,7 +687,7 @@ function renderPlan(){
   const steps=[
     {t:'Plan the look and the roles', d:'This tab. Rules, ladder and roles are set.', done:true},
     {t:'Pick the build and buy it', d:'Buy tab. Choose a tier, swap roles, track each item to Rigged.', done:bought},
-    {t:'Rig day: place, meter, match', d:'Place tab for positions, Camera tab for settings, Run tab for the checklist.', done:rigDone===RIG.length},
+    {t:'Rig day: place, meter, match', d:'Place tab for positions, Settings tab for settings, Run tab for the checklist.', done:rigDone===RIG.length},
     {t:'Lock the house standard', d:'Measured values from the Rig Log replace every starting point on this page (v2).', done:false},
     {t:'Run every show from the pre-show list', d:'Run tab. Same marks, same levels, same Kelvin every time.', done:false},
   ];
@@ -653,16 +695,16 @@ function renderPlan(){
   const D=[
     ['Settled','Three tiers plus mix-and-match. Tier 1 fixed 5600K, tiers 2 and 3 bi-colour.'],
     ['Settled','House frame rate 29.97. Sony\'s "30p" in NTSC mode is 29.97, so the old 30 vs 29.97 conflict is one setting.'],
-    ['Settled','RØDECaster Video switches 1080p. CAM2 and CAM3 also record 4K internally for vertical clips.'],
+    ['Settled','All three cameras run 1080p 29.97 for now, switched and ISO-recorded on the RØDECaster Video. 4K inside the ZV-E10 IIs is the later upgrade for sharper vertical clips.'],
     ['Settled','Armchair left of frame, couch centre and right. Nancy-style interview.'],
     ['Settled','Owned NiceVeedi softboxes ×4 stay as Tier 1 fill and spares.'],
     ['Settled','Room confirmed from session stills: white curtain on the left wall, black shelf with books and LED in the back-right corner, plant back-left, marble side table between the seats, grey armchair, brown leather tufted couch.'],
-    ['Proposed','Move the a6000 to the wide (CAM1). It cannot record 4K, and the wide is the shot cropped least for vertical clips.'],
-    ['Open','Lens count: this plan needs 2× Sigma 30mm and 1× Sigma 16mm. Confirm what is owned.'],
-    ['Open','Exact Govee bar and strip models.'],
-    ['Open','Landlord approval for ceiling mounts (lease needs written approval).'],
-    ['Open','Whether to shoot 60p reels sessions (see Camera tab, 60p mode).'],
-    ['Open','Keep the white curtain or swap it for a charcoal or deep-blue drape (not priced yet).'],
+    ['Settled','The a6000 shoots the wide (CAM1). The two ZV-E10 IIs take the singles.'],
+    ['Settled','Lenses owned: 2× Sigma 30mm f/1.4 for the singles, 1× Sigma 16mm f/1.4 for the wide.'],
+    ['Settled','Landlord approved ceiling mounting in writing. Keys and rim move to ceiling clamps once the hardware is scouted.'],
+    ['Settled','No 60p reels sessions for now. The 60p mode stays on the Settings tab as a future option.'],
+    ['Settled','Swap the white curtain for a charcoal drape. To scout and price.'],
+    ['Open','Exact Govee bar and strip models. Check the device list in the Govee Home app.'],
   ];
   $('#decisions').innerHTML=D.map(([s,t])=>`<tr><td><span class="status" data-s="${s==='Settled'?'rigged':s==='Proposed'?'arrived':'ordered'}">${s}</span></td><td>${esc(t)}</td></tr>`).join('');
 }
@@ -674,8 +716,8 @@ function renderTiers(){
     const sel=tierSel(t), T=TIERS[t];
     const rows=ROLES.map(r=>{const o=optById(sel[r.id]); const L=lightOf(o)||P[o.lines[0][0]]; return `<li>${roleChip(r.id,false)}<span class="t">${esc(L.n)}</span></li>`;}).join('');
     return `<div class="tier ${cur===t?'on':''}"><div class="t-top"><h3>${esc(T.name)}</h3><span class="tag">${esc(T.tag)}</span></div>
-      <div class="price">${money(buildTotal(sel))}</div><p class="note">${esc(T.blurb)}</p><ul>${rows}</ul>
-      <button class="btn ${cur===t?'':'primary'}" data-tier="${t}" ${cur===t?'disabled':''}>${cur===t?'Current build':'Use this tier'}</button></div>`;
+      <div class="price">${money(buildTotal(sel))}</div>${(()=>{const x=staleSplit(sel); return x.stale?`<p class="note mono" style="font-size:12px">Without ${x.stale} stale or unavailable listing${x.stale>1?'s':''}: ${money(x.fresh)} (partial)</p>`:'';})()}<p class="note">${esc(T.blurb)}</p><ul>${rows}</ul>
+      <button class="btn ${cur===t?'':'primary'}" data-tier="${t}" data-fk="tier-${t}" ${cur===t?'disabled':''}>${cur===t?'Current build':'Use this tier'}</button></div>`;
   }).join('');
 }
 function renderKelvin(){
@@ -687,7 +729,7 @@ function renderKelvin(){
     spans+=`<span class="span" data-role="${r.id}" style="left:${pct(a)}%;width:${Math.max(1.2,pct(b)-pct(a))}%;bottom:${-10-i*6}px"></span>`; i++; }
   $('#kbar').innerHTML=`<span class="mark" style="left:${pct(k)}%"></span>`+spans;
   $('#kbar').style.marginBottom=(i*6+8)+'px';
-  $('#kPresets').innerHTML=[3200,4000,4500,5000,5600].map(v=>`<button data-k="${v}" class="${v===k?'on':''}">${v}K</button>`).join('');
+  $('#kPresets').innerHTML=[3200,4000,4500,5000,5600].map(v=>`<button data-k="${v}" data-fk="k-${v}" class="${v===k?'on':''}">${v}K</button>`).join('');
   const bad=issues().filter(x=>x.text.includes("can't reach"));
   $('#kNote').innerHTML=bad.length?`<span class="warnline">${bad.length} face light${bad.length>1?'s':''} can't reach ${k}K. The coloured bars under the strip show each face light's range.</span>`:`<span class="okline">Every face light in this build can run at ${k}K. The coloured bars show each light's range.</span>`;
 }
@@ -698,21 +740,21 @@ function renderPicker(){
       const L=lightOf(o); const on=S.sel[r.id]===o.id;
       const bad=r.skin&&L&&(S.kelvin<L.cct[0]||S.kelvin>L.cct[1]);
       const lines=o.lines.map(([p,q])=>`${q>1?q+'× ':''}${esc(P[p].n)}`).join('<br>');
-      return `<button class="opt ${on?'on':''}" data-role-pick="${r.id}" data-opt="${o.id}" aria-pressed="${on}">
+      return `<button class="opt ${on?'on':''}" data-role-pick="${r.id}" data-opt="${o.id}" data-fk="opt-${r.id}-${o.id}" aria-pressed="${on}">
         <div class="o-top">${tierBadge(o.tier)}${on?'<span class="badge" style="border-color:var(--rc);color:var(--rc)">Picked</span>':''}</div>
         <div class="lines">${lines}</div>
         ${L&&r.skin?`<div class="note mono" style="font-size:11.5px">${L.cct[0]===L.cct[1]?L.cct[0]+'K fixed':L.cct[0]+'–'+L.cct[1]+'K'}</div>`:''}
         ${bad?`<div class="warnline">Can't reach ${S.kelvin}K</div>`:''}
         ${o.note?`<div class="note" style="font-size:12px">${esc(o.note)}</div>`:''}
-        <div class="o-foot"><span>${optPrice(o)?money(optPrice(o)):'Owned'}</span><span class="muted" style="font-size:11px">${o.out?esc(o.out):''}</span></div>
+        <div class="o-foot"><span>${optPrice(o)?money(optPrice(o)):'Owned'}${hasScout(o)?' + to scout':''}</span><span class="muted" style="font-size:11px">${o.out?esc(o.out):''}</span></div>
       </button>`;}).join('');
-    return `<div class="prow" data-role="${r.id}"><div class="about">${roleChip(r.id)}<p>${esc(r.job)}</p></div><div class="opts">${cards}</div></div>`;
+    return `<div class="prow" data-role="${r.id}"><div class="about">${roleChip(r.id)}<p>${esc(r.job)}</p></div><div class="opts" data-sx="opts-${r.id}">${cards}</div></div>`;
   }).join('');
 }
 function renderSummary(){
   const tot=buildTotal(), iss=issues();
   const rows=ROLES.map(r=>{const o=optById(S.sel[r.id]); const L=lightOf(o)||P[o.lines[0][0]]; const p=optPrice(o);
-    return `<div class="sumrow">${roleChip(r.id,false)}<span class="t">${esc(L.n)} ${tierBadge(o.tier)}</span><span class="num">${p?money(p):'Owned'}</span></div>`;}).join('');
+    return `<div class="sumrow">${roleChip(r.id,false)}<span class="t">${esc(L.n)} ${tierBadge(o.tier)}</span><span class="num" style="text-align:right">${p?money(p):'Owned'}${hasScout(o)?'<br><small class="muted">+ to scout</small>':''}</span></div>`;}).join('');
   $('#summary').innerHTML=`<div><span class="eyebrow">Your build</span><h3>${currentTier()?'Tier '+currentTier():'Mixed build'}</h3></div>
     <div class="sumrows">${rows}</div>
     <div class="totals"><span>Before GST</span><span class="num">${money(tot)}</span><span>GST 5%</span><span class="num">${money(tot*0.05)}</span><span><b>Total</b></span><span class="big">${money(tot*1.05)}</span></div>
@@ -723,35 +765,64 @@ function shopLines(){
   const m=new Map();
   for(const r of ROLES){ const o=optById(S.sel[r.id]);
     for(const [p,q] of o.lines){ const e=m.get(p)||{p,q:0,roles:[]}; e.q+=q; if(!e.roles.includes(r.id)) e.roles.push(r.id); m.set(p,e);} }
-  return [...m.values()].sort((a,b)=>(P[a.p].kind==='owned')-(P[b.p].kind==='owned')||P[b.p].price*b.q-P[a.p].price*a.q);
+  const rank=k=>k==='owned'?2:k==='scout'?1:0;
+  return [...m.values()].sort((a,b)=>rank(P[a.p].kind)-rank(P[b.p].kind)||P[b.p].price*b.q-P[a.p].price*a.q);
 }
 const NEXT={needed:'ordered',ordered:'arrived',arrived:'rigged',rigged:'needed'};
 const LABEL={needed:'Needed',ordered:'Ordered',arrived:'Arrived',rigged:'Rigged'};
+const checkedLabel = d => { const [y,m,dd]=d.split('-').map(Number); return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1]+' '+dd; };
 function renderShop(){
   $('#shop').innerHTML=shopLines().map(e=>{const pr=P[e.p]; const own=pr.kind==='owned';
     const st=own?'rigged':(S.status[e.p]?.s||'needed');
     return `<tr><td><b>${esc(pr.n)}</b><br><span class="note">${esc(pr.d)}</span></td>
       <td>${e.roles.map(r=>roleChip(r,false)).join(' ')}</td><td class="num">${e.q}</td>
-      <td class="num">${own?'—':money(pr.price)}</td><td class="num">${own?'Owned':money(pr.price*e.q)}</td>
-      <td>${pr.url?`<a href="${esc(pr.url)}" target="_blank" rel="noopener">${esc(pr.src)}</a>`:esc(pr.src)}</td>
-      <td>${own?'<span class="status" data-s="rigged">Owned</span>':`<button class="status" data-s="${st}" data-status="${e.p}" ${S.canWrite?'':'disabled'}>${LABEL[st]}</button>`}</td></tr>`;}).join('');
+      <td class="num">${own||pr.kind==='scout'?'—':money(pr.price)}</td><td class="num">${own?'Owned':pr.kind==='scout'?'To scout':money(pr.price*e.q)}</td>
+      <td>${pr.url?`<a href="${esc(pr.url)}" target="_blank" rel="noopener">${esc(pr.src)}</a>`:esc(pr.src)}${pr.unavail?`<span class="note"> · unavailable ${checkedLabel(pr.unavail)}, price is the ${checkedLabel(pr.checked)} reference</span>`:pr.obs?`<span class="note"> · asking price seen ${checkedLabel(pr.checked)} by ${esc(pr.obs)}, seller availability unconfirmed</span>`:pr.checked?`<span class="note"> · ${pr.kind==='mp'?'stale offer, ':''}checked ${checkedLabel(pr.checked)}</span>`:''}</td>
+      <td>${own?'<span class="status" data-s="rigged">Owned</span>':`<button class="status" data-s="${st}" data-status="${e.p}" data-fk="st-${e.p}" ${S.canWrite?'':'disabled'}>${LABEL[st]}</button>`}</td></tr>`;}).join('');
 }
 
 /* ---------- place ---------- */
-const FACES={H1:[22,56,44],H2:[67,52,42],H3:[91,52,42]};
-const FIX={
-  K1:{x:30,y:86,z:80,aim:'H1',where:'Front-left of the armchair, stand outside the wide frame',tilt:'Down 35°, at the armchair face'},
-  K2:{x:104,y:86,z:80,aim:'H3',where:'Front-right of the couch, stand outside the wide frame',tilt:'Down 35°, between the couch seats'},
-  F:{x:77,y:113,z:56,aim:'H2',where:'Beside CAM1, against the front wall',tilt:'Level, at the middle of the set'},
-  R:{x:86,y:30,z:94,aim:'H2',where:'Over the gap behind the couch, boom base against the right wall just in front of the shelf',tilt:'Down 60°, forward onto hair and shoulders'},
+const LAYOUTS={
+  interview:{name:'Interview · 3 seats',
+    faces:{H1:[22,56,44],H2:[67,52,42],H3:[91,52,42]},
+    fix:{
+  K1:{x:30,y:86,z:80,aim:['H1'],where:'Front-left of the armchair, stand outside the wide frame',tilt:'Down 35°, at the armchair face'},
+  K2:{x:104,y:86,z:80,aim:['H3','H2'],where:'Front-right of the couch, stand outside the wide frame',tilt:'Down 35°, between the couch seats'},
+  F:{x:77,y:113,z:56,aim:['H2'],where:'Beside CAM1, against the front wall',tilt:'Level, at the middle of the set'},
+  R:{x:86,y:30,z:94,aim:['H2','H3'],boom:[114,24],where:'Over the gap behind the couch, boom base against the right wall just in front of the shelf',tilt:'Down 60°, forward onto hair and shoulders'},
   BG:{x:60,y:5,z:2,aim:null,where:'Floor at the baseboard: one behind the armchair, one behind the couch',tilt:'Up the slats, grazing'},
   AC:{x:8,y:30,z:60,aim:null,where:'Govee bars at the wall edges (right one behind the shelf), warm lamp on the marble side table',tilt:'In frame as practicals'},
-};
-const CAMS=[
+},
+    cams:[
   {id:'CAM1',x:60,y:112,aim:[60,50],fov:72.6,lens:'16mm'},
   {id:'CAM2',x:94,y:102,aim:[22,56],fov:42.8,lens:'30mm'},
   {id:'CAM3',x:42,y:100,aim:[79,52],fov:42.8,lens:'30mm'},
-];
+],
+    lamp:[45,38],
+    detail:'Seats: H1 armchair (guest), H2 and H3 couch (host and second host). Cameras sit at 48 in. CAM2 shoots the armchair from front-right and CAM3 shoots the couch from front-left, so the singles cross.'},
+  table:{name:'Open table · 4 seats',
+    faces:{H1:[42,40,44],H2:[33,70,44],H3:[100,44,42],H4:[100,82,42]},
+    fix:{
+      K1:{x:112,y:108,z:84,aim:['H2','H1'],where:'Front-right corner, stand against the right wall just in front of the couch arm',tilt:'Down 30°, across the table at both armchair faces'},
+      K2:{x:34,y:98,z:84,aim:['H4','H3'],where:'Front-left, in front of the front armchair and clear of the door swing',tilt:'Down 30°, across the table at both couch faces'},
+      F:{x:60,y:116,z:66,aim:['H2','H4'],where:'Above and behind CAM1, against the front wall',tilt:'Down 10°, down the middle of the table'},
+      R:{x:106,y:63,z:94,aim:['H3','H4'],boom:[114,20],vert:true,where:'Over the back of the couch, boom base in the gap between the shelf and the couch\'s back arm',tilt:'Down 60°, onto hair and shoulders of both couch seats'},
+      BG:{x:60,y:5,z:2,aim:null,where:'Floor at the baseboard either side of the TV console: one behind the back armchair, one behind the couch\'s back arm',tilt:'Up the slats, grazing'},
+      AC:{x:8,y:30,z:60,aim:null,where:'Govee bars at the wall edges (right one behind the shelf), warm lamp on the right end of the TV console',tilt:'In frame as practicals'},
+    },
+    cams:[
+      {id:'CAM1',x:60,y:114,aim:[62,62],fov:72.6,lens:'16mm'},
+      {id:'CAM2',x:100,y:114,aim:[36,56],fov:42.8,lens:'30mm'},
+      {id:'CAM3',x:38,y:112,aim:[100,64],fov:42.8,lens:'30mm'},
+    ],
+    lamp:[82,9],
+    detail:'Seats: H1 back armchair and H2 front armchair face the couch. H3 and H4 sit on the couch facing them across the table. The open end of the table points at the wide. CAM2 shoots the armchairs from front-right and CAM3 shoots the couch from front-left, so the singles cross. The armchairs sit in front of the left wall (the white curtain until the charcoal drape goes up) and separate from it without a rim, so the rim strip goes over the couch, where hair meets the brown panels.'},
+};
+let layout='interview';
+try{ if(localStorage.getItem('rmsb-layout')==='table') layout='table'; }catch(e){}
+let FACES, FIX, CAMS;
+function useLayout(k){ layout=LAYOUTS[k]?k:'interview'; const L=LAYOUTS[layout]; FACES=L.faces; FIX=L.fix; CAMS=L.cams; }
+useLayout(layout);
 let hlRole=null;
 function dist3(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);}
 function ftin(i){const f=Math.floor(i/12), r=Math.round(i-f*12); return r===12?`${f+1}′0″`:`${f}′${r}″`;}
@@ -779,21 +850,32 @@ function renderPlace(){
   g+=`<path d="M0.6,14 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8 q1.6,4 0,8 q-1.6,4 0,8" fill="none" stroke="var(--fg)" stroke-width="1.1" opacity=".55"/><text x="5" y="104" class="lbl">CURTAIN</text>`;
   g+=`<rect x="98" y="4" width="20" height="12" fill="none" stroke="var(--muted)" stroke-width=".6"/><line x1="98" y1="10" x2="118" y2="10" stroke="var(--muted)" stroke-width=".3"/><text x="108" y="21" text-anchor="middle" class="lbl">SHELF</text>`;
   g+=`<circle cx="36" cy="14" r="5" fill="none" stroke="var(--ok)" stroke-width=".6"/><text x="36" y="23" text-anchor="middle" class="lbl">PLANT</text>`;
-  g+=`<rect x="50" y="36" width="58" height="34" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="50" y="36" width="58" height="9" rx="4" fill="var(--line)" opacity=".7"/><text x="79" y="66" text-anchor="middle" class="lbl">COUCH</text>`;
-  g+=`<g transform="rotate(-28 24 60)"><rect x="8" y="44" width="32" height="32" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="8" y="44" width="32" height="8" rx="4" fill="var(--line)" opacity=".7"/></g><text x="24" y="82" text-anchor="middle" class="lbl">ARMCHAIR</text>`;
-  g+=`<circle cx="45" cy="38" r="6" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><text x="45" y="30" text-anchor="middle" class="lbl">SIDE TABLE</text>`;
+  if(layout==='table'){
+    g+=`<rect x="34" y="5" width="52" height="8" rx="1" fill="var(--furn)" stroke="var(--line)" stroke-width=".5"/><circle cx="89" cy="15" r="4" fill="none" stroke="var(--ok)" stroke-width=".6"/>`;
+    const chair=(cx,cy,rot)=>`<g transform="rotate(${rot} ${cx} ${cy})"><rect x="${cx-15}" y="${cy-15}" width="30" height="30" rx="9" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="${cx-15}" y="${cy-15}" width="8" height="30" rx="4" fill="var(--line)" opacity=".7"/></g>`;
+    g+=chair(38,38,20)+chair(28,70,0)+`<text x="3" y="88" class="lbl">ARMCHAIRS</text>`;
+    g+=`<rect x="50" y="54" width="22" height="44" rx="2" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><text x="61" y="78" text-anchor="middle" class="lbl">TABLE</text>`;
+    g+=`<rect x="84" y="24" width="32" height="76" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="108" y="24" width="8" height="76" rx="4" fill="var(--line)" opacity=".7"/><text x="92" y="65" text-anchor="middle" class="lbl" transform="rotate(90 92 65)">COUCH</text>`;
+  } else {
+    g+=`<rect x="50" y="36" width="58" height="34" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="50" y="36" width="58" height="9" rx="4" fill="var(--line)" opacity=".7"/><text x="79" y="66" text-anchor="middle" class="lbl">COUCH</text>`;
+    g+=`<g transform="rotate(-28 24 60)"><rect x="8" y="44" width="32" height="32" rx="5" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><rect x="8" y="44" width="32" height="8" rx="4" fill="var(--line)" opacity=".7"/></g><text x="24" y="82" text-anchor="middle" class="lbl">ARMCHAIR</text>`;
+    g+=`<circle cx="45" cy="38" r="6" fill="var(--furn)" stroke="var(--line)" stroke-width=".6"/><text x="45" y="30" text-anchor="middle" class="lbl">SIDE TABLE</text>`;
+  }
   // faces
   for(const [k,f] of Object.entries(FACES)) g+=`<circle cx="${f[0]}" cy="${f[1]}" r="3.4" fill="var(--fg)"/><text x="${f[0]}" y="${f[1]-5}" text-anchor="middle" class="lblb">${k}</text>`;
   // fixtures
   const fx=(role,inner)=>`<g class="fx ${hlRole===role?'hl':''}" data-fx="${role}" style="color:var(--rc)" data-role="${role}">${inner}</g>`;
   const beam=(f,tgt)=>showBeam&&tgt?`<line x1="${f.x}" y1="${f.y}" x2="${tgt[0]}" y2="${tgt[1]}" stroke="currentColor" stroke-width=".7" stroke-dasharray="2 1.2" opacity=".8"/>`:'';
   const k1=FIX.K1,k2=FIX.K2,F=FIX.F,R=FIX.R;
-  g+=fx('K1',`${beam(k1,FACES.H1)}<circle cx="${k1.x}" cy="${k1.y}" r="13" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${k1.x}" y="${k1.y+3}" text-anchor="middle" class="lblb">K1</text>`);
-  g+=fx('K2',`${beam(k2,FACES.H3)}${showBeam?`<line x1="${k2.x}" y1="${k2.y}" x2="${FACES.H2[0]}" y2="${FACES.H2[1]}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2" opacity=".6"/>`:''}<circle cx="${k2.x}" cy="${k2.y}" r="13" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${k2.x}" y="${k2.y+3}" text-anchor="middle" class="lblb">K2</text>`);
-  g+=fx('F',`${beam(F,FACES.H2)}<path d="M${F.x-15},${F.y+4} L${F.x-11},${F.y-6} L${F.x+11},${F.y-6} L${F.x+15},${F.y+4} Z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${F.x}" y="${F.y+1.5}" text-anchor="middle" class="lblb">F</text>`);
-  g+=fx('R',`<line x1="114" y1="24" x2="${R.x+24}" y2="${R.y}" stroke="currentColor" stroke-width="1"/><circle cx="114" cy="24" r="2.2" fill="currentColor"/><rect x="${R.x-24}" y="${R.y-4}" width="48" height="8" rx="1.5" fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1"/><text x="${R.x}" y="${R.y+2.6}" text-anchor="middle" class="lblb">R</text>${showBeam?`<line x1="${R.x-12}" y1="${R.y+4}" x2="${FACES.H2[0]}" y2="${FACES.H2[1]-3}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2"/><line x1="${R.x+8}" y1="${R.y+4}" x2="${FACES.H3[0]}" y2="${FACES.H3[1]-3}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2"/>`:''}`);
+  const beams=f=>showBeam&&f.aim?f.aim.map((h,i)=>`<line x1="${f.x}" y1="${f.y}" x2="${FACES[h][0]}" y2="${FACES[h][1]}" stroke="currentColor" stroke-width="${i?.5:.7}" stroke-dasharray="2 1.2" opacity="${i?.6:.8}"/>`).join(''):'';
+  for(const [id,k] of [['K1',k1],['K2',k2]]) g+=fx(id,`${beams(k)}<circle cx="${k.x}" cy="${k.y}" r="13" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${k.x}" y="${k.y+3}" text-anchor="middle" class="lblb">${id}</text>`);
+  g+=fx('F',`${beams(F)}<path d="M${F.x-15},${F.y+4} L${F.x-11},${F.y-6} L${F.x+11},${F.y-6} L${F.x+15},${F.y+4} Z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1"/><text x="${F.x}" y="${F.y+1.5}" text-anchor="middle" class="lblb">F</text>`);
+  const rb=R.boom, rEnd=R.vert?[R.x+4,R.y-24]:[R.x+24,R.y];
+  const rRect=R.vert?`<rect x="${R.x-4}" y="${R.y-24}" width="8" height="48" rx="1.5"`:`<rect x="${R.x-24}" y="${R.y-4}" width="48" height="8" rx="1.5"`;
+  const rBeams=showBeam?R.aim.map(h=>`<line x1="${R.x}" y1="${R.y}" x2="${FACES[h][0]}" y2="${FACES[h][1]-3}" stroke="currentColor" stroke-width=".5" stroke-dasharray="2 1.2"/>`).join(''):'';
+  g+=fx('R',`<line x1="${rb[0]}" y1="${rb[1]}" x2="${rEnd[0]}" y2="${rEnd[1]}" stroke="currentColor" stroke-width="1"/><circle cx="${rb[0]}" cy="${rb[1]}" r="2.2" fill="currentColor"/>${rRect} fill="currentColor" fill-opacity=".25" stroke="currentColor" stroke-width="1"/><text x="${R.x}" y="${R.y+1.5}" text-anchor="middle" class="lblb">R</text>${rBeams}`);
   g+=fx('BG',`<rect x="10" y="6" width="24" height="2.6" rx="1.3" fill="currentColor"/><rect x="86" y="6" width="24" height="2.6" rx="1.3" fill="currentColor"/><text x="22" y="14" text-anchor="middle" class="lblb">BG</text><text x="98" y="14" text-anchor="middle" class="lblb">BG</text>`);
-  g+=fx('AC',`<rect x="3.5" y="3.4" width="3" height="5" fill="currentColor"/><rect x="113.5" y="3.4" width="3" height="5" fill="currentColor"/><line x1="3" y1="12" x2="3" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><line x1="118.8" y1="12" x2="118.8" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><circle cx="45" cy="38" r="2.6" fill="currentColor" fill-opacity=".6" stroke="currentColor"/><text x="45" y="47" text-anchor="middle" class="lbl">LAMP</text>`);
+  g+=fx('AC',`<rect x="3.5" y="3.4" width="3" height="5" fill="currentColor"/><rect x="113.5" y="3.4" width="3" height="5" fill="currentColor"/><line x1="3" y1="12" x2="3" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><line x1="118.8" y1="12" x2="118.8" y2="88" stroke="currentColor" stroke-width="1" stroke-dasharray="3 2"/><circle cx="${LAYOUTS[layout].lamp[0]}" cy="${LAYOUTS[layout].lamp[1]}" r="2.6" fill="currentColor" fill-opacity=".6" stroke="currentColor"/><text x="${LAYOUTS[layout].lamp[0]}" y="${LAYOUTS[layout].lamp[1]+9}" text-anchor="middle" class="lbl">LAMP</text>`);
   // cameras
   for(const c of CAMS){ const a=Math.atan2(c.aim[1]-c.y,c.aim[0]-c.x)*180/Math.PI;
     g+=`<g transform="translate(${c.x} ${c.y}) rotate(${a.toFixed(1)})"><rect x="-4" y="-3.2" width="7" height="6.4" rx="1" fill="var(--accent)"/><rect x="3" y="-2" width="3" height="4" fill="var(--accent)"/></g><text x="${c.x}" y="${c.y+(c.y>108?-6:9)}" text-anchor="middle" class="lblb" style="fill:var(--accent)">${c.id}</text>`;}
@@ -802,72 +884,120 @@ function renderPlace(){
   const svg=$('#planSvg');
   svg.innerHTML=`<defs><clipPath id="roomClip"><rect x="0" y="0" width="120" height="120"/></clipPath></defs>`+g;
   svg.classList.toggle('dimmed',!!hlRole);
-  $('#legend').innerHTML=ROLES.filter(r=>r.id!=='SK').map(r=>`<button data-role="${r.id}" data-hl="${r.id}" class="${hlRole===r.id?'on':''}">${roleChip(r.id)}</button>`).join('');
+  $('#layoutSegs').innerHTML=Object.entries(LAYOUTS).map(([k,v])=>`<button data-layout="${k}" data-fk="layout-${k}" class="${layout===k?'on':''}">${esc(v.name)}</button>`).join('');
+  $('#legend').innerHTML=ROLES.filter(r=>r.id!=='SK').map(r=>`<button data-role="${r.id}" data-hl="${r.id}" data-fk="hl-${r.id}" class="${hlRole===r.id?'on':''}">${roleChip(r.id)}</button>`).join('');
   // table
   $('#placeTable').innerHTML=ROLES.filter(r=>FIX[r.id]).map(r=>{const f=FIX[r.id], o=optById(S.sel[r.id]);
     const names=o.lines.filter(([p])=>!['kf','ras280','sb','sr5321','sr3757','power'].includes(p)).map(([p,q])=>(q>1?q+'× ':'')+P[p].n).join(' + ');
-    const d=f.aim?ftin(dist3([f.x,f.y,f.z],FACES[f.aim])):'—';
+    const d=f.aim?ftin(dist3([f.x,f.y,f.z],FACES[f.aim[0]])):'—';
     return `<tr><td>${roleChip(r.id)}</td><td>${esc(names)} ${tierBadge(o.tier)}</td><td>${esc(f.where)}</td><td class="num">${f.z?f.z+' in':''}</td><td>${esc(f.tilt)}</td><td class="num">${d}</td><td class="mono">${esc(o.out||'')}</td></tr>`;}).join('');
   const det=hlRole?ROLES.find(r=>r.id===hlRole):null;
   $('#placeDetail').innerHTML=det?`${roleChip(det.id)}<p style="margin-top:6px">${esc(det.job)}</p>${FIX[det.id]?`<p class="mono" style="margin-top:6px;font-size:12px">${esc(FIX[det.id].where)} · ${FIX[det.id].z} in high · ${esc(FIX[det.id].tilt)}</p>`:''}`:
-    'Seats: H1 armchair (guest), H2 and H3 couch (host and second host). Cameras sit at 48 in. CAM2 shoots the armchair from front-right and CAM3 shoots the couch from front-left, so the singles cross.';
+    esc(LAYOUTS[layout].detail);
 }
 
 /* ---------- camera ---------- */
 const MODES={
-  show:{name:'Show', lede:'Default for every episode. Matches the RØDECaster Video at 1080p 29.97, and CAM2 and CAM3 record 4K internally for vertical clips.'},
-  p60:{name:'60p reels', lede:'For a separate reels or slow-motion session. Every RØDECaster Video input must run the same rate, so do not mix 60p into a 29.97 show.'},
-  vert:{name:'Native vertical', lede:'A ZV-E10 II turned 90° on an L-bracket records 2160×3840 with no crop. Use it for solo, teleprompter and ad reads. For shows, cropping 9:16 from the 4K singles is enough.'},
+  show:{name:'Show', lede:'Default for every episode: every camera at 1080p 29.97 into the RØDECaster Video. No internal recording for now.'},
+  photo:{name:'Photo', lede:'Still photos on the set with the same lights and the same Kelvin as the show. Shoot before or after a recording, never during one.'},
+  p60:{name:'60p reels (future)', lede:'Not planned for now. For a separate reels or slow-motion session later. Every RØDECaster Video input must run the same rate, so do not mix 60p into a 29.97 show.'},
+  vert:{name:'Native vertical (future)', lede:'Not planned for now. A ZV-E10 II turned 90° on an L-bracket records 2160×3840 with no crop. Use it for solo, teleprompter and ad reads. For shows, crop 9:16 from the singles.'},
 };
 let mode='show';
+const SKINS={
+  fair:{name:'Fair', lede:'Light skin reflects the most light. Protect the forehead and nose from clipping.',
+    zebra:70, ire:'60–70 IRE', keyLux:300, fillStops:1.5,
+    look:['Creative Look ST, Highlights −1, Picture Profile off','Creative Style Standard, sharpness −1'],
+    lookWhy:'Highlights −1 on the singles keeps forehead shine from clipping. The wide keeps Standard.',
+    notes:['Shine shows first on fair skin. Blot foreheads and noses before the show.','Keep the lanterns\' inner diffusion in. A bare COB makes hot spots on pale skin.']},
+  medium:{name:'Medium', lede:'Olive, tan and light brown skin. Expose a little lower than fair skin so it stays rich instead of washed out.',
+    zebra:60, ire:'50–60 IRE', keyLux:300, fillStops:1.5,
+    look:['Creative Look ST, Picture Profile off','Creative Style Standard, sharpness −1'],
+    lookWhy:'Ready for air with no grade. Sharpness −1 stops moiré on the slats.',
+    notes:['Warm skin turns orange if the Kelvin drifts. Check the grey card, never the face, when matching cameras.']},
+  deep:{name:'Deep', lede:'Dark brown and deep skin reflects less light. Add light to the face rather than gain to the camera, and keep detail in the shadow side.',
+    zebra:50, ire:'40–50 IRE', keyLux:480, fillStops:1,
+    look:['Creative Look ST, Contrast −1, Shadows +1, Picture Profile off','Creative Style Standard, contrast −1, sharpness −1'],
+    lookWhy:'Lower contrast keeps detail in the shadow side of the face instead of crushing it to black.',
+    notes:['Sheen reads as white patches on deep skin. Blot before the show and keep the lanterns fully diffused.']},
+};
+let skin='fair';
+try{ const v=localStorage.getItem('rmsb-skin'); if(SKINS[v]) skin=v; }catch(e){}
 function camRows(){
-  const k=S.kelvin, m=mode;
+  const k=S.kelvin, m=mode, sk=SKINS[skin];
   const rate=m==='p60'?'NTSC · 60p (59.94)':'NTSC · 30p (29.97)';
   const sh=m==='p60'?'1/125':'1/60';
-  const zvFile=m==='p60'?'XAVC S 4K 60p (check the crop) or HD 60p':m==='vert'?'XAVC S 4K 30p, body rotated, 2160×3840':'XAVC S 4K 30p 100M 4:2:2 10-bit';
+  if(m==='photo') return [
+    ['Mode', 'Still/Movie/S&Q switch to Still, exposure mode M', 'Mode dial to M', 'Manual keeps every frame the same brightness under the fixed set lights.'],
+    ['File format', 'RAW + JPEG, JPEG Fine, size L (26 MP), 3:2', 'RAW & JPEG, Fine, size L (24 MP), 3:2', 'The JPEG is ready to post. The RAW leaves room to fix exposure and colour later.'],
+    ['Shutter', '1/125', '1/125', 'Freezes a seated person and a handheld camera. Neither the bodies nor the Sigma lenses are stabilised. Use 1/60 only on a tripod.'],
+    ['Aperture', 'f/2.0', 'f/2.8', 'f/2.0 on the 30mm blurs the wall behind one person. For two people go to f/2.8 and double the ISO. The 16mm needs f/2.8 for depth across the seats.'],
+    ['ISO (fixed)', '400', '800', 'Same light as the show. The faster shutter costs one stop, so ISO is double the video setting.'],
+    ['White balance', `${k}K, tint 0`, `${k}K, tint 0`, 'Same Kelvin as the face lights, so the JPEGs match the video. The RAW can still be changed later.'],
+    ['Look', sk.look[0], sk.look[1], 'Same look as the video for this skin tone, so stills and clips sit together.'],
+    ['Focus', 'AF-S, Human, eye on, Focus Area Wide', 'AF-S, Flexible Spot M on the nearest eye, Face Detection on', 'The video standard leaves the a6000 on manual focus with Face Detection off. Turn both back on for stills.'],
+    ['Drive', 'Single. Continuous Lo for groups', 'Single. Continuous Lo for groups', 'A short burst beats blinks in a group shot.'],
+    ['Shutter type', 'Electronic (the body has no mechanical shutter)', 'Mechanical, e-Front Curtain on', 'An electronic shutter can show bands under dimmed LEDs. If bands appear on a ZV-E10 II, use 1/60 on a tripod or raise the light output.'],
+    ['Exposure aid', `Zebra ${sk.zebra}, then check the histogram`, `Zebra ${sk.zebra}, then check the histogram`, `For ${sk.name.toLowerCase()} skin, forehead highlights just touching ${sk.zebra}. Nothing piled against the right edge of the histogram.`],
+    ['Flash', 'None', 'Off, pop-up flash down', 'The set lights are the look. Flash flattens it.'],
+    ['Card', 'SD card in the body', 'The SDXC card already in the body', 'Stills save to the card. Video goes to the RØDECaster Video.'],
+    ['Power', 'Battery for handheld, USB-C PD on the tripod', 'NP-FW50 battery for handheld, AC dummy on the tripod', 'Unplug HDMI and power before lifting a camera off its tripod.'],
+  ];
+  const zvFile=m==='p60'?'XAVC S HD 60p 50M':m==='vert'?'XAVC S 4K 30p, body rotated, 2160×3840':'None for now (HDMI only). Later: XAVC S 4K 30p';
   return [
     ['Region and rate', rate, m==='p60'?'NTSC · 60p (59.94)':'NTSC · 30p (29.97)', 'In Sony\'s NTSC menu "30p" is 29.97. Every input has to match the switcher.'],
-    ['Internal file', zvFile, m==='p60'?'XAVC S HD 60p 50M':'XAVC S HD 30p 50M (no 4K)', 'The 4K files are for vertical crops and re-framing in the edit.'],
-    ['HDMI out', '1080p, info display off', '1080p, info display off, CTRL FOR HDMI off', 'Confirm on rig day that 1080p HDMI keeps running while 4K records internally.'],
+    ['Internal file', zvFile, m==='p60'?'XAVC S HD 60p 50M':'None (HDMI only)', m==='show'?'The RØDECaster Video ISO-records every input, so the cameras only feed HDMI.':'Only for this future mode.'],
+    ['HDMI out', '1080p, info display off', '1080p, info display off, CTRL FOR HDMI off', 'Confirm on rig day that every input holds 1080p 29.97 for the whole show.'],
     ['Shutter', sh, sh, m==='p60'?'Double the frame rate needs double the shutter speed, so one stop less light reaches the sensor.':'180° shutter: natural motion blur.'],
     ['Aperture', 'f/2.0', 'f/2.8', 'The wide needs depth across all three seats. The singles get softer backgrounds.'],
-    ['ISO (fixed)', m==='p60'?'400':'200', m==='p60'?'800':'400', 'f/2.0 at ISO 200 and f/2.8 at ISO 400 give the same exposure, so all three cameras match under one light level.'],
+    ['ISO (fixed)', m==='p60'?'400':'200', m==='p60'?'800':'400', 'f/2.0 at ISO 200 and f/2.8 at ISO 400 give the same exposure, so all three cameras match under one light level. ISO stays put for every skin tone; the key changes instead.'],
     ['White balance', `${k}K, tint 0`, `${k}K, tint 0`, 'Same Kelvin as every face light. Never auto.'],
-    ['Look', 'Creative Look ST, Picture Profile off', 'Creative Style Standard, sharpness −1', 'Ready for air with no grade. Sharpness −1 stops moiré on the slats.'],
+    ['Look', sk.look[0], sk.look[1], sk.lookWhy],
     ['Focus', 'AF-C, Human, eye on', 'AF once, then MF, centre area', 'The wide stays put. The singles follow the face.'],
-    ['Exposure aid', 'Zebra 70', 'Zebra 70', 'Forehead highlights just touching 70 means skin is right.'],
+    ['Exposure aid', `Zebra ${sk.zebra}`, `Zebra ${sk.zebra}`, `For ${sk.name.toLowerCase()} skin, forehead highlights just touching ${sk.zebra} means skin is right.`],
+    ['Skin level', sk.ire, sk.ire, 'Where the lit cheek sits on the waveform. Check it on each single during the grey-card match.'],
     ['Stabilisation', 'Off', 'SteadyShot off', 'Locked off on tripods.'],
     ['Power', 'USB-C PD, Power Save off', 'NP-FW50 dummy + AC-PW20, Power Save 30 min', 'Shows run past battery life.'],
-    ['Record', 'Press REC on each body at the start', 'Never press record (HDMI only)', 'Clap on camera to sync the 4K files.'],
+    ['Record', 'Never press record (HDMI only)', 'Never press record (HDMI only)', 'Recording happens on the RØDECaster Video. Clap on camera at the start.'],
     ['Audio', 'Off', 'Off', 'Sound comes from the RØDECaster Pro II.'],
   ];
 }
 function renderCamera(){
   const cams=[
-    {id:'CAM1', t:'Wide · three-shot', b:'a6000 + Sigma 16mm f/1.4', s:'Centre, 48 in. f/2.8. HDMI 1. Carries the teleprompter.', n:'Proposed move: the a6000 shoots the wide because it cannot record 4K.'},
-    {id:'CAM2', t:'Single · armchair', b:'ZV-E10 II + Sigma 30mm f/1.4', s:'Front-right, crossed onto H1, 48 in. f/2.0. HDMI 2. 4K internal.', n:''},
-    {id:'CAM3', t:'Single · couch', b:'ZV-E10 II + Sigma 30mm f/1.4', s:'Front-left, crossed onto H2 and H3, 48 in. f/2.0. HDMI 3. 4K internal.', n:''},
+    {id:'CAM1', t:'Wide · three-shot', b:'a6000 + Sigma 16mm f/1.4', s:'Centre, 48 in. f/2.8. HDMI 1, 1080p 29.97. Carries the teleprompter.', n:''},
+    {id:'CAM2', t:'Single · armchair', b:'ZV-E10 II + Sigma 30mm f/1.4', s:'Front-right, crossed onto H1, 48 in. f/2.0. HDMI 2, 1080p 29.97.', n:''},
+    {id:'CAM3', t:'Single · couch', b:'ZV-E10 II + Sigma 30mm f/1.4', s:'Front-left, crossed onto H2 and H3, 48 in. f/2.0. HDMI 3, 1080p 29.97.', n:''},
     {id:'CAM4', t:'Remote and screens', b:'Mac HDMI out', s:'Riverside guests and screen shares. HDMI 4 (approved Oct 20).', n:''},
   ];
   $('#camcards').innerHTML=cams.map(c=>`<div class="cam"><span class="id">${c.id}</span><b>${esc(c.t)}</b><span class="mono" style="font-size:12.5px">${esc(c.b)}</span><span class="note">${esc(c.s)}</span>${c.n?`<span class="warnline">${esc(c.n)}</span>`:''}</div>`).join('');
-  $('#modeSegs').innerHTML=Object.entries(MODES).map(([k,v])=>`<button data-mode="${k}" class="${mode===k?'on':''}">${esc(v.name)}</button>`).join('');
+  $('#modeSegs').innerHTML=Object.entries(MODES).map(([k,v])=>`<button data-mode="${k}" data-fk="mode-${k}" class="${mode===k?'on':''}">${esc(v.name)}</button>`).join('');
   $('#modeTitle').textContent=MODES[mode].name; $('#modeLede').textContent=MODES[mode].lede;
+  $('#skinSegs').innerHTML=Object.entries(SKINS).map(([k,v])=>`<button data-skin="${k}" data-fk="skin-${k}" class="${skin===k?'on':''}">${esc(v.name)}</button>`).join('');
+  const sk=SKINS[skin]; $('#skinTitle').textContent=sk.name; $('#skinLede').textContent=sk.lede;
   $('#camTable').innerHTML=camRows().map(r=>`<tr><td><b>${esc(r[0])}</b></td><td class="mono" style="font-size:13px">${esc(r[1])}</td><td class="mono" style="font-size:13px">${esc(r[2])}</td><td class="note">${esc(r[3])}</td></tr>`).join('');
   const t=currentTier(); const fill=optById(S.sel.F);
   let eff=[];
-  if(mode==='p60'){
-    eff.push('Lighting: keys need about 600 lux at the face, or ISO doubles (singles 400, wide 800). The output ranges on the Place tab roughly double.');
+  if(mode==='photo'){
+    eff.push('Shoot stills before or after a recording. In Still mode a camera stops sending a clean video picture to the RØDECaster Video.');
+    eff.push('Lights stay at show levels. For portraits, put the Serif 65 on a dark slide or turn it down so it does not outshine the face.');
+    eff.push('Back to video, ZV-E10 II: flip the switch back to Movie. With "Different Set for Still/Mv" turned on for aperture, shutter, ISO, white balance and focus mode, the video standard comes back as it was. Turn that on once, then confirm the video settings.');
+    eff.push('Back to video, a6000: mode dial to Movie, then set 1/60, f/2.8, ISO 400, manual focus and Face Detection off again. Check them against the Show mode table before the next recording.');
+    eff.push('Not tested in the room yet. On rig day take three frames per body at these settings and look for LED bands on the ZV-E10 II frames.');
+  } else if(mode==='p60'){
+    eff.push(`Lighting: keys need about ${sk.keyLux*2} lux at the face, or ISO doubles (singles 400, wide 800). The output ranges on the Place tab roughly double.`);
     eff.push('Flicker: dimmed LEDs can band at 1/125. Run the flicker test on rig day before any reels session.'+(fill.id==='f1'?' The owned NiceVeedi bulb fill is the most likely to flicker.':''));
-    eff.push('Files are about twice the size. The ZV-E10 II crops in at 4K 60p, so frame the singles a little looser.');
+    eff.push('Files are about twice the size. Every input on the RØDECaster Video has to run 60p for that session.');
     if(t===1) eff.push('Tier 1 SL60IID keys have the output for 60p at about 4 ft. Expect 85 to 100%.');
   } else if(mode==='vert'){
     eff.push('Lighting is unchanged. The rim and wall wash matter more because a vertical frame shows more wall above the head.');
     eff.push('The camera needs an L-bracket and a second tripod position. It can\'t feed the switcher as a landscape shot.');
   } else {
-    eff.push('4K internal runs about 45 GB an hour per body. Use V60 cards of 128 GB or more and offload after each show.');
-    eff.push('Run a 60-minute heat soak on rig day with HDMI out and internal 4K running at once.');
+    eff.push('Vertical clips crop from 1080p for now, so a 9:16 single is about 608×1080 and looks soft on phones. 4K inside the ZV-E10 IIs fixes that later.');
+    eff.push('Run a 60-minute power soak on rig day with all three bodies feeding HDMI.');
   }
-  $('#modeEffects').innerHTML=eff.map(e=>`<div class="alert">${esc(e)}</div>`).join('');
+  const skinEff=[`Key ${sk.keyLux} lux at the face${sk.keyLux>300?' (about 2/3 stop over the 300 lux house reference), from more key output, never more ISO, because noise lands in the shadows first':', the house reference'}. Fill ${sk.fillStops} stop${sk.fillStops>1?'s':''} under the key, about ${sk.fillStops>1?'3:1':'2:1'}${sk.fillStops<1.5?', so the shadow side keeps its detail':''}.`, ...sk.notes,
+    'Mixed panel: set each single for the person it shoots, and set its key for them. On the wide, keep the fairest forehead under its zebra and lift the deepest face with its own key, not with exposure.'];
+  $('#modeEffects').innerHTML=eff.map(e=>`<div class="alert">${esc(e)}</div>`).join('')+skinEff.map(e=>`<div class="alert good">${esc(e)}</div>`).join('');
 }
 
 /* ---------- run ---------- */
@@ -875,13 +1005,13 @@ const RIGDAY=[
   ['r1','Clear the floor, place furniture: couch back 3 ft off the slat wall, armchair angled 28° toward the couch.'],
   ['r2','Stand every light at its Place-tab position and height. Sandbag every base.'],
   ['r3','Set every face light to the camera Kelvin, tint 0. Start at the Place-tab output levels.'],
-  ['r4','Cameras on tripods at 48 in, settings from the Camera tab. Check both key stands and the rim strip are outside the wide frame.'],
+  ['r4','Cameras on tripods at 48 in, settings from the Settings tab. Check both key stands and the rim strip are outside the wide frame.'],
   ['r5','Meter each face with the key only, then add fill and rim. Adjust output until the ratios on the Plan tab read true.'],
   ['r6','Bring up the wall wash and Govee bars. Wall between the hosts sits 1 to 2 stops under the faces.'],
   ['r7','TV on a slide. Lower its brightness until whites don\'t clip on the wide.'],
   ['r8','Grey card match across all three cameras within 2 IRE. Save the PowerGrade.'],
   ['r9','Flicker test: record 10 s of every light at 1/60 and 1/125.'],
-  ['r10','Heat and power soak: 60 minutes, internal 4K and HDMI out together.'],
+  ['r10','Power soak: 60 minutes with all three bodies feeding HDMI at 1080p 29.97.'],
   ['r11','Tape seat marks on the rug. Shoot reference stills from all three cameras.'],
   ['r12','Fill in the Rig Log below. The measured values become the house standard.'],
 ];
@@ -892,11 +1022,11 @@ const PRESHOW=[
   ['p4','TV slides at 01, brightness at the Rig Log value','Whites must not clip on the wide'],
   ['p5','Seats on the tape marks, mics just out of frame','Arms come in from below and the side, mic about 45° under the chin, no arm across the TV text'],
   ['p5b','Drinks in glasses on the side table, no bottles in shot',''],
-  ['p5c','Curtain behind the armchair reads at least 1 stop under the face on CAM2',''],
+  ['p5c','Left wall behind the armchair reads at least 1 stop under the face on CAM2','Charcoal drape once it is hung'],
   ['p6','Exposure, ISO and white balance locked on all three bodies',''],
-  ['p7','Zebra check: forehead highlights just touching 70',''],
-  ['p8','Card space checked on CAM2 and CAM3 (45 GB per hour in 4K)',''],
-  ['p9','Press REC on CAM2 and CAM3, then start the RØDECaster Video',''],
+  ['p7','Zebra check: forehead highlights just touching the level for each guest\'s skin tone','Settings tab: Fair 70, Medium 60, Deep 50'],
+  ['p8','At least 100 GB free for the RØDECaster Video recording',''],
+  ['p9','Start the RØDECaster Video recording with ISO on',''],
   ['p10','Clap on camera',''],
   ['p11','Phones and the Studio Echo on Do Not Disturb',''],
 ];
@@ -913,7 +1043,7 @@ const RIG=[
   {id:'iso', l:'Final ISO (singles / wide)', t:'Planned 200 / 400', u:''},
   {id:'ire', l:'Camera match gap', t:'2 IRE or less', u:'IRE'},
   {id:'flicker', l:'Flicker at 1/60 and 1/125', t:'Note any light that bands', u:''},
-  {id:'hdmi4k', l:'HDMI 1080p while recording 4K', t:'Works / fails', u:''},
+  {id:'hdmi4k', l:'All HDMI inputs hold 1080p 29.97 for 60 min', t:'Works / fails', u:''},
   {id:'heat', l:'60-minute heat soak', t:'Pass / overheat at minute …', u:''},
 ];
 const SCENES=[
@@ -933,14 +1063,14 @@ const FIXES=[
   ['Skin is a different colour between cameras','A Kelvin or tint mismatch. Set every body and every face light to the same Kelvin, tint 0.'],
   ['Rolling bands in the picture','LED flicker. Keep the shutter at 1/60 and raise the light\'s output rather than dimming it very low.'],
   ['Stand or lantern edge in the wide','Slide the stand outward. The wide\'s edges cross 3.4 ft in from each side wall at the seats.'],
-  ['White curtain glows behind the armchair','Skirt the K1 lantern on the curtain side, aim CAM2 a few degrees right, or swap to a dark drape.'],
+  ['White curtain glows behind the armchair','Hang the charcoal drape. Until then, skirt the K1 lantern on the curtain side and aim CAM2 a few degrees right.'],
   ['Hot spots on the leather couch','The key is too low and frontal. Raise it and move it to the side, the short-side position on the Place tab.'],
   ['Mic arm through the TV logo','Drop the arm below the TV text zone and bring it in from the side.'],
   ['Hair melts into the wall','Rim too low or aimed at the face. Re-aim it at the crown and shoulders and raise it half a stop.'],
 ];
 function renderRun(){
   const mk=(list,doc,withSub)=>list.map(([id,t,sub])=>{const on=!!S.checks[doc]?.[id];
-    return `<label class="check ${on?'done':''}"><input type="checkbox" data-check="${doc}" data-id="${id}" ${on?'checked':''} ${S.canWrite?'':'disabled'}><span>${esc(t)}${withSub&&sub?`<small>${esc(sub)}</small>`:''}</span></label>`;}).join('');
+    return `<label class="check ${on?'done':''}"><input type="checkbox" data-check="${doc}" data-id="${id}" data-fk="ck-${doc}-${id}" ${on?'checked':''} ${S.canWrite?'':'disabled'}><span>${esc(t)}${withSub&&sub?`<small>${esc(sub)}</small>`:''}</span></label>`;}).join('');
   $('#rigChecks').innerHTML=mk(RIGDAY,'rigday',false);
   $('#preChecks').innerHTML=mk(PRESHOW,'preshow',true);
   const rc=RIGDAY.filter(([id])=>S.checks.rigday?.[id]).length, pc=PRESHOW.filter(([id])=>S.checks.preshow?.[id]).length;
@@ -967,7 +1097,7 @@ const NOW_ORDER=[['Serif 65','Solid bright cyan slide, near clipping in every sh
 const PLAN_ORDER=[['Rim on hair','Half a stop over the key, separates from the slats'],['Faces','300 lux key, 1.5-stop fill, short-side shape'],['Serif 65','Near-black slides, whites just under the faces'],['Slat wall and LEDs','1 to 2 stops under the faces, show colour'],['Curtain','At least 1 stop under the faces']];
 const ISSUES=[
   {id:'t1',sev:'first',shot:'All three shots',role:'AC',title:'The TV is the brightest thing in frame',see:'The solid cyan slide sits near clipping in every shot. Faces read darker than the screen behind them, so the eye goes to the TV first.',fix:'Lower Serif 65 brightness until its whites sit just under the faces on the wide. Switch to the near-black slide backgrounds from the Runbook with text in the upper two thirds. Free.',tab:'run'},
-  {id:'t2',sev:'first',shot:'Armchair single',role:'K1',title:'The white curtain blows out behind the armchair',see:'On the armchair single the sheer curtain is the brightest area in frame. The left third of the picture is close to white and pulls attention off the face.',fix:'Keep light off it: skirt the K1 lantern on the curtain side and aim CAM2 a few degrees right so the slats and plant fill more of the background. Meter the curtain at least 1 stop under the face. If it still glows, swap it for a charcoal or deep-blue drape.',tab:'place'},
+  {id:'t2',sev:'first',shot:'Armchair single',role:'K1',title:'The white curtain blows out behind the armchair',see:'On the armchair single the sheer curtain is the brightest area in frame. The left third of the picture is close to white and pulls attention off the face.',fix:'Decided: swap it for a charcoal drape (on the shopping list to scout). Until it is up, skirt the K1 lantern on the curtain side and aim CAM2 a few degrees right so the slats and plant fill more of the background.',tab:'place'},
   {id:'t3',sev:'first',shot:'All three shots',role:'K2',title:'Faces are flat and front-lit',see:'Light comes from close to the camera, so faces have little shape and the shadow side is almost as bright as the key side. The leather couch shows hot spots from the same light.',fix:'Move to short-side keys in 26 in lanterns (K1, K2), high and to the side, with fill 1.5 stops under from beside CAM1. Higher keys also take the glare off the leather.',tab:'buy'},
   {id:'t4',sev:'next',shot:'Couch single and wide',role:'R',title:'Dark hair melts into the dark slats',see:'There is no rim light. Dark hair and a navy top sit against near-black panels, and the couch back is close to the wall.',fix:'Add the rim strip over the gap behind the couch. Pull the couch forward to 3 ft off the slat wall if the cameras allow it.',tab:'place'},
   {id:'t5',sev:'next',shot:'Couch single and wide',role:null,title:'Mic arms cross the TV and the faces',see:'On the couch single a boom arm cuts through the TV logo. On the wide both mics sit in front of the mouths.',fix:'Bring arms in from below and the side, mic about 45° under the chin, arm below the TV text zone. Check each single for an arm crossing a face or the logo.',tab:'run'},
@@ -980,26 +1110,457 @@ const KEEPS=['The layout already matches the plan: armchair left of frame, couch
 function renderToday(){
   const ord=(el,list)=>{$(el).innerHTML=list.map(([t,d])=>`<li><div><b>${esc(t)}</b><br><span class="note">${esc(d)}</span></div></li>`).join('');};
   ord('#orderNow',NOW_ORDER); ord('#orderPlan',PLAN_ORDER);
-  const tabName={run:'Run',place:'Place',buy:'Buy',camera:'Camera'};
+  const tabName={run:'Run',place:'Place',buy:'Buy',camera:'Settings'};
   $('#issues').innerHTML=ISSUES.map(i=>{const on=!!S.checks.today?.[i.id];
-    return `<label class="issue ${on?'done':''}"><input type="checkbox" data-check="today" data-id="${i.id}" ${on?'checked':''} ${S.canWrite?'':'disabled'} aria-label="Fixed: ${esc(i.title)}"><div>
+    return `<label class="issue ${on?'done':''}"><input type="checkbox" data-check="today" data-id="${i.id}" data-fk="ck-today-${i.id}" ${on?'checked':''} ${S.canWrite?'':'disabled'} aria-label="Fixed: ${esc(i.title)}"><div>
       <div class="ihead"><span class="sev ${i.sev}">${i.sev==='first'?'Fix first':i.sev==='next'?'Next':'Polish'}</span><h4>${esc(i.title)}</h4></div>
-      <div class="ihead" style="margin-top:4px"><span class="note mono" style="font-size:12px">${esc(i.shot)}</span>${i.role?roleChip(i.role):''}<a class="note" href="#${i.tab}">${tabName[i.tab]} tab →</a></div>
+      <div class="ihead" style="margin-top:4px"><span class="note mono" style="font-size:12px">${esc(i.shot)}</span>${i.role?roleChip(i.role):''}<a class="note" href="#lighting-${i.tab==='camera'?'settings':i.tab}">${tabName[i.tab]} tab →</a></div>
       <div class="cols"><div><b>In the still</b>${esc(i.see)}</div><div><b>Fix</b>${esc(i.fix)}</div></div></div></label>`;}).join('');
   const d=ISSUES.filter(i=>S.checks.today?.[i.id]).length;
   $('#todayProg').textContent=`${d} of ${ISSUES.length} fixed`; $('#todayBar').style.width=(d/ISSUES.length*100)+'%';
   $('#keeps').innerHTML=KEEPS.map(k=>`<li>${esc(k)}</li>`).join('');
 }
 
+/* ---------- desks: hardware buying guides ---------- */
+/* Source for every confirmed row: the Nov 5 2026 meeting note "Trading desk build plan" (project "Junior Latency Desk") and its transcript, plus the Oct 26 note where marked.
+   own: 'owned' | 'planned' | 'none' (not in any record).  ev: 'v' stated in the record, 'p' stated but price or model not re-checked on a product page, 'u' unknown. */
+const DESKS={
+  junior:{name:'Junior Desk', code:'JD',
+    lede:'Hardware for the Junior Latency Desk: one three-screen desk in the trader\'s home office with its own Mac mini. Everything on this desk is planned. No record shows any of it bought. Two sources feed this list and they disagree in places, shown below. Prices are CAD before tax as spoken on Nov 5 and have not been re-checked on a product page.',
+    sources:[['A','Nov 5 planning session','The meeting note "Trading desk build plan" and its transcript. Read directly for this guide.'],['B','Botty\'s Junior Desk hardware list','Relayed by AGAMEMBOT on Nov 16. The list itself has not been seen by this guide\'s author, and it gives no quantities, prices or reasons.']],
+    layout:[
+      ['Left','Portrait monitor','Ranked alerts. A tall screen shows a long ranked list at a glance.'],
+      ['Centre','Ultrawide monitor','Charts.'],
+      ['Right','Landscape monitor, 27 in 4K','News and holds.'],
+      ['At the desk','Mac mini','Plugged straight into the three screens in the same room, so nothing is streamed across the city.'],
+    ],
+    items:[
+      {n:'Mac mini (desk computer)', q:'1', where:'At the desk, home office', own:'planned', ev:'x', price:'A: about $2,600 · B: not given',
+       spec:'A: "M6", 12-core CPU and GPU, 32 GB memory, 1 TB SSD. B: "M6", 24 GB memory, 512 GB SSD.',
+       why:'Drives all three screens by itself with no dock. Source A warns against 16 GB ("it\'ll choke") and says storage under 1 TB "gets tight". Source B\'s 512 GB is under that line.',
+       src:'Sources differ on memory and storage. An M6 Mac mini is on sale in Canada per the Nov 16 check below. Apple\'s own store could not be opened for this guide, so confirm the memory and storage menu there. See Deployment options for which machine goes where.'},
+      {n:'Portrait monitor, option 1: Dell UltraSharp 27 4K', q:'1 (option 1 or 2)', where:'Left, portrait', own:'planned', ev:'x', price:'A: about $1,050 · B: not given',
+       spec:'A: model U2725QE. B: model U2723QE. Both are 27 in 4K UltraSharps; they are different models.',
+       why:'First pick for the alert column. Its price had risen from an earlier ballpark of about $700, which is why option 2 came up.',
+       src:'Sources differ on the model number. A\'s figure was read from a Best Buy listing during the session.'},
+      {n:'Portrait monitor, option 2: LG 32UN880 (32 in Ergo)', q:'1 (option 1 or 2)', where:'Left, portrait', own:'planned', ev:'p', price:'A: about $600',
+       spec:'A calls it the "LG 32 Ergo". B gives the model 32UN880, which is LG\'s 32 in Ergo, so the sources agree.',
+       why:'Bigger and cheaper than the Dell after the Dell\'s price rise.',
+       src:'Sources A and B.'},
+      {n:'Ultrawide monitor: Dell S3422DW', q:'1', where:'Centre', own:'planned', ev:'p', price:'not recorded',
+       spec:'B names the model. A only says "ultrawide".', why:'Charts need the width.', src:'Role from A, model from B.'},
+      {n:'Landscape monitor, 27 in 4K', q:'1', where:'Right', own:'planned', ev:'u', price:'not recorded',
+       spec:'B gives the size and resolution and says the model is undecided.', why:'Keeps news and holds in view beside the charts.', src:'Role from A, size from B. Model undecided.'},
+      {n:'Ergotron LX dual monitor arm', q:'not stated', where:'On the desk, fixed', own:'planned', ev:'p', price:'not recorded',
+       spec:'A dual arm holds two screens. How the third screen is mounted is not recorded.',
+       why:'A: "The arms and cables stay put", so the screens never need re-aiming.', src:'Arms mentioned in A, model from B.'},
+      {n:'APC BR1500G battery backup (UPS)', q:'not stated', where:'not recorded', own:'planned', ev:'p', price:'not recorded',
+       spec:'Not mentioned in source A.', why:'Reason not stated in the list.', src:'Source B only.'},
+      {n:'RØDE Wireless GO (Gen 3) microphone', q:'not stated', where:'not recorded', own:'planned', ev:'p', price:'not recorded',
+       spec:'Not mentioned in source A.', why:'Reason not stated in the list.', src:'Source B only.'},
+      {n:'Cables', q:'4 labelled leads to the Mac mini', where:'Fixed at the desk', own:'planned', ev:'u', price:'not recorded',
+       spec:'Types and lengths not recorded.', why:'Labelled so the computer can be unplugged and reconnected without tracing cables.', src:'Source A.'},
+      {n:'Desk, chair, keyboard, mouse', q:'not recorded', where:'Home office', own:'none', ev:'u', price:'not recorded',
+       spec:'Nothing recorded. The trader\'s existing setup has not been inventoried.', why:'', src:'An office walkthrough was planned on Oct 26. No result is recorded.'},
+      {n:'Desk lighting and camera', q:'not recorded', where:'', own:'none', ev:'u', price:'not recorded',
+       spec:'Nothing recorded for this desk.', why:'', src:'No record.'},
+    ],
+    conflicts:[
+      ['Mac mini memory and storage','A: 32 GB and 1 TB, with a warning against smaller. B: 24 GB and 512 GB.','B matches what Apple Canada lists (reported Nov 16). No Canadian listing for 32 GB was found. See the recommendation below.'],
+      ['Mac mini model name','Both say "M6". Neither shows a listing.','Resolved in part on Nov 16: Canadian tech press and a Best Buy Canada listing show an M6 Mac mini on sale since Sep 22. Apple\'s own page was not reachable, so the exact memory and storage menu is still to confirm.'],
+      ['Dell portrait monitor model','A: U2725QE. B: U2723QE.','Confirm which model the plan means before pricing.'],
+    ],
+    deploy:{
+      checked:'Nov 16, 2026',
+      apple:[
+        ['On sale in Canada','M6 Mac mini and M5 Pro Mac mini, since Sep 22, 2026.','iPhone in Canada, Sep 22 and Aug 25'],
+        ['Base M6','12-core CPU, 12-core GPU, 16 GB memory, 256 GB storage. $1,249 CAD at Apple; $1,199.99 at Best Buy Canada.','iPhone in Canada; Jump+; Best Buy Canada listing'],
+        ['Apple Canada store','Lists the M6 at 24 GB / 512 GB and the M5 Pro at 24 GB / 512 GB.','Reported by Miller, Nov 16. Not opened for this guide'],
+        ['M6, 24 GB / 512 GB','$1,849.99 CAD on a Best Buy Canada listing. Seen in one search result and not confirmed by a second. Apple\'s own price not recorded.','Best Buy Canada'],
+        ['M6, 32 GB / 1 TB','No Canadian listing found. The only figure is the "about $2,600" spoken on Nov 5. Sources disagree on whether 32 GB is offered: MacRumors-based reports and TechRepublic say yes, EveryMac lists only 16 and 24 GB.','MacRumors; TechRepublic; EveryMac'],
+        ['M5 Pro Mac mini','From $2,399 CAD. A Best Buy Canada listing shows 24 GB / 512 GB at $2,399.99.','iPhone in Canada; Best Buy Canada'],
+        ['M6 ports and screens','Back: 3 Thunderbolt 4, 1 HDMI, 2.5 Gb Ethernet. Front: 2 USB-C, headphone jack. Runs three screens by itself.','9to5Mac; AppleInsider'],
+        ['M1 Mac mini (2020) ports and screens','Back: 2 Thunderbolt 3, 1 HDMI 2.0, 2 USB-A, Gigabit Ethernet. Runs two screens by itself: one up to 6K on Thunderbolt and one up to 4K on HDMI. Sold with 8 or 16 GB memory, fixed for life.','Apple Support; The Apple Wiki'],
+      ],
+      rows:[
+        ['Computer at the home-office desk','New M6 Mac mini (planned)','The studio\'s M1 Mac mini (owned), moved across town'],
+        ['Computer at the studio','The M1 Mac mini stays (owned)','New Mac mini bought for the studio (planned)'],
+        ['What you buy','1 Mac mini for the desk','1 Mac mini for the studio, plus 1 USB graphics adapter for the desk'],
+        ['Load at the desk','Three screens of dashboards and charts. Light work.','The same light work'],
+        ['Load at the studio','The M1 keeps music sessions (Ableton Live 12, UAD Console, the Apollo x6, about 226 UAD plugins), show days (RØDECaster Pro II and Video, clean guest picture on HDMI) and adds the always-on background jobs on top','The new machine takes all of that. The always-on jobs get a current chip and more memory'],
+        ['Memory at the desk','24 GB on the configuration Apple Canada lists','16 GB (reported Nov 16). Enough for three screens of dashboards'],
+        ['Memory at the studio','16 GB, shared by music, shows and the always-on jobs','24 GB: the 16 GB that carries the studio today plus 8 GB for the always-on jobs'],
+        ['Storage','Desk: 512 GB. Studio: the M1\'s 512 GB, already holding Ableton and the plugins','Desk: the M1\'s 512 GB, wiped. Studio: 512 GB new, with projects and recordings on the studio drives'],
+        ['Screens the desk computer runs by itself','3 of 3','2 of 3. The third needs a USB graphics adapter'],
+        ['Screens the studio computer runs by itself','2: the operator monitor and the clean guest picture to the RØDECaster Video. Any second monitor needs adapter software','3: the operator monitor, the clean guest picture, and one spare for a second monitor'],
+        ['Ports at the studio','M1: 2 Thunderbolt, one taken by the Apollo x6','M6: 3 Thunderbolt, one for the Apollo x6 and two spare'],
+        ['Studio data drives (2 × 1 TB, owned)','Stay at the studio','Stay at the studio. Nothing on them moves with the M1'],
+        ['Disruption','None at the studio. The desk is a clean install','The studio\'s recording setup has to be rebuilt on the new machine: Ableton, UAD, plugins and their licences. The M1 is then wiped for the desk'],
+        ['Main risk','Background jobs competing with a paid recording session on a 16 GB machine from 2020','A third screen that depends on adapter software, and studio downtime during the move'],
+        ['Cost to buy (CAD before tax)','About $1,850 (24 GB / 512 GB, Best Buy listing, Nov 16) up to about $2,600 (32 GB / 1 TB, spoken Nov 5)','About $1,850 for the M6 at 24 GB / 512 GB (Best Buy listing, Nov 16), plus about $140 for the desk adapter and a powered USB-C hub for the studio (not priced)'],
+      ],
+      third:[
+        'The M1 Mac mini sends a picture to two screens by itself. A third screen only works through a USB graphics adapter, a small box that uses DisplayLink software on the Mac to draw the picture and send it down a USB cable.',
+        'Cost: the Canadian listings found on Nov 16 are two-output models at about $138 (Sonnet, Fleet Network) to $145 (OWC, Staples.ca and Newegg.ca). A one-output model would do, and none was priced.',
+        'What it needs: the DisplayLink Manager app installed and running, with screen recording permission. The screen stays dark until the Mac has started and the app is running.',
+        'What you give up on that one screen: the picture is compressed and drawn by the processor, so it can lag a little and uses some of the Mac\'s power. Protected video such as Netflix won\'t play on it. A macOS update can stop it working until the app is updated.',
+        'How to use it well: put the ultrawide and the portrait screen on the Mac\'s own two outputs. Put the right-hand news screen on the adapter, since it changes least.',
+        'The studio M1 already has DisplayLink software on it: a "DisplayLink USB Audio" device shows in its audio device list. Whether the adapter is still there and could go with it is not recorded.',
+      ],
+      runs:[
+        ['c','On the studio Mac mini (M1, 16 GB / 512 GB)','Music: Ableton Live 12 Suite, UAD Console and the Apollo x6 on Thunderbolt, about 226 UAD plugins and 285 Audio Units. Shows: RØDECaster Pro II and RØDECaster Video, with the Mac\'s HDMI output feeding RØDECaster Video input 4 as the clean picture for Riverside guests and screens. Also the podcast audio lab and the Claude sessions that work on the studio.','Studio control skill, "The rig, as verified"; seven studio bots, reported Nov 16; Settings tab, CAM4'],
+        ['c','Planned for the studio Mac mini','The always-on background jobs for the Junior Desk.','Nov 5 planning session'],
+        ['c','On the Skytech (Windows)','Govee lighting control, the archive, copy jobs and the Windows production console. None of this needs to move to the Mac.','Reported by Miller, Nov 16'],
+        ['u','Not measured yet','How full the M1\'s 512 GB is, and its memory pressure during a full session. More hardware audit evidence is pending.','Open'],
+      ],
+      ports:[
+        ['Apollo x6','Thunderbolt, plugged straight in','Rear Thunderbolt 1'],
+        ['Operator monitor','One screen','Rear Thunderbolt 2'],
+        ['Clean guest picture to RØDECaster Video input 4','HDMI','The HDMI port'],
+        ['Studio drive 1','One port (connector type not recorded)','Rear Thunderbolt 3'],
+        ['Studio drive 2','One port (connector type not recorded)','Powered hub'],
+        ['RØDECaster Pro II and RØDECaster Video, when connected to the Mac','One USB port each','Front USB-C, or the powered hub'],
+        ['Network','Ethernet','Built in'],
+        ['Second monitor, if wanted','One screen','Moves a drive to the hub and takes a Thunderbolt port. No adapter software needed'],
+      ],
+      rec:[
+        'Buy for the studio: Apple Mac mini, M6 chip (12-core CPU, 12-core GPU), 24 GB memory, 512 GB storage. This is the M6 configuration Apple Canada lists. About $1,850 CAD before tax on a Best Buy Canada listing seen Nov 16; confirm Apple\'s price.',
+        'Why 24 GB: the M1 runs the whole studio today on 16 GB. 24 GB keeps that and adds 8 GB for the always-on jobs, so a music session or a show is not competing with them.',
+        'Why the M6 and not the M5 Pro: the Skytech already carries the archive, copy jobs and the production console, and the Apollo x6 runs the UAD plugins on its own processors. The M5 Pro at 24 GB / 512 GB costs about $550 more for the same memory and storage.',
+        'Why 512 GB works: the M1 runs the same software on 512 GB now, and projects and recordings stay on the two studio drives. If the M1\'s disk is more than about three quarters full, order 1 TB instead (price not confirmed).',
+        'Add one powered USB-C hub. The studio needs six USB-C or Thunderbolt connections and the M6 has five. Keep the Apollo x6 and the monitor plugged straight into the Mac; the drives and RØDE gear can share the hub. The M6 has no USB-A ports, so older cables need the hub or adapters.',
+        'Step up to the M5 Pro only if the audit shows the M1 under memory pressure or with Ableton\'s CPU meter running high during normal sessions today.',
+        'The M1 at 16 GB / 512 GB then suits the home-office desk under Option 2, with the third screen on the USB graphics adapter.',
+        'This replaces the earlier 32 GB / 1 TB suggestion. That was made before the M1\'s size and the Skytech\'s jobs were known, and no Canadian listing for 32 GB was found.',
+      ],
+      links:[['iPhone in Canada, Sep 22','https://www.iphoneincanada.ca/2026/09/22/mac-mini-mac-studio-canada-available/'],['iPhone in Canada, Aug 25','https://www.iphoneincanada.ca/2026/08/25/apple-debuts-m6-and-m5-pro-mac-mini-with-price-hike-in-canada/'],['Best Buy Canada, Mac mini','https://www.bestbuy.ca/en-ca/category/apple-mac-mini/26226'],['Jump+, M6 Mac mini','https://www.jumpplus.com/products/mac-mini-m6-mhqk4vc-a'],['9to5Mac','https://9to5mac.com/2026/08/25/apple-announces-new-mac-mini-heres-everything-new/'],['MacRumors','https://www.macrumors.com/2026/08/25/apple-announces-2026-mac-mini/'],['TechRepublic','https://www.techrepublic.com/article/news-mac-mini-m6-cheat-sheet/'],['EveryMac, M6','https://everymac.com/systems/apple/mac_mini/specs/mac-mini-m6-12-core-cpu-12-core-gpu-2026-specs.html'],['AppleInsider','https://appleinsider.com/inside/mac-mini/vs/m6-mac-mini-vs-m4-mac-mini-compact-powerhouses-compared'],['Apple Support, M1 displays','https://support.apple.com/guide/mac-mini/connect-a-display-apd8e4fbbb97/2020'],['The Apple Wiki, M1 Mac mini','https://theapplewiki.com/wiki/Mac_mini_(M1,_2020)'],['Staples.ca, OWC adapter','https://www.staples.ca/products/3119330-en-owc-usb-c-to-dual-hdmi-4k-display-adapter-with-displaylink'],['Fleet Network, Sonnet adapter','https://fleetnetwork.ca/products/usbc-dhdmi/']],
+    },
+    money:[['One desk, complete','$3,200 to $4,200','Spoken estimate in source A, made before the UPS and microphone were on the list']],
+    open:[
+      'Deployment: Option 1 or Option 2.',
+      'How full the studio M1\'s 512 GB is, and its memory pressure in a full session. These decide 512 GB or 1 TB, and M6 or M5 Pro.',
+      'Apple Canada\'s own price for the M6 at 24 GB / 512 GB.',
+      'The powered USB-C hub: model and price, or whether one is already owned.',
+      'Portrait screen: the Dell 27 or the LG 32UN880, and which Dell model.',
+      'The right-hand 27 in 4K monitor model.',
+      'How the third screen is mounted, and how many arms.',
+      'Kit count: two fixed kits, or one Mac mini that travels between desks.',
+      'What the trader already owns at the desk. Any existing screen could fill a slot.',
+    ],
+    history:'Oct 26: the first idea was one dedicated vertical big screen, with a possible second monitor. Nov 5 replaced that with the three-screen layout above.'},
+  trading:{name:'Trading Desk', code:'TD',
+    lede:'The records use "trading desk" for the same project as the Junior Desk. Beyond the home-office desk they describe two more hardware setups: the always-on computer at the studio and an optional second desk. Those are here. No record lists a separate Trading Desk kit, so anything else is unknown until the desk sources arrive.',
+    sources:[['A','Nov 5 planning session','The meeting note "Trading desk build plan" and its transcript. Read directly.'],['B','Botty\'s hardware list','Relayed by AGAMEMBOT on Nov 16. Not seen directly.']],
+    layout:[
+      ['Studio, 1865 17 Ave SW','Mac mini, permanent','The always-on machine that does the background work. It never moves and has no trading screens of its own.'],
+      ['Trader\'s office (optional)','Second three-screen desk','Only if a desk is wanted at the office as well as at home. Same three-screen map as the Junior Desk, left in place.'],
+    ],
+    items:[
+      {n:'Mac mini M1 at the studio', q:'1', where:'Red Mile studio, fixed', own:'owned', ev:'p', price:'owned',
+       spec:'M1, 16 GB memory, 512 GB storage.',
+       why:'Keeps the heavy background work at the studio and out of the trader\'s room.',
+       src:'Owned per source B. Size reported by seven studio bots, Nov 16.'},
+      {n:'1 TB drives', q:'2', where:'Red Mile studio. They stay at the studio under either deployment option', own:'owned', ev:'p', price:'owned',
+       spec:'Make, model and connector are not recorded.', why:'Hold the studio\'s projects and recordings.', src:'Owned per source B.'},
+      {n:'New Mac mini for the studio', q:'0 or 1', where:'Red Mile studio, fixed', own:'planned', ev:'u', price:'about $2,600 if needed',
+       spec:'Same spec as the desk computer, if the M1 falls short.',
+       why:'Only needed if the existing M1 is not capable enough.',
+       src:'Source A: the question was asked and not answered.'},
+      {n:'Mac mini for the office desk', q:'1, only if the office desk is built', where:'At the office desk', own:'planned', ev:'x', price:'about $2,600',
+       spec:'Same spec as the Junior Desk computer, which the sources disagree on.',
+       why:'A fixed kit at each desk means nothing is carried between them. That would make three Mac minis in total.',
+       src:'Source A.'},
+      {n:'Three monitors for the office desk', q:'3, only if the office desk is built', where:'Portrait left, ultrawide centre, landscape right', own:'planned', ev:'u', price:'not recorded',
+       spec:'Same map as the Junior Desk. Models follow whatever is chosen there.',
+       why:'The same layout at both desks, so the trader sees the same thing in the same place.',
+       src:'Source A.'},
+      {n:'Arms, cables, desk, chair, lighting, camera', q:'not recorded', where:'', own:'none', ev:'u', price:'not recorded',
+       spec:'Nothing recorded for either setup.', why:'', src:'No record.'},
+    ],
+    conflicts:[],
+    money:[['Matched pair of desks','$6,500 to $8,500','Spoken estimate in source A'],['One desk','$3,200 to $4,200','Spoken estimate in source A']],
+    open:[
+      'Whether the studio M1 stays or moves to the home-office desk. See Deployment options on the Junior Desk tab.',
+      'Whether an office desk is wanted at all. On Nov 5 the answer was that the desk will probably just be at home.',
+      'Whether "Trading Desk" means a setup that is not in these records.',
+    ],
+    history:''},
+};
+const OWN={owned:['Owned','c'],planned:['Planned','l'],none:['No record','u']};
+const EVL={p:['Named, not re-checked','g'],x:['Sources differ','x'],u:['Unknown','u']};
+/* ---------- setups: hardware upgrade planner ---------- */
+const SETUPS={overview:{name:'Overview',sub:'Every setup, what is owned, what to buy next'},lighting:{name:'Lighting and set',sub:'1865 17 Ave SW · podcast room 10×10 ft · 8.5 ft ceiling'},desk:{name:'Trading Desk',sub:'Junior Latency Desk · home office and studio computers'},storage:{name:'Storage',sub:'Record, edit, archive and offsite drives'},music:{name:'Music',sub:'Recording and mixing rig at the studio'}};
+const STAGES=[['today','Room today'],['plan','Plan'],['buy','Buy'],['place','Place'],['settings','Settings'],['run','Run']];
+const LIGHT_SEC={today:'today',plan:'plan',buy:'buy',place:'place',settings:'camera',run:'run'};
+let area='overview', stage='plan';
+const STORE={"checked": "Oct 31, 2026", "need": "A storage plan that gets every Red Mile recording into three places and gets the T7 back to recording only. Oct 31 2026 state: the T7 (RCV_Disk) is full with 959 GB waiting for ingest plus 246 GB of imports and cache; the editing PC's C: has 16 GB free of 930; Google Drive has 15 GB free of 930 and is currently acting as RMR_ARCHIVE; about 1 TB of new footage landed in October alone. Red Mile Ingest v2 is built and waits on a physical drive labelled RMR_ARCHIVE.", "rules": ["Tier 1 Record: the T7 and the Pro II card carry a session only until ingest clears them. Nothing new to buy.", "Tier 2 Edit: a 2 TB NVMe takes the console cache, Drive_Imports and renders off C:, so the PC stops swapping.", "Tier 3 Archive: RMR_ARCHIVE on a new 8 TB CMR NAS drive, mirrored to a second identical drive in the same host. A mirrored pair gives 8 TB usable; after the 1.2 TB already waiting on the T7 and about 0.9 TB coming back from Google Drive, 1 TB a month fills it in about 6 months, so plan the next pair or a capacity swap for spring 2027.", "Tier 4 Offsite: an 8 TB external that copies the archive once a month and lives away from the studio. Google Drive drops back to deliverables and the knowledge base only once the local archive is verified.", "Archive drives must be 3.5 in CMR NAS class, 8 TB or more, 3 year warranty or longer; SMR and desktop-class drives never hold the archive.", "Everything on the editing PC side runs at USB 3.2 Gen 2 (10 Gbps) or faster so a 55 GB session copies in minutes, not an hour.", "A copy exists and verifies before anything is removed. The ingest already enforces this."], "roles": [{"id": "archive", "must": "3.5 in CMR NAS class, 8 TB or more, 3 year warranty or longer. One is RMR_ARCHIVE, the other its mirror.", "name": "Archive drives", "qty": 2}, {"id": "host", "must": "Holds both archive drives: either a 2-bay NAS with 2.5 GbE or a 2-bay USB-C 10 Gbps enclosure. 5 Gbps docks fail.", "name": "Archive host", "qty": 1}, {"id": "edit", "must": "2 TB NVMe PCIe 4.0, TLC with DRAM, 5 year warranty.", "name": "Edit SSD", "qty": 1}, {"id": "enclosure", "must": "USB-C 10 Gbps M.2 NVMe enclosure, only needed if the PC has no free M.2 slot.", "name": "SSD enclosure", "qty": 1}, {"id": "offsite", "must": "New 8 TB external desktop HDD, CMR preferred, 2 year warranty or longer.", "name": "Offsite drive", "qty": 1}, {"id": "reader", "must": "USB-C 10 Gbps with UHS-II SD and microSD slots for the Pro II card.", "name": "Card reader", "qty": 1}], "builds": {"fit": {"name": "Best fit build", "note": "Two IronWolf Pro 8 TB, the Orico enclosure and the Seagate Expansion 8 TB from the Canada Computers shelf on Macleod Trail, the SN850X 2 TB shipped from Canada Computers, and the UGREEN DXP2800 NAS and Unitek reader from Amazon for Nov 1 and 2. Both the PC and the Mac mini can then map RMR_ARCHIVE over 2.5 GbE."}, "value": {"name": "Best value build", "note": "Two WD Red Plus 8 TB from Amazon for Nov 1, the TerraMaster D2-320 USB-C enclosure from Amazon for Nov 2 (the archive stays a plain drive letter on the editing PC, so Red Mile Ingest and repoint.py need no changes), the same SN850X, Orico enclosure, Seagate Expansion and Unitek reader. $280 less than the best fit, with a 3 year warranty on the drives instead of 5."}}, "notes": "Prices are CAD before 5 percent GST, read from each product's own page on Oct 31 2026. Best value assumes delivery within about a week. Marketplace prices are asking prices; offer and walk-away figures are ours. Best fit total $2,481.71, best value total $2,201.71. Two Marketplace deals can lower either build: the sealed recertified IronWolf Pro 12 TB at $500 firm (one archive bay, check the serial on Seagate's warranty page first) and the sealed SN850X 2 TB at $400 from an unrated seller. Order of operations once the drives land: label the archive drive RMR_ARCHIVE, run Red Mile Ingest once by hand, run Console\\tools\\repoint.py --apply, run Optimize, then move the 246 GB of imports and cache off the T7, then set the monthly offsite copy. Decide the host first: NAS if both machines need the archive, enclosure if only the editing PC does. Open question for Miller: does the skytech PC have a free M.2 slot? If yes, skip the Orico enclosure. Not scouted: the 32 GB RAM kit from the Oct 30 audit, cables, a UPS.", "items": [{"role": "archive", "product": "Seagate IronWolf Pro 8TB ST8000NT001", "source": "Canada Computers", "price": 509.99, "fit_qty": 2, "value_qty": 0, "specs": "3.5 in CMR 7200 rpm 256 MB, 5 year warranty, 300 TB per year workload", "reason": "Meets every must-have with the longest warranty of any 8 TB in the hunt (5 years) and 5 units on the Calgary shelf, so both archive drives come home today. $509.99 each, $1,019.98 for the pair before GST, $10 more than the best value pair.", "url": "https://www.canadacomputers.com/en/desktop-internal-hard-drives/239798/seagate-ironwolf-pro-8-tb-hard-drive-st8000nt001.html"}, {"role": "archive", "product": "WD Red Plus 8TB WD80EFPX", "source": "Amazon.ca", "price": 504.99, "fit_qty": 0, "value_qty": 2, "specs": "3.5 in CMR 5640 rpm 256 MB, 3 year warranty", "reason": "Cheapest new 8 TB CMR NAS drive that can supply two within a week: $504.99 each, $1,009.98 for the pair, sold and shipped by Amazon.ca for Nov 1. Quieter 5640 rpm drive with a 3 year warranty instead of the IronWolf Pro's 5.", "url": "https://www.amazon.ca/dp/B0CMQ6SK7W"}, {"role": "host", "product": "UGREEN NASync DXP2800 2-bay NAS, diskless", "source": "Amazon.ca", "price": 469.99, "fit_qty": 1, "value_qty": 0, "specs": "Intel N100, 8 GB DDR5, 2.5 GbE, HDMI, 2 bays, SMB share the console can map", "reason": "The NAS option: two bays in a mirror and 2.5 GbE so the editing PC and the Mac mini both see RMR_ARCHIVE as a network drive. $469.99 shipped by Amazon for Nov 1, $30 under the Calgary shelf price.", "url": "https://www.amazon.ca/dp/B0D22HBFK1"}, {"role": "host", "product": "TerraMaster D2-320 2-bay USB 3.2 Gen 2 enclosure, diskless", "source": "Amazon.ca", "price": 199.99, "fit_qty": 0, "value_qty": 1, "specs": "Two 3.5 in bays, USB-C 10 Gbps, single, JBOD or hardware RAID 1 selectable", "reason": "The dock option: both archive drives in one 10 Gbps USB-C box on the editing PC for $199.99, $270 less than the NAS, and it shows up as a plain drive letter so Red Mile Ingest and repoint.py need no changes. A 15 percent coupon appeared at checkout but is not counted in the total.", "url": "https://www.amazon.ca/dp/B0C8GCZP5K"}, {"role": "edit", "product": "WD Black SN850X 2TB NVMe WDBB9G0020BNC", "source": "Canada Computers", "price": 549.99, "fit_qty": 1, "value_qty": 1, "specs": "PCIe 4.0 x4, TLC with DRAM, 7300 MB/s read, 5 year warranty", "reason": "Fastest qualifying 2 TB drive at a sane price ($549.99) from a store with Calgary returns; the 990 Pro is $874.99 at both Canada Computers and Best Buy right now. Ships from the warehouse, Calgary has none on the shelf.", "url": "https://www.canadacomputers.com/en/desktop-laptop-internal-ssds/282003/wd-black-sn850x-2tb-pcie-gen4-nvme-m-2-ssd-wdbb9g0020bnc.html"}, {"role": "enclosure", "product": "Orico M2PV-C3 USB-C 10 Gbps NVMe enclosure", "source": "Canada Computers", "price": 21.29, "fit_qty": 1, "value_qty": 1, "specs": "USB 3.2 Gen 2, 10 Gbps, M.2 2280 NVMe, tool free", "reason": "Puts the SN850X on any USB-C port for $21.29, on the Calgary shelf, so the edit drive can move between the PC and the Mac mini. Skip it if the PC turns out to have a free M.2 slot.", "url": "https://www.canadacomputers.com/en/m-2-nvme-ssd-enclosures/253301/orico-m2pv-m-2-nvme-ssd-enclosure-with-usb-3-2-type-c-gen-2-and-speed-up-to-10gbps-orico-m2pv-c3-bk-ep.html"}, {"role": "offsite", "product": "Seagate Expansion Desktop 8TB STKP8000400", "source": "Canada Computers", "price": 394.99, "fit_qty": 1, "value_qty": 1, "specs": "3.5 in desktop external, USB 3.0 micro-B, 2 year warranty", "reason": "Cheapest in-stock new 8 TB external: $394.99 with one on the Calgary shelf and 10+ to ship. Amazon has the same drive at the same price but not until Nov 11 to 15, and Best Buy's $354.99 listing is sold out.", "url": "https://www.canadacomputers.com/en/external-hard-drives/196410/seagate-8tb-expansion-desktop-external-drive-usb3-0-3-5e-stkp8000400.html"}, {"role": "reader", "product": "Unitek 4-in-1 CFexpress B, SD UHS-II and microSD reader, USB-C 10 Gbps", "source": "Amazon.ca", "price": 25.47, "fit_qty": 1, "value_qty": 1, "specs": "USB-C 10 Gbps, SD 4.0 UHS-II, microSD UHS-II, CFexpress Type B", "reason": "The only reader found with UHS-II SD and microSD on a 10 Gbps USB-C port, $25.47 for Nov 2; it also takes CFexpress B if a camera upgrade ever needs it.", "url": "https://www.amazon.ca/dp/B0D738KQFB"}], "fit": 2481.71, "value": 2201.71};
+const MPL=[{"area": "lighting", "role": "boom", "n": "C-stand with boom arm (new)", "price": 100, "cond": "New (reseller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/900124516024271/", "checked": "2026-11-14", "verdict": "best_value", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "146 to 320 cm stainless C-stand, 128 cm arm, 2 grip heads, 20 kg", "offer": 85, "walk": 100, "gone": false, "reason": "New, heavier rated and $56 under the Amazon C-stand."}, {"area": "lighting", "role": "boom", "n": "K&F 3.3 m C-stand (new)", "price": 100, "cond": "New (reseller)", "loc": "Sylvan Lake", "url": "https://www.facebook.com/marketplace/item/2140047200268097/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available", "specs": "149 to 330 cm, 20 kg, crossbar", "offer": null, "walk": null, "gone": false, "reason": "Same price as the Calgary C-stand but 150 km away."}, {"area": "lighting", "role": "key", "n": "Amaran COB 60x S (used)", "price": 180, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1039441475547073/", "checked": "2026-10-31", "verdict": "skip", "stock": "Sold", "specs": "Bi-colour Bowens COB, accessories not listed", "offer": null, "walk": null, "gone": true, "reason": "Sold by Oct 31. Single unit, and a new Halo 60x costs $11 less."}, {"area": "lighting", "role": "key", "n": "Aputure LS C120d II daylight", "price": 350, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/3799111526895920/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available", "specs": "120 W, 5500K daylight only", "offer": null, "walk": null, "gone": false, "reason": "Daylight only and more light than one seat needs."}, {"area": "lighting", "role": "key", "n": "Godox SL60IIBi (new in box)", "price": 180, "cond": "New (private seller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/4575527462767518/", "checked": "2026-11-14", "verdict": "deal", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "75 W bi-colour, 2800 to 6500K, CRI 96, TLCI 97, Bowens, app and remote", "offer": 170, "walk": 195, "gone": false, "reason": "Asking price cut to $180 on Oct 31 (was $215, then $195). One unit only. Worth it if you go Godox: this plus two from The Camera Store is a matched set for $650. Old listing, so open low."}, {"area": "lighting", "role": "key", "n": "Godox SL60IID daylight (5 listings, $155 to $230)", "price": 155, "cond": "New (private and reseller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/37831808123133428/", "checked": "2026-11-14", "verdict": "skip", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "70 W, 5600K daylight only, CRI 96, Bowens", "offer": null, "walk": null, "gone": false, "reason": "Daylight only. Our cameras are locked at 4500K, so these would only work if the house white balance moved to 5600K."}, {"area": "lighting", "role": "key", "n": "Godox SL60W daylight", "price": 130, "cond": "Used, like new", "loc": "Calgary (Legacy)", "url": "https://www.facebook.com/marketplace/item/1430563098949083/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available", "specs": "60 W, 5600K daylight only, previous generation, remote only", "offer": null, "walk": null, "gone": false, "reason": "Daylight only and no app. The $320 kit with an 80 cm octa and C-stand is the same light."}, {"area": "lighting", "role": "key", "n": "Neewer MS60B (new, with batteries)", "price": 140, "cond": "New (private seller)", "loc": "Airdrie", "url": "https://www.facebook.com/marketplace/item/1752167802766308/", "checked": "2026-11-14", "verdict": "skip", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "65 W bi-colour, 2700 to 6500K, CRI 97+, TLCI 98+, Bowens (per listing), app, 2 NP-F970 batteries", "offer": null, "walk": null, "gone": false, "reason": "Single unit, so it cannot be the matched key set. It is the value pick for the rim."}, {"area": "lighting", "role": "lantern", "n": "Aputure Lantern (used)", "price": 80, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1044360098511059/", "checked": "2026-11-14", "verdict": "deal", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "Lantern with bag; size not stated", "offer": 65, "walk": 80, "gone": false, "reason": "Pair it with the same lantern from The Camera Store ($129, Nov 14) for two Aputure lanterns at $209, or with Vistek ($133.50, Nov 5) at $213.50. Confirm it is the 26 in size."}, {"area": "lighting", "role": "lantern", "n": "Neewer 26 in lantern (used)", "price": 70, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1060542973597901/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listing live Oct 31, available", "specs": "26 in lantern, mount not stated", "offer": 55, "walk": 65, "gone": false, "reason": "Only $21 under a new NS26L, so only worth it at $65 or less."}, {"area": "lighting", "role": "octa", "n": "Godox QR-P90 parabolic with grid", "price": 180, "cond": "New (private seller)", "loc": "Calgary (NW)", "url": "https://www.facebook.com/marketplace/item/942832508898956/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing removed", "specs": "90 cm parabolic, Bowens, grid", "offer": null, "walk": null, "gone": true, "reason": "Listing removed by Oct 31. More than twice the price of the 80 cm octa and too big for a 10 x 10 room."}, {"area": "lighting", "role": "octa", "n": "Godox SL60W + 80 cm octa + C-stand kit", "price": 320, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1862295548482967/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available", "specs": "Daylight SL60W, SB-UE 80 cm octa with grid, Neewer 10 ft C-stand with boom; kit only", "offer": null, "walk": null, "gone": false, "reason": "The octa and C-stand are what we want, but it is sold as a kit with a daylight-only light."}, {"area": "lighting", "role": "octa", "n": "Neewer NS92P 90 cm octa with grid", "price": 119, "cond": "New (private seller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/2095119671404678/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available, door pickup", "specs": "90 cm octa, grid, mount not stated", "offer": null, "walk": null, "gone": false, "reason": "Bigger than the room wants and dearer than the new 80 cm Godox."}, {"area": "lighting", "role": "rim", "n": "Aputure LS 60x", "price": 400, "cond": "Used, like new", "loc": "Calgary (NW)", "url": "https://www.facebook.com/marketplace/item/1026985316880185/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, In stock", "specs": "Bi-colour focusing light with barn doors, no Bowens mount", "offer": null, "walk": null, "gone": false, "reason": "Lovely light, but $400 for a rim and it will not take the strip box."}, {"area": "lighting", "role": "rim", "n": "Neewer FS60B", "price": 90, "cond": "New (private seller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1373359324407474/", "checked": "2026-11-14", "verdict": "consider", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "Compact bi-colour COB; listing gives no CRI or wattage", "offer": 75, "walk": 90, "gone": false, "reason": "Cheapest rim option. Ask for the CRI and confirm the Bowens mount before driving over."}, {"area": "lighting", "role": "rim", "n": "Neewer MS60B (new, with batteries)", "price": 140, "cond": "New (private seller)", "loc": "Airdrie", "url": "https://www.facebook.com/marketplace/item/1752167802766308/", "checked": "2026-11-14", "verdict": "best_value", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "65 W bi-colour, 2700 to 6500K, CRI 97+, TLCI 98+, Bowens (per listing), Neewer app, 2 NP-F970 batteries", "offer": 120, "walk": 140, "gone": false, "reason": "New, bi-colour, on the Neewer app the tubes use, and the batteries are a bonus. Confirm the Bowens mount in person before paying."}, {"area": "lighting", "role": "stand", "n": "Manfrotto 1051BAC 3-pack (new in box)", "price": 230, "cond": "New (private seller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/916669444067304/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listing live Oct 31, available", "specs": "3 stands, 211 cm, 4 kg each, air cushion, stackable", "offer": 190, "walk": 210, "gone": false, "reason": "Manfrotto quality at the SmallRig price, but lower load and height. Worth it at $210 or less."}, {"area": "lighting", "role": "strip", "n": "Strobepro 12x55 strip with grid (used)", "price": 140, "cond": "Used, like new", "loc": "Cochrane", "url": "https://www.facebook.com/marketplace/item/1552963789712788/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available", "specs": "12 x 55 in, grid, speedring type not stated", "offer": null, "walk": null, "gone": false, "reason": "Costs more used than the new boxes above."}, {"area": "lighting", "role": "tube", "n": "Amaran PT2c pixel tube (used)", "price": 200, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1053882330965907/", "checked": "2026-10-31", "verdict": "deal", "stock": "Listing live Oct 31, available", "specs": "2 ft RGBWW pixel tube, case, chargers, egg crate", "offer": 175, "walk": 200, "gone": false, "reason": "About 89% of the new per-tube price now that the Amazon 2-light kit is $448.50 ($224.25 a tube), so the discount is thin. Grab it only if you want a single pixel-effect accent; it does not make a matched pair on its own."}, {"area": "lighting", "role": "tube", "n": "Godox TL60 2-light kit (used)", "price": 450, "cond": "Used, good", "loc": "Okotoks", "url": "https://www.facebook.com/marketplace/item/872083795335751/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listing live Oct 31, In stock", "specs": "2 x 2 ft RGB tubes, app, DMX, case, clips, C-47s and blackwrap", "offer": 350, "walk": 390, "gone": false, "reason": "Asking $450, but two new Neewer TL60s cost $393.98, so this used pair is only worth it at $390 or less."}, {"area": "lighting", "role": "tube", "n": "Neewer TL120C (4 ft)", "price": 250, "cond": "New (private seller)", "loc": "Airdrie", "url": "https://www.facebook.com/marketplace/item/1413430494289916/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, In stock", "specs": "127 cm RGBWW, CRI 97+", "offer": null, "walk": null, "gone": false, "reason": "Twice the length the wall wash needs."}, {"area": "storage", "role": "archive", "n": "Lot of 8x WD Red Pro and Plus 8TB plus 8-bay USB 3.0 enclosure", "price": 2800, "cond": "used", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1625209199227052/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listed 4 weeks ago, bundle only, seller Jason Guo 19 reviews", "specs": "64 TB raw in a USB 3.0 (5 Gbps) enclosure", "offer": null, "walk": null, "gone": false, "reason": "Bundle only at $2,800: far more capacity than the plan needs and the enclosure is 5 Gbps, which fails the host spec."}, {"area": "storage", "role": "archive", "n": "Seagate IronWolf Pro 12TB ST12000NT001, factory recertified, sealed", "price": 500, "cond": "recertified", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1099146612869637/", "checked": "2026-10-31", "verdict": "deal", "stock": "Listed a week ago, seller Carl Pan, 33 ratings", "specs": "3.5 in CMR 7200 rpm, RMA replacement unit, warranty to be checked by serial", "offer": 500, "walk": 500, "gone": false, "reason": "Best price per TB in the hunt ($41.67 versus $63.75 for a new IronWolf Pro 8 TB) and sealed, but a single recertified unit, so it fills one bay only. Check the serial on Seagate's warranty page before paying. The listing says the price is firm, so offer $500, "}, {"area": "storage", "role": "archive", "n": "WD Red Pro 18TB WD181KFGX, used like new", "price": 700, "cond": "used", "loc": "Rocky View", "url": "https://www.facebook.com/marketplace/item/1153735313719646/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listed 3 weeks ago, seller has 1 review", "specs": "3.5 in CMR 7200 rpm, usage hours not stated", "offer": 550, "walk": 650, "gone": false, "reason": "$38.89 per TB is the cheapest capacity found, but a one-review seller, no SMART report and a 30 minute drive. Only with a SMART check on the spot. Offer $550, walk away at $650."}, {"area": "storage", "role": "edit", "n": "Samsung 990 PRO 2TB NVMe, used, no box", "price": 450, "cond": "used", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1553740500132331/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listed 2 weeks ago, reduced from $500", "specs": "PCIe 4.0 x4, TLC with DRAM, wear unknown", "offer": 380, "walk": 420, "gone": false, "reason": "Used with no box and no wear figure given; only worth it with a SMART readout under 5 percent used. Offer $380, walk away at $420."}, {"area": "storage", "role": "edit", "n": "WD Black SN850X 2TB NVMe, new sealed per listing", "price": 400, "cond": "new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1599314157937275/", "checked": "2026-10-31", "verdict": "deal", "stock": "Listed a week ago, seller has no ratings", "specs": "PCIe 4.0 x4, TLC with DRAM", "offer": 350, "walk": 420, "gone": false, "reason": "The best fit drive sealed for $400, $150 under the store, but from an unrated seller: meet in a public place and check the seal and serial on WD's site. Offer $350, walk away at $420."}, {"area": "storage", "role": "host", "n": "Synology DS223j 2-bay NAS", "price": 160, "cond": "used", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1687332252808414/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listed 4 days ago, diskless not stated", "specs": "Realtek RTD1619B, 1 GB, 1 GbE", "offer": 130, "walk": 150, "gone": false, "reason": "Cheap way into a mirror at $160 but 1 GbE and a weak chip, so a 55 GB session takes about 8 minutes to copy and the console cache should stay local. Offer $130, walk away at $150."}, {"area": "storage", "role": "host", "n": "QNAP TS-233 2-bay NAS, diskless with box", "price": 275, "cond": "used", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1118336103977352/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listed 4 weeks ago", "specs": "ARM Cortex-A55, 2 GB, 1 GbE", "offer": 220, "walk": 250, "gone": false, "reason": "Boxed and diskless at $275, but 1 GbE and an ARM chip, so slower than either new pick for not much less than the D2-320. Offer $220, walk away at $250."}, {"area": "storage", "role": "offsite", "n": "Seagate Archive 8TB ST8000AS0002, SMR, used 8300 hours", "price": 245, "cond": "used", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1921244012183576/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listed a week ago", "specs": "3.5 in SMR, 8300 power-on hours, in a plastic case", "offer": null, "walk": null, "gone": false, "reason": "SMR and 8,300 hours used: fine for a write-once copy in theory, but an offsite drive is the one you must trust when everything else has failed."}];
+const MUSIC_OWNED=[
+  ['Universal Audio Apollo x6','Audio interface, on Thunderbolt'],['Neumann U87 Ai','Primary vocal microphone'],['Neumann TLM 103','Secondary microphone'],
+  ['Avalon VT-737sp','Channel strip, into an Apollo line input'],['Neve 1073LB','500-series preamp, into an Apollo line input'],
+  ['Yamaha HS8 pair and HS8 sub','Main monitors'],['KRK Rokit 6 pair','Second pair of monitors'],
+  ['Mac mini M1, 16 GB / 512 GB','Runs Ableton Live 12 Suite and UAD Console'],['Ableton Live 12 Suite, UAD Console 1.3.0','About 226 UAD plugins, 285 Audio Units and 54 VST3'],
+];
+const CHK='Nov 17, 2026';
+/* kind: new = retail listing found by search on CHK (page not opened from here); mp = Facebook Marketplace listing opened by Miller; owned; none. */
+const CAT={
+  mac:{n:"Apple Mac mini (2026), M6",kind:"new",price:1849,date:"Nov 16 to 17",
+    specs:["M6 chip: 12-core CPU, 12-core GPU","24 GB memory, 512 GB SSD (the configuration Apple Canada lists)","Back: 3 Thunderbolt 4, 1 HDMI, 2.5 Gb Ethernet. Front: 2 USB-C, headphone jack","Runs three screens by itself. No USB-A ports"],
+    fit:"Apple's Canadian model number for this configuration is not confirmed: sources give MHQM4 and MHQK4.",
+    links:[["Apple Canada","https://www.apple.com/ca/shop/buy-mac/mac-mini"],["Best Buy Canada","https://www.bestbuy.ca/en-ca/category/apple-mac-mini/26226"]],
+    src:"$1,849 launch price (refurb.me); $1,849.99 Best Buy Canada listing seen Nov 16. Apple's own page not opened."},
+  m1:{n:"Apple Mac mini (M1, 2020)",kind:"owned",price:0,
+    specs:["M1 chip: 8-core CPU, 8-core GPU","16 GB memory, 512 GB SSD (reported Nov 16)","Back: 2 Thunderbolt 3, 1 HDMI 2.0, 2 USB-A, Gigabit Ethernet","Runs two screens by itself: one on Thunderbolt, one on HDMI. A third needs a USB graphics adapter"],
+    fit:"At the studio today, running Ableton Live 12, the Apollo x6 and the RØDECasters.",links:[],src:"Owned. Size reported by seven studio bots."},
+  u2723qe:{n:"Dell UltraSharp 27 4K USB-C Hub Monitor U2723QE",kind:"new",price:799.99,date:CHK,
+    specs:["27 in, 3840×2160, IPS Black, 60 Hz","USB-C with 90 W power, HDMI, DisplayPort, Ethernet, USB hub","Stand: height, tilt, swivel, turns upright","VESA 100×100"],
+    fit:"One USB-C cable carries picture and power. Dell.ca shows it at $839.99 on one page and out of stock on another.",
+    links:[["CDW.ca $799.99","https://cdw.ca/product/dell-ultrasharp-u2723qe-led-monitor-4k-27/6892518"],["Dell.ca","https://dell.com/en-ca/shop/dell-ultrasharp-27-4k-usb-c-hub-monitor-u2723qe/apd/210-bdpf/monitors-monitor-accessories"],["Fleet Network $870.64","https://fleetnetwork.ca/products/dell-u2723qe"]],
+    src:"Lowest Canadian listing found. Named in Botty's list."},
+  u2725qe:{n:"Dell UltraSharp 27 4K Thunderbolt Hub Monitor U2725QE",kind:"new",price:1008.40,date:CHK,
+    specs:["27 in, 3840×2160, IPS Black, 120 Hz","Thunderbolt 4 with up to 140 W, HDMI 2.1, DisplayPort 1.4, 2.5 Gb Ethernet, KVM","Stand: height, tilt, swivel, turns upright","VESA 100×100 (from one overseas listing)"],
+    fit:"The newer model named on Nov 5. About $208 more than the U2723QE for 120 Hz and Thunderbolt.",
+    links:[["monitors.com $1,008.40","https://www.monitors.com/en-ca/products/dell-u2725qe"],["CDW.ca $1,201.99","https://www.cdw.ca/product/dell-ultrasharp-u2725qe-led-monitor-4k-27-hdr/8294221"]],
+    src:"Named in the Nov 5 session at about $1,050."},
+  lg32:{n:"LG UltraFine Ergo 32UN880-B",kind:"new",price:949.99,date:CHK,
+    specs:["31.5 in, 3840×2160, IPS, 60 Hz, HDR10","USB-C with 60 W power, 2 HDMI, 1 DisplayPort","Ergo stand: a desk-clamp arm that turns upright, included","VESA 100×100"],
+    fit:"Not the cheaper option it looked like on Nov 5. The $600 to $650 listings are a different model, 32UN880K-B. The exact -B model is $949.99 to $1,154.99.",
+    links:[["Logics $949.99","https://logicstechnology.com/products/lg-ultrafine-32un880-b-32-class-4k-uhd-lcd-monitor-16-9-matte-black"],["CDW.ca $1,154.99","https://cdw.ca/product/lg-ultrafine-32un880-b-led-monitor-4k-32-hdr/6239367"],["32UN880K-B at Fleet $649.95","https://fleetnetwork.ca/lg-ultrafine-32un880k-b-32-class-4k-uhd-lcd-monitor-16-9-black-31-5-viewable-in-plane-switching-ips-technology-3840-x-32un880k-b/"]],
+    src:"Named in both sources."},
+  lg27mp:{n:"LG 27UL550-W",kind:"mp",price:220,date:"Nov 16, 2026",one:true,
+    specs:["27 in, 3840×2160, IPS, 60 Hz, HDR10","2 HDMI, 1 DisplayPort. No USB-C, no Ethernet, no USB hub","Stand included: height, tilt, turns upright","VESA mount: yes. Pattern not confirmed"],
+    fit:"Same size and resolution as the U2723QE. You lose the one-cable USB-C hub and Ethernet. One listing, one unit: it can fill the left or the right, not both.",
+    cond:"Used, like new. Seller says no scratches or dead pixels.",loc:"Calgary",
+    links:[["Marketplace listing","https://www.facebook.com/marketplace/item/1696180838509218/"],["Last new price: Logics $347.99, sold out","https://logicstechnology.com/products/lg-27ul550-w-27-class-4k-uhd-gaming-lcd-monitor-16-9"]],
+    vs:[["its last new price ($347.99, sold out)",347.99],["a new U2723QE",799.99]],src:"Opened by Miller."},
+  s3422dw:{n:"Dell 34 Curved Monitor S3422DW",kind:"new",price:503.98,date:CHK,
+    specs:["34 in curved (1800R), 3440×1440, VA, 100 Hz","2 HDMI, 1 DisplayPort, speakers","Stand: height and tilt","VESA pattern not confirmed"],
+    fit:"The model in Botty's list. Dell.ca now shows it as unavailable, so new stock is thin.",
+    links:[["Dell.ca (unavailable)","https://www.dell.com/en-ca/shop/dell-34-curved-monitor-s3422dw/apd/210-axns/monitors-monitor-accessories"],["Smart Micro System $503.98","https://www.smartmicrosystem.ca/computers-and-components/computers/monitor/dell-34-curved-wqhd-monitor-s3422dw-86-42-cm-34-wqhd-spkr-free-sync-hdmi-cable"],["Best Buy open box","https://www.bestbuy.ca/en-ca/product/open-box-dell-34-wqhd-curved-monitor-s3422dw/19660951"]],
+    src:"One third-party price found. The retailer link is the closest match from the search; confirm the price on its page."},
+  s3422dwg:{n:"Dell 34 Curved Gaming Monitor S3422DWG",kind:"new",price:399.99,date:CHK,
+    specs:["34 in curved (1800R), 3440×1440, VA, 144 Hz","1 DisplayPort 1.4, 2 HDMI 2.0 (HDMI tops out at 100 Hz), USB hub","Stand: height adjustable","VESA 100×100"],
+    fit:"Same size, panel type and resolution as the S3422DW, faster refresh, and cheaper new.",
+    links:[["Dell.ca $399.99","https://dell.com/en-ca/shop/dell-34-curved-gaming-monitor-s3422dwg/apd/210-azep/monitors-monitor-accessories"]],src:"Equivalent alternative found in the search."},
+  s3422dwg_mp:{n:"Dell S3422DWG",kind:"mp",price:350,date:"Nov 16, 2026",
+    specs:["34 in curved (1800R), 3440×1440, VA, 144 Hz","1 DisplayPort 1.4, 2 HDMI 2.0 (HDMI tops out at 100 Hz), USB hub","Adjustable stand included","VESA 100×100"],
+    fit:"Same chart workspace as the planned S3422DW with a faster refresh. Only $50 under a new one from Dell.ca with warranty.",
+    cond:"Used, like new. Reduced from $425.",loc:"Calgary",
+    links:[["Marketplace listing","https://www.facebook.com/marketplace/item/1102230032293644/"],["New at Dell.ca $399.99","https://dell.com/en-ca/shop/dell-34-curved-gaming-monitor-s3422dwg/apd/210-azep/monitors-monitor-accessories"]],
+    vs:[["a new S3422DWG from Dell.ca",399.99],["the planned S3422DW",503.98]],src:"Opened by Miller."},
+  u3419w_mp:{n:"Dell UltraSharp U3419W",kind:"mp",price:300,date:"Nov 16, 2026",
+    specs:["34.14 in curved, 3440×1440, IPS, 60 Hz","USB-C, HDMI, DisplayPort, USB hub (USB-C wattage and VESA not re-confirmed on Nov 17)","Stand included: height, tilt, swivel","A 2018 model, no longer sold new"],
+    fit:"Same chart workspace. IPS is easier to read off-angle than VA, and USB-C means one cable to the Mac. 60 Hz is slower but fine for charts.",
+    cond:"Used, good.",loc:"Rocky View County",
+    links:[["Marketplace listing","https://www.facebook.com/marketplace/item/1675375917355194/"],["Successor U3425WE, new $1,311.82","https://itvisionnetworks.ca/products/51787924"]],
+    vs:[["the planned S3422DW",503.98],["its successor, the U3425WE",1311.82]],src:"Opened by Miller."},
+  undecided:{n:"Not chosen yet",kind:"none",price:null,specs:["27 in 4K, model undecided in both sources"],fit:"Leaves the right-hand screen out of the total.",links:[],src:""},
+  stands:{n:"Use each monitor's own stand",kind:"owned",price:0,specs:["Every screen option here includes a stand","The 27 in options turn upright on their own stands"],fit:"No arm needed to start. Add one later if the desk needs the space.",links:[],src:""},
+  ergotron:{n:"Ergotron LX Dual Side-by-Side Arm 45-245-026",kind:"new",price:483.97,date:CHK,
+    specs:["Holds two screens up to 27 in each","5 to 20 lb per screen, 40 lb combined","VESA 75×75 and 100×100","Desk clamp or grommet"],
+    fit:"It holds two 27 in screens side by side. It does not hold the 34 in centre screen, and the two 27s in this layout sit on either side of it, so check the reach before buying.",
+    links:[["Fleet Network $483.97","https://fleetnetwork.ca/products/ergotron-45-245-026-mounting-arm-for-flat-panel-display-silver-27-screen-support-18-14-kg-load-capacity-75-x-75-100-x-100-45-245-026.html"],["Canada Computers $599.99","https://www.canadacomputers.com/en/monitor-mounts/53586/ergotron-45-245-026-lx-dual-side-by-side-arm-45-245-026.html"]],src:"Named in Botty's list."},
+  br1500ms2:{n:"APC Back-UPS Pro BR1500MS2",kind:"new",price:384.99,date:CHK,
+    specs:["1500 VA, sine wave output","The current model in this line"],fit:"The current replacement for the BR1500G, and cheaper.",
+    links:[["Deploy Depot $384.99","https://deploydepot.ca/products/apc-by-schneider-electric-back-ups-pro-1500va-line-interactive-tower-ups-br1500ms2"],["CDW.ca $398.99","https://cdw.ca/product/apc-by-schneider-electric-back-ups-pro-1500va-line-interactive-tower-ups/6404423"]],src:"Equivalent alternative found in the search."},
+  br1500g:{n:"APC Back-UPS Pro BR1500G",kind:"new",price:439.95,date:CHK,
+    specs:["1500 VA, 865 W","The older model named in Botty's list"],fit:"Costs more than its replacement.",
+    links:[["Fleet Network $439.95","https://fleetnetwork.ca/products/apc-by-schneider-electric-br1500g-120v-backup-system-1-50-kva-865-w-120-v-ac-3-minute-stand-by-time-tower-5-x-nema-5-15r-5-br1500g.html"]],src:"Named in Botty's list."},
+  mic:{n:"RØDE Wireless GO (Gen 3)",kind:"new",price:259.99,date:CHK,
+    specs:["Two-person wireless microphone system"],fit:"On Botty's list with no reason given.",
+    links:[["Economik $259.99","https://www.economik.com/products/wireless-go-gen-3"],["Long & McQuade $279.00","https://www.long-mcquade.com/457889/Pro-Audio-Recording/Wireless-Systems/Rode/Wireless-GO-Gen-III-Microphone-System.htm"]],src:"Named in Botty's list."},
+  adapter:{n:"USB graphics adapter (DisplayLink), dual HDMI",kind:"new",price:137.95,date:"Nov 16, 2026",
+    specs:["Adds a third screen to the M1 through USB","Needs the DisplayLink Manager app running"],fit:"Option 2 only. Put the right-hand screen on it.",
+    links:[["Sonnet at Fleet Network $137.95","https://fleetnetwork.ca/products/usbc-dhdmi/"],["OWC at Staples.ca $144.99","https://www.staples.ca/products/3119330-en-owc-usb-c-to-dual-hdmi-4k-display-adapter-with-displaylink"]],src:""},
+  hub:{n:"Powered USB-C hub for the studio",kind:"none",price:null,specs:["The studio needs six USB-C or Thunderbolt connections; the M6 has five"],fit:"Option 2 only. No model chosen or priced.",links:[],src:""},
+};
+const SLOTS=[
+  {id:'left',name:'Left screen · upright',why:'Ranked alerts. A tall screen shows a long list at a glance.',opts:['u2723qe','u2725qe','lg32','lg27mp']},
+  {id:'centre',name:'Centre screen · ultrawide',why:'Charts need the width.',opts:['s3422dwg_mp','u3419w_mp','s3422dwg','s3422dw']},
+  {id:'right',name:'Right screen · 27 in 4K',why:'News and holds, beside the charts.',opts:['lg27mp','u2723qe','undecided']},
+  {id:'mount',name:'Mounting',why:'How the screens are held.',opts:['stands','ergotron']},
+  {id:'ups',name:'Battery backup',why:'On Botty\'s list. Keeps the desk up through a power blip.',opts:['br1500ms2','br1500g']},
+];
+const PLAN_DEFAULT={opt:2,left:'u2723qe',centre:'s3422dwg_mp',right:'lg27mp',mount:'stands',ups:'br1500ms2'};
+const ALLNEW={left:'u2723qe',centre:'s3422dw',right:'u2723qe',mount:'ergotron',ups:'br1500g'};
+let PLAN={...PLAN_DEFAULT}; let LEADS={};
+function deskLines(pl){
+  const L=[{k:'Computer to buy',id:'mac',where:pl.opt===2?'Studio':'Home-office desk'}];
+  for(const sl of SLOTS) L.push({k:sl.name,id:pl[sl.id]});
+  L.push({k:'Microphone',id:'mic'});
+  if(pl.opt===2){ L.push({k:'Third-screen adapter',id:'adapter'}); L.push({k:'Studio hub',id:'hub'}); }
+  return L;
+}
+function deskTotal(pl){ let n=0,unp=0; for(const l of deskLines(pl)){ const c=CAT[l.id]; if(c.price==null) unp++; else n+=c.price; } return {n,unp}; }
+const kindTag=k=>k==='mp'?'<span class="ev x">Marketplace</span>':k==='owned'?'<span class="ev c">Owned</span>':k==='new'?'<span class="ev l">New</span>':'<span class="ev u">Unknown</span>';
+function pcard(id,o={}){
+  const c=CAT[id]; const price=c.price==null?'Not priced':c.price===0?(c.kind==='owned'?'Owned':'$0'):money(c.price);
+  const dated=c.kind==='mp'?`Asking price, seen ${c.date}`:c.kind==='new'?`Found ${c.date}, before tax`:'';
+  const save=c.vs?c.vs.map(v=>`<div class="save">${money(v[1]-c.price)} less than ${esc(v[0])}</div>`).join(''):'';
+  const body=`<div class="pt">${kindTag(c.kind)}${o.on?'<span class="ev c">Picked</span>':''}${o.qty?`<span class="ev g">Qty ${o.qty}</span>`:''}</div>
+    <h4>${esc(c.n)}</h4><div class="pp">${price}<small>${dated}</small></div>
+    <ul>${c.specs.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+    ${c.cond?`<div class="fit"><b>Condition (seller's words):</b> ${esc(c.cond)} ${esc(c.loc||'')}. Availability was only viewed, not held.</div>`:''}
+    ${c.fit?`<div class="fit">${esc(c.fit)}</div>`:''}${save}
+    ${c.links.length?`<div class="lk">${c.links.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(l[0])}</a>`).join('')}</div>`:''}
+    ${o.blocked?`<div class="warnline">Already picked for the other side. One unit only.</div>`:''}`;
+  return o.slot?`<div class="pcard ${o.on?'on':''}">${body}<button class="btn ${o.on?'':'primary'}" data-dslot="${o.slot}" data-dpick="${id}" data-fk="pick-${o.slot}-${id}" ${o.on||o.blocked?'disabled':''}>${o.on?'In your plan':'Choose this'}</button></div>`:`<div class="pcard">${body}</div>`;
+}
+function leadCard(l){
+  return `<div class="pcard"><div class="pt"><span class="ev x">Marketplace</span>${l.gone?'<span class="ev u">Unavailable</span>':'<span class="ev g">Not re-checked</span>'}${l.verdict==='deal'?'<span class="ev c">Flagged as a deal</span>':''}</div>
+    <h4>${esc(l.n)}</h4><div class="pp">${money(l.price)}<small>Asking price, recorded ${esc(l.checked)}</small></div>
+    <ul><li>${esc(l.specs||'')}</li><li>${esc(l.cond||'')}${l.loc?', '+esc(l.loc):''}</li><li>${esc(l.stock||'')}</li></ul>
+    ${l.offer?`<div class="fit">Offer ${money(l.offer)}, walk away above ${money(l.walk)}.</div>`:''}
+    <div class="lk"><a href="${esc(l.url)}" target="_blank" rel="noopener">Marketplace listing</a></div></div>`;
+}
+function leadsBlock(ar){
+  const all=MPL.filter(l=>l.area===ar), live=all.filter(l=>!l.gone), gone=all.filter(l=>l.gone);
+  return `<p class="note">Listings recorded on the original Gear Scout board. Dates show when each was last seen. None has been re-opened since, so treat every one as a lead to check, not as available.</p>
+    <div class="pcards">${live.map(leadCard).join('')}</div>
+    ${gone.length?`<h3 style="margin-top:6px">No longer available</h3><div class="pcards">${gone.map(leadCard).join('')}</div>`:''}`;
+}
+function renderLightLeads(){ const el=$('#lightLeads'); if(el) el.innerHTML=`<span class="eyebrow">Marketplace</span><h3>Calgary listings on record for lighting</h3>${leadsBlock('lighting')}`; }
+function setupHTML(){
+  const panel=(eye,h,body,id)=>`<div class="panel"${id?` id="${id}"`:''}><span class="eyebrow">${eye}</span><h3>${h}</h3>${body}</div>`;
+  const ul=a=>`<ul class="clean">${a.map(o=>`<li>${esc(o)}</li>`).join('')}</ul>`;
+  const tbl=(heads,rows,sx)=>`<div class="tbl desk"${sx?` data-sx="${sx}"`:''}><table>${heads?`<thead><tr>${heads.map(x=>`<th>${x}</th>`).join('')}</tr></thead>`:''}<tbody>${rows.join('')}</tbody></table></div>`;
+  const jump=a=>`<div class="jump">${a.map(([id,n])=>`<button data-jump="${id}">${n}</button>`).join('')}</div>`;
+
+  if(area==='overview'){
+    const dt=deskTotal(PLAN), lt=buildTotal();
+    const card=(k,head,lines,total,note)=>`<div class="pcard"><h4>${esc(SETUPS[k].name)}</h4><div class="pp">${total}<small>${note}</small></div><ul>${lines.map(x=>`<li>${x}</li>`).join('')}</ul><div class="lk"><a href="#${k==='lighting'?'lighting-buy':k}">${head} →</a></div></div>`;
+    return `<div class="lede"><span class="eyebrow">Hardware upgrade planner</span><h2>Every setup, and what to buy next</h2><p>Pick a setup to see what is owned, the buying decisions side by side, and each product with its exact model, price, date and link. Prices are CAD before tax.</p></div>
+      <div class="pcards">
+        ${card('desk','Plan the desk',['Three screens and a Mac mini','3 Calgary Marketplace screens opened Nov 16','Owned: the studio M1 Mac mini, two 1 TB drives'],money(dt.n),`Your current picks${dt.unp?`, ${dt.unp} item${dt.unp>1?'s':''} not priced`:''}`)}
+        ${card('lighting','Open the lighting build',['Three tiers, mix and match by role','21 Marketplace listings on record','Owned: four NiceVeedi softboxes, Govee bars'],money(lt),`${currentTier()?'Tier '+currentTier():'Mixed build'}, the build saved for the team`)}
+        ${card('storage','Compare the two builds',['Archive, edit, offsite drives and a reader','8 Marketplace listings on record','Prices last read Oct 31'],money(STORE.value)+' to '+money(STORE.fit),'Best value to best fit')}
+        ${card('music','See the rig',['Apollo x6, U87 Ai, TLM 103, Avalon, Neve','Nothing planned or priced','The new studio Mac mini is planned under Trading Desk'],'Nothing to buy','Owned gear only')}
+      </div>
+      ${panel('Totals','Known spend across setups',tbl(['Setup','Basis','<span class="num">CAD before tax</span>'],[
+        `<tr><td><b>Trading Desk</b></td><td>Your picks, Option ${PLAN.opt}</td><td class="num mono">${money(dt.n)}</td></tr>`,
+        `<tr><td><b>Lighting and set</b></td><td>${currentTier()?'Tier '+currentTier():'Mixed build'}</td><td class="num mono">${money(lt)}</td></tr>`,
+        `<tr><td><b>Storage</b></td><td>Best value build, Oct 31 prices</td><td class="num mono">${money(STORE.value)}</td></tr>`,
+        `<tr><td><b>All three</b></td><td></td><td class="num mono"><b>${money(dt.n+lt+STORE.value)}</b></td></tr>`])+'<p class="note">Unpriced items are left out. Each setup page lists them.</p>')}`;
+  }
+
+  if(area==='desk'){
+    const J=DESKS.junior, T=DESKS.trading, D=J.deploy; const tot=deskTotal(PLAN), base=deskTotal({opt:PLAN.opt,...ALLNEW});
+    const optCard=(o,title,buy,pros,cons)=>`<div class="pcard ${PLAN.opt===o?'on':''}"><div class="pt">${PLAN.opt===o?'<span class="ev c">Picked</span>':''}${o===2?'<span class="ev g">Recommended</span>':''}</div><h4>Option ${o} · ${title}</h4><ul>${buy.map(x=>`<li>${x}</li>`).join('')}</ul><div class="fit"><b>For:</b> ${pros}</div><div class="fit"><b>Against:</b> ${cons}</div><button class="btn ${PLAN.opt===o?'':'primary'}" data-deploy="${o}" data-fk="deploy-${o}" ${PLAN.opt===o?'disabled':''}>${PLAN.opt===o?'In your plan':'Choose this'}</button></div>`;
+    const slotHTML=sl=>{ const other=sl.id==='left'?'right':sl.id==='right'?'left':null;
+      return `<div class="slot" id="slot-${sl.id}"><div><span class="eyebrow">Decision</span><h3>${esc(sl.name)}</h3><span class="note">${esc(sl.why)}</span></div><div class="pcards">${sl.opts.map(id=>pcard(id,{slot:sl.id,on:PLAN[sl.id]===id,blocked:!!(CAT[id].one&&other&&PLAN[other]===id)})).join('')}</div></div>`; };
+    const lines=deskLines(PLAN);
+    const leadList=Object.entries(LEADS).sort((a,b)=>(b[1].at||0)-(a[1].at||0));
+    return `<div class="lede"><span class="eyebrow">Trading Desk · hardware upgrade planner</span><h2>Three screens, one new Mac mini</h2><p>Trading Desk and Junior Desk are one project. Work down the page: choose where the computers go, choose each screen, then check the total. Your choices save for the team.</p>${jump([['d-deploy','1 Computers'],['d-screens','2 Screens'],['d-kit','3 Kit'],['d-total','4 Total'],['d-market','Marketplace'],['d-more','Placement and evidence']])}</div>
+      <div class="slot" id="d-deploy"><div><span class="eyebrow">Decision 1</span><h3>Where the computers go</h3><span class="note">Either way you buy one Mac mini. The question is which room gets the new one.</span></div>
+        <div class="pcards">
+          ${optCard(1,'New Mac mini at the home-office desk',['Buy: 1 Mac mini M6 for the desk','Studio keeps the M1 (16 GB)','Desk runs 3 of 3 screens directly'],'No change at the studio. Clean install at the desk.','The 2020 M1 carries music, shows and the always-on jobs on 16 GB.')}
+          ${optCard(2,'M1 to the desk, new Mac mini at the studio',['Buy: 1 Mac mini M6 for the studio','Buy: 1 USB graphics adapter and 1 powered hub','Desk M1 runs 2 of 3 screens directly'],'The heavy and always-on work gets the new machine and three spare-capable ports.','The studio setup is rebuilt on the new Mac. The desk\'s third screen depends on adapter software.')}
+        </div>
+        <div class="pcards">${pcard('mac',{qty:1})}${pcard('m1')}</div>
+        <p class="note">Both 1 TB studio drives stay at the studio under either option.</p></div>
+      <div id="d-screens" style="display:grid;gap:14px">${SLOTS.slice(0,3).map(slotHTML).join('')}
+        <p class="note">Cables: the Mac mini M6 has one HDMI and three USB-C (Thunderbolt) outputs. A screen without USB-C needs an HDMI cable or a USB-C to DisplayPort cable. These are not priced.${PLAN.opt===2?' Under Option 2 the M1 drives two screens directly; put the right-hand screen on the USB graphics adapter.':''}</p></div>
+      <div id="d-kit" style="display:grid;gap:14px">${SLOTS.slice(3).map(slotHTML).join('')}
+        <div class="slot"><div><span class="eyebrow">Also on the list</span><h3>Fixed items</h3></div><div class="pcards">${pcard('mic',{qty:1})}${PLAN.opt===2?pcard('adapter',{qty:1})+pcard('hub',{qty:1}):''}</div></div></div>
+      ${panel('Total','Your plan, Option '+PLAN.opt,tbl(['For','Item','Source','<span class="num">Price</span>'],lines.map(l=>{const c=CAT[l.id];return `<tr><td><b>${esc(l.k)}</b>${l.where?`<small>${esc(l.where)}</small>`:''}</td><td>${esc(c.n)}</td><td>${kindTag(c.kind)} <span class="note">${c.date?esc(c.date):''}</span></td><td class="num mono">${c.price==null?'not priced':c.price===0?'—':money(c.price)}</td></tr>`;}))
+        +`<div class="totals" style="margin-top:10px"><span>Your picks, before tax</span><span class="num">${money(tot.n)}</span><span>GST 5%</span><span class="num">${money(tot.n*0.05)}</span><span><b>Total</b></span><span class="big">${money(tot.n*1.05)}</span><span>Everything new, as first listed</span><span class="num">${money(base.n)}</span><span><b>Your picks save</b></span><span class="num"><b>${money(base.n-tot.n)}</b></span></div>
+        <p class="note">${tot.unp?`${tot.unp} item${tot.unp>1?'s are':' is'} not priced and left out. `:''}"Everything new, as first listed" means two U2723QE screens, the S3422DW, the Ergotron arm and the BR1500G. Marketplace prices are asking prices for single units.</p>`,'d-total')}
+      <div class="panel" id="d-market"><span class="eyebrow">Marketplace</span><h3>Calgary listings</h3>
+        <p class="note">The three listings above were opened by Miller on Nov 16. Facebook Marketplace cannot be opened from where this page is built, so no other current listings were searched. Add any you find here and the page compares them with the new price.</p>
+        <form class="leadform" id="leadForm">
+          <label>For<select id="lead-slot"><option value="left">Left screen</option><option value="centre">Centre screen</option><option value="right">Right screen</option><option value="mac">Mac mini</option><option value="other">Other</option></select></label>
+          <label>Listing title<input id="lead-title" required placeholder="Dell U2723QE"></label>
+          <label>Asking price (CAD)<input id="lead-price" required inputmode="decimal" placeholder="450"></label>
+          <label>Condition (seller's words)<input id="lead-cond" placeholder="Used, like new"></label>
+          <label>Marketplace link<input id="lead-url" required placeholder="https://www.facebook.com/marketplace/item/..."></label>
+          <button class="btn primary" type="submit">Add listing</button>
+        </form><div id="leadMsg" class="note"></div>
+        ${leadList.length?`<div class="pcards">${leadList.map(([id,l])=>{const ref={left:799.99,right:799.99,centre:503.98,mac:1849}[l.slot];return `<div class="pcard"><div class="pt"><span class="ev x">Marketplace</span><span class="ev g">Added by the team</span></div><h4>${esc(l.title)}</h4><div class="pp">${money(l.price)}<small>Asking price, seen ${esc(l.seen||'')}</small></div><ul><li>For: ${esc(l.slot)}</li>${l.cond?`<li>Condition (seller's words): ${esc(l.cond)}</li>`:''}</ul>${ref?`<div class="save">${money(ref-l.price)} less than the new reference (${money(ref)})</div>`:''}<div class="lk"><a href="${esc(l.url)}" target="_blank" rel="noopener">Marketplace listing</a></div><button class="btn" data-leaddel="${id}">Remove</button></div>`;}).join('')}</div>`:'<p class="note">No extra listings added yet.</p>'}
+      </div>
+      <details class="more" id="d-more"><summary>Placement, plug-in plan and evidence</summary><div>
+        ${panel('Place','What goes where',tbl(['Position','Item','Why there'],[...J.layout,...T.layout].map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`)))}
+        ${panel('Option 2 · Studio machine','Where everything plugs into the new Mac mini',tbl(['Connection','Needs','Goes to'],D.ports.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`)))}
+        ${panel('Option 2 · Desk','Two screens direct, the third by adapter',ul(D.third))}
+        ${panel('Why this Mac mini','The studio machine to buy',ul(D.rec))}
+        ${panel('Side by side','Both options in full',tbl(['','Option 1','Option 2'],D.rows.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td style="min-width:200px">${esc(r[1])}</td><td style="min-width:200px">${esc(r[2])}</td></tr>`),'deploy'))}
+        ${panel('What runs where','Studio workloads, by evidence',tbl(null,D.runs.map(r=>`<tr><td>${r[0]==='c'?'<span class="ev c">Confirmed</span>':'<span class="ev u">Unknown</span>'}</td><td><b>${esc(r[1])}</b><small>${esc(r[2])}</small></td><td class="note">${esc(r[3])}</td></tr>`)))}
+        ${panel('Sources and conflicts','Where the facts come from',tbl(null,J.sources.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td><b>${esc(r[1])}</b></td><td class="note">${esc(r[2])}</td></tr>`))+tbl(['Item','What each says','What to do'],J.conflicts.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`)))}
+        ${panel('Apple Canada check · '+esc(D.checked),'What is on sale',tbl(null,D.apple.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`))+`<p class="note">Sources: ${D.links.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])}</a>`).join(' · ')}</p>`)}
+        ${panel('Still unknown','Gaps',ul(['Apple Canada\'s own price and model number for the M6 at 24 GB / 512 GB.','How full the studio M1\'s 512 GB is, and its memory pressure in a full session.','The powered USB-C hub: model and price.','Cables for screens without USB-C.','Desk, chair, keyboard and mouse at the home office: nothing recorded.','Whether each Marketplace listing is still available. They were viewed once on Nov 16.']))}
+      </div></details>`;
+  }
+
+  if(area==='storage'){
+    const R=STORE; const roleName=id=>R.roles.find(r=>r.id===id).name;
+    const sc=x=>`<div class="pcard"><div class="pt"><span class="ev l">New</span>${x.fit_qty?`<span class="ev c">Best fit ×${x.fit_qty}</span>`:''}${x.value_qty?`<span class="ev g">Best value ×${x.value_qty}</span>`:''}</div><h4>${esc(x.product)}</h4><div class="pp">${money(x.price)}<small>${esc(roleName(x.role))} · read ${esc(R.checked)}</small></div><ul><li>${esc(x.specs)}</li></ul><div class="fit">${esc(x.reason)}</div><div class="lk"><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.source)}</a></div></div>`;
+    return `<div class="lede"><span class="eyebrow">Storage · hardware upgrade planner</span><h2>Two builds for the archive</h2><p>${esc(R.need)}</p>${jump([['s-decide','1 Decide'],['s-buy','2 Products'],['s-market','Marketplace'],['s-more','Rules and steps']])}</div>
+      <div class="slot" id="s-decide"><div><span class="eyebrow">Decision</span><h3>Network box or USB enclosure</h3><span class="note">Prices read ${esc(R.checked)} and not re-checked since. CAD before GST.</span></div>
+        <div class="pcards"><div class="pcard"><h4>Best fit</h4><div class="pp">${money(R.fit)}</div><div class="fit">${esc(R.builds.fit.note)}</div></div><div class="pcard"><h4>Best value</h4><div class="pp">${money(R.value)}<small>${money(R.fit-R.value)} less</small></div><div class="fit">${esc(R.builds.value.note)}</div></div></div></div>
+      ${panel('Products','Picked items',`<div class="pcards">${R.items.map(sc).join('')}</div><p class="note">The full list of 40 scouted items is on the <a href="https://claude.ai/artifact/FePPhRJnKVvXG71UQNfhWQ#studio-storage-2026-10" target="_blank" rel="noopener">original Gear Scout board</a>.</p>`,'s-buy')}
+      ${panel('Marketplace','Calgary listings on record for storage',leadsBlock('storage'),'s-market')}
+      <details class="more" id="s-more"><summary>Rules, roles and order of operations</summary><div>
+        ${panel('Rules','How the storage plan works',ul(R.rules))}
+        ${panel('Roles','What each piece has to do',tbl(['Role','Qty','Must have'],R.roles.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${r.qty}</td><td class="note">${esc(r.must)}</td></tr>`)))}
+        ${panel('Once the drives land','Do these in order',`<ol class="steps">${['Label the new archive drive.','Run Red Mile Ingest once by hand.','Run the console repoint tool, then Optimize.','Clear the 246 GB of imports and cache from the T7 once the copy has verified.','Set the monthly offsite copy.'].map(o=>`<li><div>${o}</div></li>`).join('')}</ol>`)}
+        ${panel('Still unknown','Gaps',ul(['Whether the Skytech PC has a free M.2 slot. If yes, skip the SSD enclosure.','Current prices and stock: nothing here has been re-read since Oct 31.','Not scouted: the 32 GB RAM kit from the Oct 30 audit, cables, a UPS.']))}
+      </div></details>`;
+  }
+
+  return `<div class="lede"><span class="eyebrow">Music · owned gear</span><h2>The recording and mixing rig</h2><p>Everything here is owned, as verified on the studio machine. Nothing is planned or priced for music yet.</p></div>
+    <div class="pcards">${MUSIC_OWNED.map(r=>`<div class="pcard"><div class="pt"><span class="ev c">Owned</span></div><h4>${esc(r[0])}</h4><div class="fit">${esc(r[1])}</div></div>`).join('')}</div>
+    <div class="empty"><b>One related purchase sits under Trading Desk.</b><span>The new studio Mac mini would run Ableton and the Apollo x6. <a href="#desk">See the Trading Desk plan</a>.</span></div>
+    <div class="empty"><b>No music gear hunt is recorded.</b><span>Start one in chat with "scout:" and what the studio needs. The picks land here as product cards.</span></div>`;
+}
+function renderArea(){ if(area==='lighting') return; $('#areaView').innerHTML=setupHTML(); }
+function savePlan(){ renderArea(); if(S.db&&S.canWrite) writeDoc('plans/desk',{...PLAN,at:Date.now(),by:S.uid}); }
+
+/* ---------- keep scroll and focus across re-renders ---------- */
+function keep(fn){ return function(...args){
+  const sx={}; document.querySelectorAll('[data-sx]').forEach(e=>{ sx[e.dataset.sx]=e.scrollLeft; });
+  const a=document.activeElement, fk=a&&a.dataset?a.dataset.fk:null, y=window.scrollY;
+  const out=fn.apply(this,args);
+  document.querySelectorAll('[data-sx]').forEach(e=>{ const v=sx[e.dataset.sx]; if(v!=null&&e.scrollLeft!==v) e.scrollLeft=v; });
+  if(fk&&document.activeElement!==a){ const n=[...document.querySelectorAll('[data-fk]')].find(x=>x.dataset.fk===fk); if(n) n.focus({preventScroll:true}); }
+  if(Math.abs(window.scrollY-y)>1) window.scrollTo(window.scrollX,y);
+  return out; }; }
+
 /* ---------- render all ---------- */
-function renderAll(){ renderToday(); renderChips(); renderPlan(); renderTiers(); renderKelvin(); renderPicker(); renderSummary(); renderShop(); renderPlace(); renderCamera(); renderRun(); }
+function renderAll(){ renderArea(); renderLightLeads(); renderToday(); renderChips(); renderPlan(); renderTiers(); renderKelvin(); renderPicker(); renderSummary(); renderShop(); renderPlace(); renderCamera(); renderRun(); }
+renderAll=keep(renderAll); renderArea=keep(renderArea); renderShop=keep(renderShop); renderRun=keep(renderRun); renderPlace=keep(renderPlace);
+renderToday=keep(renderToday); renderCamera=keep(renderCamera); renderPlan=keep(renderPlan); renderRig=keep(renderRig);
 
 /* ---------- routing ---------- */
-const TABS=['today','plan','buy','place','camera','run'];
-function route(){ const h=(location.hash||'').slice(1); const t=TABS.includes(h)?h:'plan';
-  for(const id of TABS){ $('#'+id).hidden=id!==t; }
-  document.querySelectorAll('nav.tabs a').forEach(a=>{ if(a.dataset.tab===t) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+const LEGACY={today:['lighting','today'],plan:['lighting','plan'],buy:['lighting','buy'],place:['lighting','place'],camera:['lighting','settings'],run:['lighting','run'],junior:['desk',''],trading:['desk','']};
+function route(){
+  const h=(location.hash||'').slice(1); const m=h.split('-');
+  if(m[0]==='lighting'){ area='lighting'; stage=STAGES.some(x=>x[0]===m[1])?m[1]:'plan'; }
+  else if(SETUPS[m[0]]){ area=m[0]; }
+  else if(LEGACY[h]){ area=LEGACY[h][0]; if(LEGACY[h][1]) stage=LEGACY[h][1]; }
+  else { area='overview'; }
+  document.querySelectorAll('main section.stage').forEach(x=>{x.hidden=true;});
+  if(area==='lighting') $('#'+LIGHT_SEC[stage]).hidden=false; else { renderArea(); $('#areaView').hidden=false; }
+  $('#setupNav').innerHTML=Object.entries(SETUPS).map(([k,v])=>`<a href="#${k==='lighting'?'lighting-'+stage:k}" ${k===area?'aria-current="page"':''}>${esc(v.name)}</a>`).join('');
+  const sn=$('#stageNav'); sn.hidden=area!=='lighting';
+  sn.innerHTML=STAGES.map(([k,n],i)=>`<a href="#lighting-${k}" data-tab="${k}" ${k===stage?'aria-current="page"':''}><span class="n">${i}</span>${n}</a>`).join('');
+  $('#areaSub').textContent=SETUPS[area].sub;
+  $('#chips').hidden=area!=='lighting'; $('#sync').hidden=area==='music';
 }
+document.addEventListener('click',e=>{
+  const dp=e.target.closest('[data-dpick]'); if(dp&&!dp.disabled){ const sl=dp.dataset.dslot, id=dp.dataset.dpick; PLAN[sl]=id;
+    if(CAT[id].one){ const other=sl==='left'?'right':'left'; if(PLAN[other]===id) PLAN[other]=other==='left'?'u2723qe':'undecided'; }
+    savePlan(); return; }
+  const dd=e.target.closest('[data-deploy]'); if(dd&&!dd.disabled){ PLAN.opt=+dd.dataset.deploy; savePlan(); return; }
+  const j=e.target.closest('[data-jump]'); if(j){ const t=document.getElementById(j.dataset.jump); if(t){ if(t.tagName==='DETAILS') t.open=true; const y=t.getBoundingClientRect().top+window.scrollY-130; window.scrollTo({top:y}); } return; }
+  const ld=e.target.closest('[data-leaddel]'); if(ld){ const id=ld.dataset.leaddel; delete LEADS[id]; renderArea(); if(S.db) S.db.doc('leads/'+id).delete().catch(()=>{}); return; }
+});
+document.addEventListener('submit',e=>{
+  if(e.target.id!=='leadForm') return; e.preventDefault();
+  const v=id=>$('#'+id).value.trim(); const price=parseFloat(v('lead-price').replace(/[^0-9.]/g,'')); const url=v('lead-url');
+  if(!v('lead-title')||!(price>0)||!/^https:\/\/(www\.|m\.)?facebook\.com\/marketplace\//.test(url)){ $('#leadMsg').textContent='Add a title, an asking price and a facebook.com/marketplace link.'; return; }
+  const id='l'+Date.now().toString(36); const d=new Date();
+  LEADS[id]={slot:v('lead-slot'),title:v('lead-title'),price,cond:v('lead-cond'),url,seen:d.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'}),at:Date.now(),by:S.uid};
+  renderArea(); if(S.db) writeDoc('leads/'+id,LEADS[id]);
+});
 window.addEventListener('hashchange',()=>{route();window.scrollTo(0,0);});
 
 /* ---------- writes ---------- */
@@ -1024,6 +1585,8 @@ document.addEventListener('click',e=>{
   const st=e.target.closest('[data-status]'); if(st&&S.canWrite){ const id=st.dataset.status; const cur=S.status[id]?.s||'needed'; const nx=NEXT[cur];
     S.status[id]={s:nx,at:Date.now(),by:S.uid}; renderShop(); renderPlan(); writeDoc('status/'+id,S.status[id]); return; }
   const h=e.target.closest('[data-hl],[data-fx]'); if(h){ const r=h.dataset.hl||h.dataset.fx; hlRole=hlRole===r?null:r; renderPlace(); return; }
+  const lay=e.target.closest('[data-layout]'); if(lay){ useLayout(lay.dataset.layout); try{localStorage.setItem('rmsb-layout',layout);}catch(_){} hlRole=null; renderPlace(); return; }
+  const sb=e.target.closest('[data-skin]'); if(sb){ skin=sb.dataset.skin; try{localStorage.setItem('rmsb-skin',skin);}catch(_){} renderCamera(); return; }
   const m=e.target.closest('[data-mode]'); if(m){ mode=m.dataset.mode; renderCamera(); return; }
   if(e.target.id==='preReset'&&S.canWrite){ S.checks.preshow={}; renderRun(); writeDoc('checks/preshow',{items:{},at:Date.now()}); }
 });
@@ -1053,6 +1616,8 @@ route(); renderAll();
   },onErr);
   db.collection('status').onSnapshot(q=>{ const m={}; q.docs.forEach(d=>m[d.id]=d.data()); S.status=m; renderShop(); renderPlan(); },onErr);
   db.collection('checks').onSnapshot(q=>{ const m={}; q.docs.forEach(d=>m[d.id]=d.data().items||{}); S.checks=m; renderRun(); renderPlan(); renderToday(); },onErr);
+  db.doc('plans/desk').onSnapshot(sn=>{ if(sn.exists&&!sn.metadata.hasPendingWrites){ const d=sn.data(); for(const k of Object.keys(PLAN_DEFAULT)){ if(k==='opt'){ if(d.opt===1||d.opt===2) PLAN.opt=d.opt; } else if(CAT[d[k]]) PLAN[k]=d[k]; } renderArea(); } },onErr);
+  db.collection('leads').onSnapshot(q=>{ const m={}; q.docs.forEach(d=>m[d.id]=d.data()); LEADS=m; renderArea(); },onErr);
   db.collection('riglog').onSnapshot(q=>{ const m={}; q.docs.forEach(d=>m[d.id]=d.data()); S.rig=m; renderRig(); renderChips(); renderPlan(); },onErr);
 })();
 </script>
