@@ -3,7 +3,7 @@
 Source for the studio lighting and set guide, published at
 https://claude.ai/artifact/4xRxXwSDcz7S2bwNcxczri
 
-One self-contained page (`index.html`). An area picker at the top (Lighting and set, Trading Desk, Storage, Music) and six stage tabs under it: Room today, Plan, Buy, Place, Settings, Run. Links use `#<area>-<stage>`; the old `#buy`-style links still work.
+One self-contained page (`index.html`). Setup navigation at the top: Overview, Lighting and set, Trading Desk, Storage, Music. Lighting keeps six stage tabs (`#lighting-<stage>`); the other setups are one planner page each (`#desk`, `#storage`, `#music`). Old links such as `#buy` and `#junior` still work. The Trading Desk plan saves to `plans/desk` and added Marketplace listings to `leads/<id>`.
 `index.html` starts with `<meta charset="utf-8">` so a static server that omits a charset still decodes it as UTF-8.
 
 - **Room today**: diagnosis of three session stills from the room, nine ranked fixes with a shared tracker (`checks/today`).

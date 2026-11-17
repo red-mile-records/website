@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: sticky header with an area picker and six stage tabs; one stage visible at a time; content column 1180px. Dark-first studio palette. */
+/* Layout: sticky header with setup navigation; lighting keeps six stage tabs; other setups are one planner page each; one stage visible at a time; content column 1180px. Dark-first studio palette. */
 :root{
   --bg:#0f1012; --surface:#17191c; --surface2:#1e2125; --line:#2b2f34; --fg:#ece8e0; --muted:#9a9ea5;
   --accent:#e8542f; --accent-fg:#ffffff; --ok:#4cc38a; --warn:#f0b43c; --bad:#ff6b5e;
@@ -50,6 +50,32 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background
 .brand{flex-wrap:wrap}
 .areapick{display:inline-flex;align-items:center;gap:8px}
 .areapick select{font:600 15px var(--body);color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 10px;max-width:100%}
+.setups{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:8px}
+.setups a{flex:none;text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:600;font-size:14px;white-space:nowrap}
+.setups a[aria-current="page"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.jump{display:flex;flex-wrap:wrap;gap:6px}
+.jump button{border:1px solid var(--line);background:var(--surface2);border-radius:7px;padding:5px 10px;font-size:13px;font-weight:500}
+.pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:12px}
+.pcard{border:1px solid var(--line);background:var(--surface2);border-radius:10px;padding:13px;display:grid;gap:7px;align-content:start;text-align:left;min-width:0}
+button.pcard:hover{border-color:var(--muted)}
+.pcard.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset;background:color-mix(in srgb,var(--accent) 8%,var(--surface2))}
+.pcard[disabled]{opacity:.5;cursor:not-allowed}
+.pcard .pt{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.pcard h4{margin:0;font:700 15px/1.3 var(--display)}
+.pcard .pp{font:500 19px var(--mono)}
+.pcard .pp small{font:400 11.5px var(--mono);color:var(--muted);display:block}
+.pcard ul{margin:0;padding-left:16px;font-size:12.5px;color:var(--muted);display:grid;gap:2px}
+.pcard .fit{font-size:12.5px}
+.pcard .lk{font-size:12.5px;display:flex;flex-wrap:wrap;gap:4px 10px}
+.pcard .save{font-size:12.5px;color:var(--ok)}
+.slot{display:grid;gap:10px;border:1px solid var(--line);border-radius:10px;padding:16px;background:var(--surface)}
+.slot>div:first-child{display:grid;gap:3px}
+.leadform{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:8px;align-items:end}
+.leadform label{display:grid;gap:3px;font-size:12px;color:var(--muted)}
+.leadform input,.leadform select{font:500 14px var(--body);background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:7px 8px;width:100%}
+details.more{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:0 16px}
+details.more>summary{cursor:pointer;padding:14px 0;font:700 15px var(--display)}
+details.more>div{display:grid;gap:14px;padding-bottom:16px}
 .empty{border:1px dashed var(--line);border-radius:10px;padding:22px;color:var(--muted);display:grid;gap:6px}
 .empty b{color:var(--fg)}
 .brand .addr{font:400 12px var(--mono);color:var(--muted)}
@@ -234,10 +260,11 @@ svg.dimmed .fx:not(.hl){opacity:.18}
 <header class="top">
   <div class="wrap">
     <div class="head-row">
-      <div class="brand"><h1>Gear Scout 2.0</h1><label class="areapick"><span class="eyebrow">Area</span><select id="areaSel" aria-label="Business area"></select></label><span class="addr" id="areaSub"></span></div>
+      <div class="brand"><h1>Gear Scout 2.0</h1><span class="addr" id="areaSub"></span></div>
       <div class="chips" id="chips"></div>
     </div>
-    <nav class="tabs" aria-label="Stages" id="stageNav"></nav>
+    <nav class="setups" aria-label="Setups" id="setupNav"></nav>
+    <nav class="tabs" aria-label="Lighting stages" id="stageNav"></nav>
     <div class="sync" id="sync">Connecting to the shared build…</div>
   </div>
 </header>
@@ -368,6 +395,7 @@ svg.dimmed .fx:not(.hl){opacity:.18}
     <div class="rowhead"><div><span class="eyebrow">Shopping list</span><h3>What this build needs</h3></div><span class="note">Tap a status to move it on: Needed → Ordered → Arrived → Rigged</span></div>
     <div class="tbl" data-sx="shop"><table><thead><tr><th>Item</th><th>For</th><th class="num">Qty</th><th class="num">Each</th><th class="num">Line</th><th>Where</th><th>Status</th></tr></thead><tbody id="shop"></tbody></table></div>
   </div>
+  <div class="panel" id="lightLeads"></div>
 </section>
 
 <!-- PLACE -->
@@ -1260,108 +1288,231 @@ const DESKS={
 };
 const OWN={owned:['Owned','c'],planned:['Planned','l'],none:['No record','u']};
 const EVL={p:['Named, not re-checked','g'],x:['Sources differ','x'],u:['Unknown','u']};
-/* ---------- areas ---------- */
-const AREAS={
-  lighting:{name:'Lighting and set', sub:'1865 17 Ave SW · podcast room 10×10 ft · 8.5 ft ceiling'},
-  desk:{name:'Trading Desk', sub:'Junior Latency Desk · home office and studio computers'},
-  storage:{name:'Storage', sub:'Record, edit, archive and offsite drives'},
-  music:{name:'Music', sub:'Recording and mixing rig at the studio'},
-};
+/* ---------- setups: hardware upgrade planner ---------- */
+const SETUPS={overview:{name:'Overview',sub:'Every setup, what is owned, what to buy next'},lighting:{name:'Lighting and set',sub:'1865 17 Ave SW · podcast room 10×10 ft · 8.5 ft ceiling'},desk:{name:'Trading Desk',sub:'Junior Latency Desk · home office and studio computers'},storage:{name:'Storage',sub:'Record, edit, archive and offsite drives'},music:{name:'Music',sub:'Recording and mixing rig at the studio'}};
 const STAGES=[['today','Room today'],['plan','Plan'],['buy','Buy'],['place','Place'],['settings','Settings'],['run','Run']];
 const LIGHT_SEC={today:'today',plan:'plan',buy:'buy',place:'place',settings:'camera',run:'run'};
-let area='lighting', stage='plan';
+let area='overview', stage='plan';
 const STORE={"checked": "Oct 31, 2026", "need": "A storage plan that gets every Red Mile recording into three places and gets the T7 back to recording only. Oct 31 2026 state: the T7 (RCV_Disk) is full with 959 GB waiting for ingest plus 246 GB of imports and cache; the editing PC's C: has 16 GB free of 930; Google Drive has 15 GB free of 930 and is currently acting as RMR_ARCHIVE; about 1 TB of new footage landed in October alone. Red Mile Ingest v2 is built and waits on a physical drive labelled RMR_ARCHIVE.", "rules": ["Tier 1 Record: the T7 and the Pro II card carry a session only until ingest clears them. Nothing new to buy.", "Tier 2 Edit: a 2 TB NVMe takes the console cache, Drive_Imports and renders off C:, so the PC stops swapping.", "Tier 3 Archive: RMR_ARCHIVE on a new 8 TB CMR NAS drive, mirrored to a second identical drive in the same host. A mirrored pair gives 8 TB usable; after the 1.2 TB already waiting on the T7 and about 0.9 TB coming back from Google Drive, 1 TB a month fills it in about 6 months, so plan the next pair or a capacity swap for spring 2027.", "Tier 4 Offsite: an 8 TB external that copies the archive once a month and lives away from the studio. Google Drive drops back to deliverables and the knowledge base only once the local archive is verified.", "Archive drives must be 3.5 in CMR NAS class, 8 TB or more, 3 year warranty or longer; SMR and desktop-class drives never hold the archive.", "Everything on the editing PC side runs at USB 3.2 Gen 2 (10 Gbps) or faster so a 55 GB session copies in minutes, not an hour.", "A copy exists and verifies before anything is removed. The ingest already enforces this."], "roles": [{"id": "archive", "must": "3.5 in CMR NAS class, 8 TB or more, 3 year warranty or longer. One is RMR_ARCHIVE, the other its mirror.", "name": "Archive drives", "qty": 2}, {"id": "host", "must": "Holds both archive drives: either a 2-bay NAS with 2.5 GbE or a 2-bay USB-C 10 Gbps enclosure. 5 Gbps docks fail.", "name": "Archive host", "qty": 1}, {"id": "edit", "must": "2 TB NVMe PCIe 4.0, TLC with DRAM, 5 year warranty.", "name": "Edit SSD", "qty": 1}, {"id": "enclosure", "must": "USB-C 10 Gbps M.2 NVMe enclosure, only needed if the PC has no free M.2 slot.", "name": "SSD enclosure", "qty": 1}, {"id": "offsite", "must": "New 8 TB external desktop HDD, CMR preferred, 2 year warranty or longer.", "name": "Offsite drive", "qty": 1}, {"id": "reader", "must": "USB-C 10 Gbps with UHS-II SD and microSD slots for the Pro II card.", "name": "Card reader", "qty": 1}], "builds": {"fit": {"name": "Best fit build", "note": "Two IronWolf Pro 8 TB, the Orico enclosure and the Seagate Expansion 8 TB from the Canada Computers shelf on Macleod Trail, the SN850X 2 TB shipped from Canada Computers, and the UGREEN DXP2800 NAS and Unitek reader from Amazon for Nov 1 and 2. Both the PC and the Mac mini can then map RMR_ARCHIVE over 2.5 GbE."}, "value": {"name": "Best value build", "note": "Two WD Red Plus 8 TB from Amazon for Nov 1, the TerraMaster D2-320 USB-C enclosure from Amazon for Nov 2 (the archive stays a plain drive letter on the editing PC, so Red Mile Ingest and repoint.py need no changes), the same SN850X, Orico enclosure, Seagate Expansion and Unitek reader. $280 less than the best fit, with a 3 year warranty on the drives instead of 5."}}, "notes": "Prices are CAD before 5 percent GST, read from each product's own page on Oct 31 2026. Best value assumes delivery within about a week. Marketplace prices are asking prices; offer and walk-away figures are ours. Best fit total $2,481.71, best value total $2,201.71. Two Marketplace deals can lower either build: the sealed recertified IronWolf Pro 12 TB at $500 firm (one archive bay, check the serial on Seagate's warranty page first) and the sealed SN850X 2 TB at $400 from an unrated seller. Order of operations once the drives land: label the archive drive RMR_ARCHIVE, run Red Mile Ingest once by hand, run Console\\tools\\repoint.py --apply, run Optimize, then move the 246 GB of imports and cache off the T7, then set the monthly offsite copy. Decide the host first: NAS if both machines need the archive, enclosure if only the editing PC does. Open question for Miller: does the skytech PC have a free M.2 slot? If yes, skip the Orico enclosure. Not scouted: the 32 GB RAM kit from the Oct 30 audit, cables, a UPS.", "items": [{"role": "archive", "product": "Seagate IronWolf Pro 8TB ST8000NT001", "source": "Canada Computers", "price": 509.99, "fit_qty": 2, "value_qty": 0, "specs": "3.5 in CMR 7200 rpm 256 MB, 5 year warranty, 300 TB per year workload", "reason": "Meets every must-have with the longest warranty of any 8 TB in the hunt (5 years) and 5 units on the Calgary shelf, so both archive drives come home today. $509.99 each, $1,019.98 for the pair before GST, $10 more than the best value pair.", "url": "https://www.canadacomputers.com/en/desktop-internal-hard-drives/239798/seagate-ironwolf-pro-8-tb-hard-drive-st8000nt001.html"}, {"role": "archive", "product": "WD Red Plus 8TB WD80EFPX", "source": "Amazon.ca", "price": 504.99, "fit_qty": 0, "value_qty": 2, "specs": "3.5 in CMR 5640 rpm 256 MB, 3 year warranty", "reason": "Cheapest new 8 TB CMR NAS drive that can supply two within a week: $504.99 each, $1,009.98 for the pair, sold and shipped by Amazon.ca for Nov 1. Quieter 5640 rpm drive with a 3 year warranty instead of the IronWolf Pro's 5.", "url": "https://www.amazon.ca/dp/B0CMQ6SK7W"}, {"role": "host", "product": "UGREEN NASync DXP2800 2-bay NAS, diskless", "source": "Amazon.ca", "price": 469.99, "fit_qty": 1, "value_qty": 0, "specs": "Intel N100, 8 GB DDR5, 2.5 GbE, HDMI, 2 bays, SMB share the console can map", "reason": "The NAS option: two bays in a mirror and 2.5 GbE so the editing PC and the Mac mini both see RMR_ARCHIVE as a network drive. $469.99 shipped by Amazon for Nov 1, $30 under the Calgary shelf price.", "url": "https://www.amazon.ca/dp/B0D22HBFK1"}, {"role": "host", "product": "TerraMaster D2-320 2-bay USB 3.2 Gen 2 enclosure, diskless", "source": "Amazon.ca", "price": 199.99, "fit_qty": 0, "value_qty": 1, "specs": "Two 3.5 in bays, USB-C 10 Gbps, single, JBOD or hardware RAID 1 selectable", "reason": "The dock option: both archive drives in one 10 Gbps USB-C box on the editing PC for $199.99, $270 less than the NAS, and it shows up as a plain drive letter so Red Mile Ingest and repoint.py need no changes. A 15 percent coupon appeared at checkout but is not counted in the total.", "url": "https://www.amazon.ca/dp/B0C8GCZP5K"}, {"role": "edit", "product": "WD Black SN850X 2TB NVMe WDBB9G0020BNC", "source": "Canada Computers", "price": 549.99, "fit_qty": 1, "value_qty": 1, "specs": "PCIe 4.0 x4, TLC with DRAM, 7300 MB/s read, 5 year warranty", "reason": "Fastest qualifying 2 TB drive at a sane price ($549.99) from a store with Calgary returns; the 990 Pro is $874.99 at both Canada Computers and Best Buy right now. Ships from the warehouse, Calgary has none on the shelf.", "url": "https://www.canadacomputers.com/en/desktop-laptop-internal-ssds/282003/wd-black-sn850x-2tb-pcie-gen4-nvme-m-2-ssd-wdbb9g0020bnc.html"}, {"role": "enclosure", "product": "Orico M2PV-C3 USB-C 10 Gbps NVMe enclosure", "source": "Canada Computers", "price": 21.29, "fit_qty": 1, "value_qty": 1, "specs": "USB 3.2 Gen 2, 10 Gbps, M.2 2280 NVMe, tool free", "reason": "Puts the SN850X on any USB-C port for $21.29, on the Calgary shelf, so the edit drive can move between the PC and the Mac mini. Skip it if the PC turns out to have a free M.2 slot.", "url": "https://www.canadacomputers.com/en/m-2-nvme-ssd-enclosures/253301/orico-m2pv-m-2-nvme-ssd-enclosure-with-usb-3-2-type-c-gen-2-and-speed-up-to-10gbps-orico-m2pv-c3-bk-ep.html"}, {"role": "offsite", "product": "Seagate Expansion Desktop 8TB STKP8000400", "source": "Canada Computers", "price": 394.99, "fit_qty": 1, "value_qty": 1, "specs": "3.5 in desktop external, USB 3.0 micro-B, 2 year warranty", "reason": "Cheapest in-stock new 8 TB external: $394.99 with one on the Calgary shelf and 10+ to ship. Amazon has the same drive at the same price but not until Nov 11 to 15, and Best Buy's $354.99 listing is sold out.", "url": "https://www.canadacomputers.com/en/external-hard-drives/196410/seagate-8tb-expansion-desktop-external-drive-usb3-0-3-5e-stkp8000400.html"}, {"role": "reader", "product": "Unitek 4-in-1 CFexpress B, SD UHS-II and microSD reader, USB-C 10 Gbps", "source": "Amazon.ca", "price": 25.47, "fit_qty": 1, "value_qty": 1, "specs": "USB-C 10 Gbps, SD 4.0 UHS-II, microSD UHS-II, CFexpress Type B", "reason": "The only reader found with UHS-II SD and microSD on a 10 Gbps USB-C port, $25.47 for Nov 2; it also takes CFexpress B if a camera upgrade ever needs it.", "url": "https://www.amazon.ca/dp/B0D738KQFB"}], "fit": 2481.71, "value": 2201.71};
+const MPL=[{"area": "lighting", "role": "boom", "n": "C-stand with boom arm (new)", "price": 100, "cond": "New (reseller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/900124516024271/", "checked": "2026-11-14", "verdict": "best_value", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "146 to 320 cm stainless C-stand, 128 cm arm, 2 grip heads, 20 kg", "offer": 85, "walk": 100, "gone": false, "reason": "New, heavier rated and $56 under the Amazon C-stand."}, {"area": "lighting", "role": "boom", "n": "K&F 3.3 m C-stand (new)", "price": 100, "cond": "New (reseller)", "loc": "Sylvan Lake", "url": "https://www.facebook.com/marketplace/item/2140047200268097/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available", "specs": "149 to 330 cm, 20 kg, crossbar", "offer": null, "walk": null, "gone": false, "reason": "Same price as the Calgary C-stand but 150 km away."}, {"area": "lighting", "role": "key", "n": "Amaran COB 60x S (used)", "price": 180, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1039441475547073/", "checked": "2026-10-31", "verdict": "skip", "stock": "Sold", "specs": "Bi-colour Bowens COB, accessories not listed", "offer": null, "walk": null, "gone": true, "reason": "Sold by Oct 31. Single unit, and a new Halo 60x costs $11 less."}, {"area": "lighting", "role": "key", "n": "Aputure LS C120d II daylight", "price": 350, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/3799111526895920/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available", "specs": "120 W, 5500K daylight only", "offer": null, "walk": null, "gone": false, "reason": "Daylight only and more light than one seat needs."}, {"area": "lighting", "role": "key", "n": "Godox SL60IIBi (new in box)", "price": 180, "cond": "New (private seller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/4575527462767518/", "checked": "2026-11-14", "verdict": "deal", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "75 W bi-colour, 2800 to 6500K, CRI 96, TLCI 97, Bowens, app and remote", "offer": 170, "walk": 195, "gone": false, "reason": "Asking price cut to $180 on Oct 31 (was $215, then $195). One unit only. Worth it if you go Godox: this plus two from The Camera Store is a matched set for $650. Old listing, so open low."}, {"area": "lighting", "role": "key", "n": "Godox SL60IID daylight (5 listings, $155 to $230)", "price": 155, "cond": "New (private and reseller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/37831808123133428/", "checked": "2026-11-14", "verdict": "skip", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "70 W, 5600K daylight only, CRI 96, Bowens", "offer": null, "walk": null, "gone": false, "reason": "Daylight only. Our cameras are locked at 4500K, so these would only work if the house white balance moved to 5600K."}, {"area": "lighting", "role": "key", "n": "Godox SL60W daylight", "price": 130, "cond": "Used, like new", "loc": "Calgary (Legacy)", "url": "https://www.facebook.com/marketplace/item/1430563098949083/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available", "specs": "60 W, 5600K daylight only, previous generation, remote only", "offer": null, "walk": null, "gone": false, "reason": "Daylight only and no app. The $320 kit with an 80 cm octa and C-stand is the same light."}, {"area": "lighting", "role": "key", "n": "Neewer MS60B (new, with batteries)", "price": 140, "cond": "New (private seller)", "loc": "Airdrie", "url": "https://www.facebook.com/marketplace/item/1752167802766308/", "checked": "2026-11-14", "verdict": "skip", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "65 W bi-colour, 2700 to 6500K, CRI 97+, TLCI 98+, Bowens (per listing), app, 2 NP-F970 batteries", "offer": null, "walk": null, "gone": false, "reason": "Single unit, so it cannot be the matched key set. It is the value pick for the rim."}, {"area": "lighting", "role": "lantern", "n": "Aputure Lantern (used)", "price": 80, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1044360098511059/", "checked": "2026-11-14", "verdict": "deal", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "Lantern with bag; size not stated", "offer": 65, "walk": 80, "gone": false, "reason": "Pair it with the same lantern from The Camera Store ($129, Nov 14) for two Aputure lanterns at $209, or with Vistek ($133.50, Nov 5) at $213.50. Confirm it is the 26 in size."}, {"area": "lighting", "role": "lantern", "n": "Neewer 26 in lantern (used)", "price": 70, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1060542973597901/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listing live Oct 31, available", "specs": "26 in lantern, mount not stated", "offer": 55, "walk": 65, "gone": false, "reason": "Only $21 under a new NS26L, so only worth it at $65 or less."}, {"area": "lighting", "role": "octa", "n": "Godox QR-P90 parabolic with grid", "price": 180, "cond": "New (private seller)", "loc": "Calgary (NW)", "url": "https://www.facebook.com/marketplace/item/942832508898956/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing removed", "specs": "90 cm parabolic, Bowens, grid", "offer": null, "walk": null, "gone": true, "reason": "Listing removed by Oct 31. More than twice the price of the 80 cm octa and too big for a 10 x 10 room."}, {"area": "lighting", "role": "octa", "n": "Godox SL60W + 80 cm octa + C-stand kit", "price": 320, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1862295548482967/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available", "specs": "Daylight SL60W, SB-UE 80 cm octa with grid, Neewer 10 ft C-stand with boom; kit only", "offer": null, "walk": null, "gone": false, "reason": "The octa and C-stand are what we want, but it is sold as a kit with a daylight-only light."}, {"area": "lighting", "role": "octa", "n": "Neewer NS92P 90 cm octa with grid", "price": 119, "cond": "New (private seller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/2095119671404678/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available, door pickup", "specs": "90 cm octa, grid, mount not stated", "offer": null, "walk": null, "gone": false, "reason": "Bigger than the room wants and dearer than the new 80 cm Godox."}, {"area": "lighting", "role": "rim", "n": "Aputure LS 60x", "price": 400, "cond": "Used, like new", "loc": "Calgary (NW)", "url": "https://www.facebook.com/marketplace/item/1026985316880185/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, In stock", "specs": "Bi-colour focusing light with barn doors, no Bowens mount", "offer": null, "walk": null, "gone": false, "reason": "Lovely light, but $400 for a rim and it will not take the strip box."}, {"area": "lighting", "role": "rim", "n": "Neewer FS60B", "price": 90, "cond": "New (private seller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1373359324407474/", "checked": "2026-11-14", "verdict": "consider", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "Compact bi-colour COB; listing gives no CRI or wattage", "offer": 75, "walk": 90, "gone": false, "reason": "Cheapest rim option. Ask for the CRI and confirm the Bowens mount before driving over."}, {"area": "lighting", "role": "rim", "n": "Neewer MS60B (new, with batteries)", "price": 140, "cond": "New (private seller)", "loc": "Airdrie", "url": "https://www.facebook.com/marketplace/item/1752167802766308/", "checked": "2026-11-14", "verdict": "best_value", "stock": "Asking price observed by Scout Nov 14, 11:27 to 11:28 p.m. MST; seller availability unconfirmed", "specs": "65 W bi-colour, 2700 to 6500K, CRI 97+, TLCI 98+, Bowens (per listing), Neewer app, 2 NP-F970 batteries", "offer": 120, "walk": 140, "gone": false, "reason": "New, bi-colour, on the Neewer app the tubes use, and the batteries are a bonus. Confirm the Bowens mount in person before paying."}, {"area": "lighting", "role": "stand", "n": "Manfrotto 1051BAC 3-pack (new in box)", "price": 230, "cond": "New (private seller)", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/916669444067304/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listing live Oct 31, available", "specs": "3 stands, 211 cm, 4 kg each, air cushion, stackable", "offer": 190, "walk": 210, "gone": false, "reason": "Manfrotto quality at the SmallRig price, but lower load and height. Worth it at $210 or less."}, {"area": "lighting", "role": "strip", "n": "Strobepro 12x55 strip with grid (used)", "price": 140, "cond": "Used, like new", "loc": "Cochrane", "url": "https://www.facebook.com/marketplace/item/1552963789712788/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, available", "specs": "12 x 55 in, grid, speedring type not stated", "offer": null, "walk": null, "gone": false, "reason": "Costs more used than the new boxes above."}, {"area": "lighting", "role": "tube", "n": "Amaran PT2c pixel tube (used)", "price": 200, "cond": "Used, like new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1053882330965907/", "checked": "2026-10-31", "verdict": "deal", "stock": "Listing live Oct 31, available", "specs": "2 ft RGBWW pixel tube, case, chargers, egg crate", "offer": 175, "walk": 200, "gone": false, "reason": "About 89% of the new per-tube price now that the Amazon 2-light kit is $448.50 ($224.25 a tube), so the discount is thin. Grab it only if you want a single pixel-effect accent; it does not make a matched pair on its own."}, {"area": "lighting", "role": "tube", "n": "Godox TL60 2-light kit (used)", "price": 450, "cond": "Used, good", "loc": "Okotoks", "url": "https://www.facebook.com/marketplace/item/872083795335751/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listing live Oct 31, In stock", "specs": "2 x 2 ft RGB tubes, app, DMX, case, clips, C-47s and blackwrap", "offer": 350, "walk": 390, "gone": false, "reason": "Asking $450, but two new Neewer TL60s cost $393.98, so this used pair is only worth it at $390 or less."}, {"area": "lighting", "role": "tube", "n": "Neewer TL120C (4 ft)", "price": 250, "cond": "New (private seller)", "loc": "Airdrie", "url": "https://www.facebook.com/marketplace/item/1413430494289916/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listing live Oct 31, In stock", "specs": "127 cm RGBWW, CRI 97+", "offer": null, "walk": null, "gone": false, "reason": "Twice the length the wall wash needs."}, {"area": "storage", "role": "archive", "n": "Lot of 8x WD Red Pro and Plus 8TB plus 8-bay USB 3.0 enclosure", "price": 2800, "cond": "used", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1625209199227052/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listed 4 weeks ago, bundle only, seller Jason Guo 19 reviews", "specs": "64 TB raw in a USB 3.0 (5 Gbps) enclosure", "offer": null, "walk": null, "gone": false, "reason": "Bundle only at $2,800: far more capacity than the plan needs and the enclosure is 5 Gbps, which fails the host spec."}, {"area": "storage", "role": "archive", "n": "Seagate IronWolf Pro 12TB ST12000NT001, factory recertified, sealed", "price": 500, "cond": "recertified", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1099146612869637/", "checked": "2026-10-31", "verdict": "deal", "stock": "Listed a week ago, seller Carl Pan, 33 ratings", "specs": "3.5 in CMR 7200 rpm, RMA replacement unit, warranty to be checked by serial", "offer": 500, "walk": 500, "gone": false, "reason": "Best price per TB in the hunt ($41.67 versus $63.75 for a new IronWolf Pro 8 TB) and sealed, but a single recertified unit, so it fills one bay only. Check the serial on Seagate's warranty page before paying. The listing says the price is firm, so offer $500, "}, {"area": "storage", "role": "archive", "n": "WD Red Pro 18TB WD181KFGX, used like new", "price": 700, "cond": "used", "loc": "Rocky View", "url": "https://www.facebook.com/marketplace/item/1153735313719646/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listed 3 weeks ago, seller has 1 review", "specs": "3.5 in CMR 7200 rpm, usage hours not stated", "offer": 550, "walk": 650, "gone": false, "reason": "$38.89 per TB is the cheapest capacity found, but a one-review seller, no SMART report and a 30 minute drive. Only with a SMART check on the spot. Offer $550, walk away at $650."}, {"area": "storage", "role": "edit", "n": "Samsung 990 PRO 2TB NVMe, used, no box", "price": 450, "cond": "used", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1553740500132331/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listed 2 weeks ago, reduced from $500", "specs": "PCIe 4.0 x4, TLC with DRAM, wear unknown", "offer": 380, "walk": 420, "gone": false, "reason": "Used with no box and no wear figure given; only worth it with a SMART readout under 5 percent used. Offer $380, walk away at $420."}, {"area": "storage", "role": "edit", "n": "WD Black SN850X 2TB NVMe, new sealed per listing", "price": 400, "cond": "new", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1599314157937275/", "checked": "2026-10-31", "verdict": "deal", "stock": "Listed a week ago, seller has no ratings", "specs": "PCIe 4.0 x4, TLC with DRAM", "offer": 350, "walk": 420, "gone": false, "reason": "The best fit drive sealed for $400, $150 under the store, but from an unrated seller: meet in a public place and check the seal and serial on WD's site. Offer $350, walk away at $420."}, {"area": "storage", "role": "host", "n": "Synology DS223j 2-bay NAS", "price": 160, "cond": "used", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1687332252808414/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listed 4 days ago, diskless not stated", "specs": "Realtek RTD1619B, 1 GB, 1 GbE", "offer": 130, "walk": 150, "gone": false, "reason": "Cheap way into a mirror at $160 but 1 GbE and a weak chip, so a 55 GB session takes about 8 minutes to copy and the console cache should stay local. Offer $130, walk away at $150."}, {"area": "storage", "role": "host", "n": "QNAP TS-233 2-bay NAS, diskless with box", "price": 275, "cond": "used", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1118336103977352/", "checked": "2026-10-31", "verdict": "consider", "stock": "Listed 4 weeks ago", "specs": "ARM Cortex-A55, 2 GB, 1 GbE", "offer": 220, "walk": 250, "gone": false, "reason": "Boxed and diskless at $275, but 1 GbE and an ARM chip, so slower than either new pick for not much less than the D2-320. Offer $220, walk away at $250."}, {"area": "storage", "role": "offsite", "n": "Seagate Archive 8TB ST8000AS0002, SMR, used 8300 hours", "price": 245, "cond": "used", "loc": "Calgary", "url": "https://www.facebook.com/marketplace/item/1921244012183576/", "checked": "2026-10-31", "verdict": "skip", "stock": "Listed a week ago", "specs": "3.5 in SMR, 8300 power-on hours, in a plastic case", "offer": null, "walk": null, "gone": false, "reason": "SMR and 8,300 hours used: fine for a write-once copy in theory, but an offsite drive is the one you must trust when everything else has failed."}];
 const MUSIC_OWNED=[
-  ['Universal Audio Apollo x6','Audio interface, on Thunderbolt','Studio control skill, "The rig, as verified"'],
-  ['Neumann U87 Ai','Primary vocal microphone','Studio control skill'],
-  ['Neumann TLM 103','Secondary microphone','Studio control skill'],
-  ['Avalon VT-737sp','Channel strip, into an Apollo line input','Studio control skill'],
-  ['Neve 1073LB','500-series preamp, into an Apollo line input','Studio control skill'],
-  ['Yamaha HS8 pair and HS8 sub','Main monitors','Studio control skill'],
-  ['KRK Rokit 6 pair','Second pair of monitors','Studio control skill'],
-  ['Mac mini M1, 16 GB / 512 GB','Runs Ableton Live 12 Suite and UAD Console','Studio control skill; size reported Nov 16'],
-  ['Ableton Live 12 Suite, UAD Console 1.3.0','About 226 UAD plugins, 285 Audio Units and 54 VST3','Studio control skill'],
+  ['Universal Audio Apollo x6','Audio interface, on Thunderbolt'],['Neumann U87 Ai','Primary vocal microphone'],['Neumann TLM 103','Secondary microphone'],
+  ['Avalon VT-737sp','Channel strip, into an Apollo line input'],['Neve 1073LB','500-series preamp, into an Apollo line input'],
+  ['Yamaha HS8 pair and HS8 sub','Main monitors'],['KRK Rokit 6 pair','Second pair of monitors'],
+  ['Mac mini M1, 16 GB / 512 GB','Runs Ableton Live 12 Suite and UAD Console'],['Ableton Live 12 Suite, UAD Console 1.3.0','About 226 UAD plugins, 285 Audio Units and 54 VST3'],
 ];
-const DESK_NEXT=[
-  'Check the studio M1: how full its 512 GB is (Apple menu, About This Mac, Storage) and its memory pressure during a full session (Activity Monitor).',
-  'Confirm Apple Canada\'s price for the Mac mini M6 at 24 GB / 512 GB.',
-  'Choose the deployment: Option 1 or Option 2 on the Plan tab.',
-  'Choose the portrait screen (Dell 27 or LG 32UN880) and the right-hand 27 in 4K monitor.',
-  'Inventory what the trader already owns at the home-office desk. Any existing screen could fill a slot.',
-  'Buy, then mark each item here as it arrives.',
-  'Option 2 only: rebuild the studio setup on the new Mac mini (Ableton, UAD, plugins, licences), then wipe the M1 and take it to the home office with the USB graphics adapter.',
+const CHK='Nov 17, 2026';
+/* kind: new = retail listing found by search on CHK (page not opened from here); mp = Facebook Marketplace listing opened by Miller; owned; none. */
+const CAT={
+  mac:{n:"Apple Mac mini (2026), M6",kind:"new",price:1849,date:"Nov 16 to 17",
+    specs:["M6 chip: 12-core CPU, 12-core GPU","24 GB memory, 512 GB SSD (the configuration Apple Canada lists)","Back: 3 Thunderbolt 4, 1 HDMI, 2.5 Gb Ethernet. Front: 2 USB-C, headphone jack","Runs three screens by itself. No USB-A ports"],
+    fit:"Apple's Canadian model number for this configuration is not confirmed: sources give MHQM4 and MHQK4.",
+    links:[["Apple Canada","https://www.apple.com/ca/shop/buy-mac/mac-mini"],["Best Buy Canada","https://www.bestbuy.ca/en-ca/category/apple-mac-mini/26226"]],
+    src:"$1,849 launch price (refurb.me); $1,849.99 Best Buy Canada listing seen Nov 16. Apple's own page not opened."},
+  m1:{n:"Apple Mac mini (M1, 2020)",kind:"owned",price:0,
+    specs:["M1 chip: 8-core CPU, 8-core GPU","16 GB memory, 512 GB SSD (reported Nov 16)","Back: 2 Thunderbolt 3, 1 HDMI 2.0, 2 USB-A, Gigabit Ethernet","Runs two screens by itself: one on Thunderbolt, one on HDMI. A third needs a USB graphics adapter"],
+    fit:"At the studio today, running Ableton Live 12, the Apollo x6 and the RØDECasters.",links:[],src:"Owned. Size reported by seven studio bots."},
+  u2723qe:{n:"Dell UltraSharp 27 4K USB-C Hub Monitor U2723QE",kind:"new",price:799.99,date:CHK,
+    specs:["27 in, 3840×2160, IPS Black, 60 Hz","USB-C with 90 W power, HDMI, DisplayPort, Ethernet, USB hub","Stand: height, tilt, swivel, turns upright","VESA 100×100"],
+    fit:"One USB-C cable carries picture and power. Dell.ca shows it at $839.99 on one page and out of stock on another.",
+    links:[["CDW.ca $799.99","https://cdw.ca/product/dell-ultrasharp-u2723qe-led-monitor-4k-27/6892518"],["Dell.ca","https://dell.com/en-ca/shop/dell-ultrasharp-27-4k-usb-c-hub-monitor-u2723qe/apd/210-bdpf/monitors-monitor-accessories"],["Fleet Network $870.64","https://fleetnetwork.ca/products/dell-u2723qe"]],
+    src:"Lowest Canadian listing found. Named in Botty's list."},
+  u2725qe:{n:"Dell UltraSharp 27 4K Thunderbolt Hub Monitor U2725QE",kind:"new",price:1008.40,date:CHK,
+    specs:["27 in, 3840×2160, IPS Black, 120 Hz","Thunderbolt 4 with up to 140 W, HDMI 2.1, DisplayPort 1.4, 2.5 Gb Ethernet, KVM","Stand: height, tilt, swivel, turns upright","VESA 100×100 (from one overseas listing)"],
+    fit:"The newer model named on Nov 5. About $208 more than the U2723QE for 120 Hz and Thunderbolt.",
+    links:[["monitors.com $1,008.40","https://www.monitors.com/en-ca/products/dell-u2725qe"],["CDW.ca $1,201.99","https://www.cdw.ca/product/dell-ultrasharp-u2725qe-led-monitor-4k-27-hdr/8294221"]],
+    src:"Named in the Nov 5 session at about $1,050."},
+  lg32:{n:"LG UltraFine Ergo 32UN880-B",kind:"new",price:949.99,date:CHK,
+    specs:["31.5 in, 3840×2160, IPS, 60 Hz, HDR10","USB-C with 60 W power, 2 HDMI, 1 DisplayPort","Ergo stand: a desk-clamp arm that turns upright, included","VESA 100×100"],
+    fit:"Not the cheaper option it looked like on Nov 5. The $600 to $650 listings are a different model, 32UN880K-B. The exact -B model is $949.99 to $1,154.99.",
+    links:[["Logics $949.99","https://logicstechnology.com/products/lg-ultrafine-32un880-b-32-class-4k-uhd-lcd-monitor-16-9-matte-black"],["CDW.ca $1,154.99","https://cdw.ca/product/lg-ultrafine-32un880-b-led-monitor-4k-32-hdr/6239367"],["32UN880K-B at Fleet $649.95","https://fleetnetwork.ca/lg-ultrafine-32un880k-b-32-class-4k-uhd-lcd-monitor-16-9-black-31-5-viewable-in-plane-switching-ips-technology-3840-x-32un880k-b/"]],
+    src:"Named in both sources."},
+  lg27mp:{n:"LG 27UL550-W",kind:"mp",price:220,date:"Nov 16, 2026",one:true,
+    specs:["27 in, 3840×2160, IPS, 60 Hz, HDR10","2 HDMI, 1 DisplayPort. No USB-C, no Ethernet, no USB hub","Stand included: height, tilt, turns upright","VESA mount: yes. Pattern not confirmed"],
+    fit:"Same size and resolution as the U2723QE. You lose the one-cable USB-C hub and Ethernet. One listing, one unit: it can fill the left or the right, not both.",
+    cond:"Used, like new. Seller says no scratches or dead pixels.",loc:"Calgary",
+    links:[["Marketplace listing","https://www.facebook.com/marketplace/item/1696180838509218/"],["Last new price: Logics $347.99, sold out","https://logicstechnology.com/products/lg-27ul550-w-27-class-4k-uhd-gaming-lcd-monitor-16-9"]],
+    vs:[["its last new price ($347.99, sold out)",347.99],["a new U2723QE",799.99]],src:"Opened by Miller."},
+  s3422dw:{n:"Dell 34 Curved Monitor S3422DW",kind:"new",price:503.98,date:CHK,
+    specs:["34 in curved (1800R), 3440×1440, VA, 100 Hz","2 HDMI, 1 DisplayPort, speakers","Stand: height and tilt","VESA pattern not confirmed"],
+    fit:"The model in Botty's list. Dell.ca now shows it as unavailable, so new stock is thin.",
+    links:[["Dell.ca (unavailable)","https://www.dell.com/en-ca/shop/dell-34-curved-monitor-s3422dw/apd/210-axns/monitors-monitor-accessories"],["Smart Micro System $503.98","https://www.smartmicrosystem.ca/computers-and-components/computers/monitor/dell-34-curved-wqhd-monitor-s3422dw-86-42-cm-34-wqhd-spkr-free-sync-hdmi-cable"],["Best Buy open box","https://www.bestbuy.ca/en-ca/product/open-box-dell-34-wqhd-curved-monitor-s3422dw/19660951"]],
+    src:"One third-party price found. The retailer link is the closest match from the search; confirm the price on its page."},
+  s3422dwg:{n:"Dell 34 Curved Gaming Monitor S3422DWG",kind:"new",price:399.99,date:CHK,
+    specs:["34 in curved (1800R), 3440×1440, VA, 144 Hz","1 DisplayPort 1.4, 2 HDMI 2.0 (HDMI tops out at 100 Hz), USB hub","Stand: height adjustable","VESA 100×100"],
+    fit:"Same size, panel type and resolution as the S3422DW, faster refresh, and cheaper new.",
+    links:[["Dell.ca $399.99","https://dell.com/en-ca/shop/dell-34-curved-gaming-monitor-s3422dwg/apd/210-azep/monitors-monitor-accessories"]],src:"Equivalent alternative found in the search."},
+  s3422dwg_mp:{n:"Dell S3422DWG",kind:"mp",price:350,date:"Nov 16, 2026",
+    specs:["34 in curved (1800R), 3440×1440, VA, 144 Hz","1 DisplayPort 1.4, 2 HDMI 2.0 (HDMI tops out at 100 Hz), USB hub","Adjustable stand included","VESA 100×100"],
+    fit:"Same chart workspace as the planned S3422DW with a faster refresh. Only $50 under a new one from Dell.ca with warranty.",
+    cond:"Used, like new. Reduced from $425.",loc:"Calgary",
+    links:[["Marketplace listing","https://www.facebook.com/marketplace/item/1102230032293644/"],["New at Dell.ca $399.99","https://dell.com/en-ca/shop/dell-34-curved-gaming-monitor-s3422dwg/apd/210-azep/monitors-monitor-accessories"]],
+    vs:[["a new S3422DWG from Dell.ca",399.99],["the planned S3422DW",503.98]],src:"Opened by Miller."},
+  u3419w_mp:{n:"Dell UltraSharp U3419W",kind:"mp",price:300,date:"Nov 16, 2026",
+    specs:["34.14 in curved, 3440×1440, IPS, 60 Hz","USB-C, HDMI, DisplayPort, USB hub (USB-C wattage and VESA not re-confirmed on Nov 17)","Stand included: height, tilt, swivel","A 2018 model, no longer sold new"],
+    fit:"Same chart workspace. IPS is easier to read off-angle than VA, and USB-C means one cable to the Mac. 60 Hz is slower but fine for charts.",
+    cond:"Used, good.",loc:"Rocky View County",
+    links:[["Marketplace listing","https://www.facebook.com/marketplace/item/1675375917355194/"],["Successor U3425WE, new $1,311.82","https://itvisionnetworks.ca/products/51787924"]],
+    vs:[["the planned S3422DW",503.98],["its successor, the U3425WE",1311.82]],src:"Opened by Miller."},
+  undecided:{n:"Not chosen yet",kind:"none",price:null,specs:["27 in 4K, model undecided in both sources"],fit:"Leaves the right-hand screen out of the total.",links:[],src:""},
+  stands:{n:"Use each monitor's own stand",kind:"owned",price:0,specs:["Every screen option here includes a stand","The 27 in options turn upright on their own stands"],fit:"No arm needed to start. Add one later if the desk needs the space.",links:[],src:""},
+  ergotron:{n:"Ergotron LX Dual Side-by-Side Arm 45-245-026",kind:"new",price:483.97,date:CHK,
+    specs:["Holds two screens up to 27 in each","5 to 20 lb per screen, 40 lb combined","VESA 75×75 and 100×100","Desk clamp or grommet"],
+    fit:"It holds two 27 in screens side by side. It does not hold the 34 in centre screen, and the two 27s in this layout sit on either side of it, so check the reach before buying.",
+    links:[["Fleet Network $483.97","https://fleetnetwork.ca/products/ergotron-45-245-026-mounting-arm-for-flat-panel-display-silver-27-screen-support-18-14-kg-load-capacity-75-x-75-100-x-100-45-245-026.html"],["Canada Computers $599.99","https://www.canadacomputers.com/en/monitor-mounts/53586/ergotron-45-245-026-lx-dual-side-by-side-arm-45-245-026.html"]],src:"Named in Botty's list."},
+  br1500ms2:{n:"APC Back-UPS Pro BR1500MS2",kind:"new",price:384.99,date:CHK,
+    specs:["1500 VA, sine wave output","The current model in this line"],fit:"The current replacement for the BR1500G, and cheaper.",
+    links:[["Deploy Depot $384.99","https://deploydepot.ca/products/apc-by-schneider-electric-back-ups-pro-1500va-line-interactive-tower-ups-br1500ms2"],["CDW.ca $398.99","https://cdw.ca/product/apc-by-schneider-electric-back-ups-pro-1500va-line-interactive-tower-ups/6404423"]],src:"Equivalent alternative found in the search."},
+  br1500g:{n:"APC Back-UPS Pro BR1500G",kind:"new",price:439.95,date:CHK,
+    specs:["1500 VA, 865 W","The older model named in Botty's list"],fit:"Costs more than its replacement.",
+    links:[["Fleet Network $439.95","https://fleetnetwork.ca/products/apc-by-schneider-electric-br1500g-120v-backup-system-1-50-kva-865-w-120-v-ac-3-minute-stand-by-time-tower-5-x-nema-5-15r-5-br1500g.html"]],src:"Named in Botty's list."},
+  mic:{n:"RØDE Wireless GO (Gen 3)",kind:"new",price:259.99,date:CHK,
+    specs:["Two-person wireless microphone system"],fit:"On Botty's list with no reason given.",
+    links:[["Economik $259.99","https://www.economik.com/products/wireless-go-gen-3"],["Long & McQuade $279.00","https://www.long-mcquade.com/457889/Pro-Audio-Recording/Wireless-Systems/Rode/Wireless-GO-Gen-III-Microphone-System.htm"]],src:"Named in Botty's list."},
+  adapter:{n:"USB graphics adapter (DisplayLink), dual HDMI",kind:"new",price:137.95,date:"Nov 16, 2026",
+    specs:["Adds a third screen to the M1 through USB","Needs the DisplayLink Manager app running"],fit:"Option 2 only. Put the right-hand screen on it.",
+    links:[["Sonnet at Fleet Network $137.95","https://fleetnetwork.ca/products/usbc-dhdmi/"],["OWC at Staples.ca $144.99","https://www.staples.ca/products/3119330-en-owc-usb-c-to-dual-hdmi-4k-display-adapter-with-displaylink"]],src:""},
+  hub:{n:"Powered USB-C hub for the studio",kind:"none",price:null,specs:["The studio needs six USB-C or Thunderbolt connections; the M6 has five"],fit:"Option 2 only. No model chosen or priced.",links:[],src:""},
+};
+const SLOTS=[
+  {id:'left',name:'Left screen · upright',why:'Ranked alerts. A tall screen shows a long list at a glance.',opts:['u2723qe','u2725qe','lg32','lg27mp']},
+  {id:'centre',name:'Centre screen · ultrawide',why:'Charts need the width.',opts:['s3422dwg_mp','u3419w_mp','s3422dwg','s3422dw']},
+  {id:'right',name:'Right screen · 27 in 4K',why:'News and holds, beside the charts.',opts:['lg27mp','u2723qe','undecided']},
+  {id:'mount',name:'Mounting',why:'How the screens are held.',opts:['stands','ergotron']},
+  {id:'ups',name:'Battery backup',why:'On Botty\'s list. Keeps the desk up through a power blip.',opts:['br1500ms2','br1500g']},
 ];
-function areaHTML(){
-  const tag=([t,c])=>`<span class="ev ${c}">${t}</span>`;
-  const A=AREAS[area], stName=STAGES.find(x=>x[0]===stage)[1];
-  const head=(h,p)=>`<div class="lede"><span class="eyebrow">${esc(A.name)} · ${esc(stName)}</span><h2>${h}</h2>${p?`<p>${p}</p>`:''}</div>`;
-  const empty=(t,d)=>`<div class="empty"><b>${t}</b><span>${d}</span></div>`;
+const PLAN_DEFAULT={opt:2,left:'u2723qe',centre:'s3422dwg_mp',right:'lg27mp',mount:'stands',ups:'br1500ms2'};
+const ALLNEW={left:'u2723qe',centre:'s3422dw',right:'u2723qe',mount:'ergotron',ups:'br1500g'};
+let PLAN={...PLAN_DEFAULT}; let LEADS={};
+function deskLines(pl){
+  const L=[{k:'Computer to buy',id:'mac',where:pl.opt===2?'Studio':'Home-office desk'}];
+  for(const sl of SLOTS) L.push({k:sl.name,id:pl[sl.id]});
+  L.push({k:'Microphone',id:'mic'});
+  if(pl.opt===2){ L.push({k:'Third-screen adapter',id:'adapter'}); L.push({k:'Studio hub',id:'hub'}); }
+  return L;
+}
+function deskTotal(pl){ let n=0,unp=0; for(const l of deskLines(pl)){ const c=CAT[l.id]; if(c.price==null) unp++; else n+=c.price; } return {n,unp}; }
+const kindTag=k=>k==='mp'?'<span class="ev x">Marketplace</span>':k==='owned'?'<span class="ev c">Owned</span>':k==='new'?'<span class="ev l">New</span>':'<span class="ev u">Unknown</span>';
+function pcard(id,o={}){
+  const c=CAT[id]; const price=c.price==null?'Not priced':c.price===0?(c.kind==='owned'?'Owned':'$0'):money(c.price);
+  const dated=c.kind==='mp'?`Asking price, seen ${c.date}`:c.kind==='new'?`Found ${c.date}, before tax`:'';
+  const save=c.vs?c.vs.map(v=>`<div class="save">${money(v[1]-c.price)} less than ${esc(v[0])}</div>`).join(''):'';
+  const body=`<div class="pt">${kindTag(c.kind)}${o.on?'<span class="ev c">Picked</span>':''}${o.qty?`<span class="ev g">Qty ${o.qty}</span>`:''}</div>
+    <h4>${esc(c.n)}</h4><div class="pp">${price}<small>${dated}</small></div>
+    <ul>${c.specs.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>
+    ${c.cond?`<div class="fit"><b>Condition (seller's words):</b> ${esc(c.cond)} ${esc(c.loc||'')}. Availability was only viewed, not held.</div>`:''}
+    ${c.fit?`<div class="fit">${esc(c.fit)}</div>`:''}${save}
+    ${c.links.length?`<div class="lk">${c.links.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(l[0])}</a>`).join('')}</div>`:''}
+    ${o.blocked?`<div class="warnline">Already picked for the other side. One unit only.</div>`:''}`;
+  return o.slot?`<div class="pcard ${o.on?'on':''}">${body}<button class="btn ${o.on?'':'primary'}" data-dslot="${o.slot}" data-dpick="${id}" data-fk="pick-${o.slot}-${id}" ${o.on||o.blocked?'disabled':''}>${o.on?'In your plan':'Choose this'}</button></div>`:`<div class="pcard">${body}</div>`;
+}
+function leadCard(l){
+  return `<div class="pcard"><div class="pt"><span class="ev x">Marketplace</span>${l.gone?'<span class="ev u">Unavailable</span>':'<span class="ev g">Not re-checked</span>'}${l.verdict==='deal'?'<span class="ev c">Flagged as a deal</span>':''}</div>
+    <h4>${esc(l.n)}</h4><div class="pp">${money(l.price)}<small>Asking price, recorded ${esc(l.checked)}</small></div>
+    <ul><li>${esc(l.specs||'')}</li><li>${esc(l.cond||'')}${l.loc?', '+esc(l.loc):''}</li><li>${esc(l.stock||'')}</li></ul>
+    ${l.offer?`<div class="fit">Offer ${money(l.offer)}, walk away above ${money(l.walk)}.</div>`:''}
+    <div class="lk"><a href="${esc(l.url)}" target="_blank" rel="noopener">Marketplace listing</a></div></div>`;
+}
+function leadsBlock(ar){
+  const all=MPL.filter(l=>l.area===ar), live=all.filter(l=>!l.gone), gone=all.filter(l=>l.gone);
+  return `<p class="note">Listings recorded on the original Gear Scout board. Dates show when each was last seen. None has been re-opened since, so treat every one as a lead to check, not as available.</p>
+    <div class="pcards">${live.map(leadCard).join('')}</div>
+    ${gone.length?`<h3 style="margin-top:6px">No longer available</h3><div class="pcards">${gone.map(leadCard).join('')}</div>`:''}`;
+}
+function renderLightLeads(){ const el=$('#lightLeads'); if(el) el.innerHTML=`<span class="eyebrow">Marketplace</span><h3>Calgary listings on record for lighting</h3>${leadsBlock('lighting')}`; }
+function setupHTML(){
+  const panel=(eye,h,body,id)=>`<div class="panel"${id?` id="${id}"`:''}><span class="eyebrow">${eye}</span><h3>${h}</h3>${body}</div>`;
   const ul=a=>`<ul class="clean">${a.map(o=>`<li>${esc(o)}</li>`).join('')}</ul>`;
-  const ol=a=>`<ol class="steps">${a.map(o=>`<li><div>${esc(o)}</div></li>`).join('')}</ol>`;
-  const panel=(eye,h,body)=>`<div class="panel"><span class="eyebrow">${eye}</span><h3>${h}</h3>${body}</div>`;
   const tbl=(heads,rows,sx)=>`<div class="tbl desk"${sx?` data-sx="${sx}"`:''}><table>${heads?`<thead><tr>${heads.map(x=>`<th>${x}</th>`).join('')}</tr></thead>`:''}<tbody>${rows.join('')}</tbody></table></div>`;
+  const jump=a=>`<div class="jump">${a.map(([id,n])=>`<button data-jump="${id}">${n}</button>`).join('')}</div>`;
+
+  if(area==='overview'){
+    const dt=deskTotal(PLAN), lt=buildTotal();
+    const card=(k,head,lines,total,note)=>`<div class="pcard"><h4>${esc(SETUPS[k].name)}</h4><div class="pp">${total}<small>${note}</small></div><ul>${lines.map(x=>`<li>${x}</li>`).join('')}</ul><div class="lk"><a href="#${k==='lighting'?'lighting-buy':k}">${head} →</a></div></div>`;
+    return `<div class="lede"><span class="eyebrow">Hardware upgrade planner</span><h2>Every setup, and what to buy next</h2><p>Pick a setup to see what is owned, the buying decisions side by side, and each product with its exact model, price, date and link. Prices are CAD before tax.</p></div>
+      <div class="pcards">
+        ${card('desk','Plan the desk',['Three screens and a Mac mini','3 Calgary Marketplace screens opened Nov 16','Owned: the studio M1 Mac mini, two 1 TB drives'],money(dt.n),`Your current picks${dt.unp?`, ${dt.unp} item${dt.unp>1?'s':''} not priced`:''}`)}
+        ${card('lighting','Open the lighting build',['Three tiers, mix and match by role','21 Marketplace listings on record','Owned: four NiceVeedi softboxes, Govee bars'],money(lt),`${currentTier()?'Tier '+currentTier():'Mixed build'}, the build saved for the team`)}
+        ${card('storage','Compare the two builds',['Archive, edit, offsite drives and a reader','8 Marketplace listings on record','Prices last read Oct 31'],money(STORE.value)+' to '+money(STORE.fit),'Best value to best fit')}
+        ${card('music','See the rig',['Apollo x6, U87 Ai, TLM 103, Avalon, Neve','Nothing planned or priced','The new studio Mac mini is planned under Trading Desk'],'Nothing to buy','Owned gear only')}
+      </div>
+      ${panel('Totals','Known spend across setups',tbl(['Setup','Basis','<span class="num">CAD before tax</span>'],[
+        `<tr><td><b>Trading Desk</b></td><td>Your picks, Option ${PLAN.opt}</td><td class="num mono">${money(dt.n)}</td></tr>`,
+        `<tr><td><b>Lighting and set</b></td><td>${currentTier()?'Tier '+currentTier():'Mixed build'}</td><td class="num mono">${money(lt)}</td></tr>`,
+        `<tr><td><b>Storage</b></td><td>Best value build, Oct 31 prices</td><td class="num mono">${money(STORE.value)}</td></tr>`,
+        `<tr><td><b>All three</b></td><td></td><td class="num mono"><b>${money(dt.n+lt+STORE.value)}</b></td></tr>`])+'<p class="note">Unpriced items are left out. Each setup page lists them.</p>')}`;
+  }
 
   if(area==='desk'){
-    const J=DESKS.junior, T=DESKS.trading, D=J.deploy;
-    const all=[...J.items,...T.items];
-    const itemRow=x=>`<tr><td style="white-space:normal;min-width:190px"><b>${esc(x.n)}</b><small>${esc(x.spec)}</small></td><td>${esc(x.q)}</td><td>${esc(x.where||'—')}</td><td class="note" style="min-width:200px">${esc(x.why||'—')}<small>${esc(x.src)}</small></td><td>${tag(OWN[x.own])}<br><span style="display:inline-block;margin-top:4px">${tag(EVL[x.ev])}</span></td><td class="num mono">${esc(x.price)}</td></tr>`;
-    const itemHeads=['Item','Qty','Placement','Why this choice','Status','<span class="num">Price</span>'];
-    if(stage==='today') return head('What exists today','Trading Desk and Junior Desk are one project, the Junior Latency Desk: a three-screen desk in the trader\'s home office, plus the always-on computer at the studio. Hardware only. Nothing planned for it has been bought.')
-      +`<div class="deskkey"><span>${tag(OWN.owned)} ${all.filter(x=>x.own==='owned').length}</span><span>${tag(OWN.planned)} ${all.filter(x=>x.own==='planned').length}, none bought per the records</span><span>${tag(EVL.x)} ${all.filter(x=>x.ev==='x').length}</span><span>${tag(EVL.u)} ${all.filter(x=>x.ev==='u').length} still to identify</span></div>`
-      +panel('Owned','Already in hand',tbl(itemHeads,all.filter(x=>x.own==='owned').map(itemRow),'desk-owned')+'<p class="note">The home-office desk itself has not been inventoried. The trader\'s existing screens, desk and chair are unknown.</p>')
-      +panel('What runs where','Studio workloads, by evidence',tbl(null,D.runs.map(r=>`<tr><td>${r[0]==='c'?tag(['Confirmed','c']):tag(['Unknown','u'])}</td><td><b>${esc(r[1])}</b><small>${esc(r[2])}</small></td><td class="note">${esc(r[3])}</td></tr>`)))
-      +panel('Sources','Where this guide\'s facts come from',tbl(null,J.sources.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td><b>${esc(r[1])}</b></td><td class="note">${esc(r[2])}</td></tr>`)))
-      +panel('Source conflicts','Where the two sources disagree',tbl(['Item','What each says','What to do'],J.conflicts.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`)));
-    if(stage==='plan') return head('Which computer goes where','Two ways to place the computers. Option 1 is the Nov 5 plan. Option 2 sends the studio\'s M1 to the home office and buys the new machine for the studio.')
-      +panel('Deployment options','Side by side',tbl(['','Option 1 · New Mac mini at the desk','Option 2 · M1 to the desk, new Mac mini at the studio'],D.rows.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td style="min-width:210px">${esc(r[1])}</td><td style="min-width:210px">${esc(r[2])}</td></tr>`),'deploy'))
-      +panel('Recommendation','The studio machine to buy',ul(D.rec))
-      +panel('Optional','A second desk at the trader\'s office','<p class="note">Only if a desk is wanted at the office as well as at home: a third Mac mini and the same three-screen map, left in place. On Nov 5 the answer was that the desk will probably just be at home.</p>');
-    if(stage==='buy') return head('What to buy, how many, and why','Prices are CAD before tax. Each row says whether the item is owned or planned and how well its details are confirmed.')
-      +panel('Products','Home-office desk and studio',tbl(itemHeads,all.filter(x=>x.own!=='owned').map(itemRow),'desk-buy'))
-      +`<div class="panel"><span class="eyebrow">Apple Canada check · ${esc(D.checked)}</span><h3>What is on sale, and at what price</h3><p class="note">Apple's own Canadian store could not be opened from where this guide is built. These facts come from Canadian tech press, retailer listings and spec sites found on ${esc(D.checked)}. Confirm on apple.com/ca before buying.</p>${tbl(null,D.apple.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`))}<p class="note">Sources: ${D.links.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])}</a>`).join(' · ')}</p></div>`
-      +panel('Budget','CAD before tax',tbl(null,[...J.money,...T.money.filter(m=>m[0]!=='One desk')].map(m=>`<tr><td><b>${esc(m[0])}</b></td><td class="num mono">${esc(m[1])}</td><td class="note">${esc(m[2])}</td></tr>`))+'<p class="note">These are ranges spoken in the Nov 5 planning session. The priced items above do not add up to them, because most items have no recorded price.</p>');
-    if(stage==='place') return head('What goes where')
-      +panel('Home-office desk','Three screens and one computer',tbl(['Position','Item','Why there'],J.layout.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`))+`<p class="note">${esc(J.history)}</p>`)
-      +panel('Studio and optional office',"The other two locations",tbl(['Location','Item','Why there'],T.layout.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`)))
-      +panel('Option 2 · Studio machine','Where everything plugs into the new Mac mini','<p class="note">The M6 Mac mini has three Thunderbolt ports and one HDMI on the back, and two USB-C ports on the front. It runs three screens by itself.</p>'+tbl(['Connection','Needs','Goes to'],D.ports.map(r=>`<tr><td style="min-width:170px"><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`)));
-    if(stage==='settings') return head('Setting up the screens')
-      +panel('Option 2 only','Two screens direct, the third by adapter',ul(D.third))
-      +empty('No other settings are recorded.','This area is a hardware guide. Software, data sources and trading workflow are kept out of it.');
-    return head('Next steps, in order')+panel('To do','From here to a working desk',ol(DESK_NEXT))+panel('Still to decide or find out','Open items',ul([...J.open,...T.open.filter(o=>!/Trading Desk|Deployment options/.test(o))]));
+    const J=DESKS.junior, T=DESKS.trading, D=J.deploy; const tot=deskTotal(PLAN), base=deskTotal({opt:PLAN.opt,...ALLNEW});
+    const optCard=(o,title,buy,pros,cons)=>`<div class="pcard ${PLAN.opt===o?'on':''}"><div class="pt">${PLAN.opt===o?'<span class="ev c">Picked</span>':''}${o===2?'<span class="ev g">Recommended</span>':''}</div><h4>Option ${o} · ${title}</h4><ul>${buy.map(x=>`<li>${x}</li>`).join('')}</ul><div class="fit"><b>For:</b> ${pros}</div><div class="fit"><b>Against:</b> ${cons}</div><button class="btn ${PLAN.opt===o?'':'primary'}" data-deploy="${o}" data-fk="deploy-${o}" ${PLAN.opt===o?'disabled':''}>${PLAN.opt===o?'In your plan':'Choose this'}</button></div>`;
+    const slotHTML=sl=>{ const other=sl.id==='left'?'right':sl.id==='right'?'left':null;
+      return `<div class="slot" id="slot-${sl.id}"><div><span class="eyebrow">Decision</span><h3>${esc(sl.name)}</h3><span class="note">${esc(sl.why)}</span></div><div class="pcards">${sl.opts.map(id=>pcard(id,{slot:sl.id,on:PLAN[sl.id]===id,blocked:!!(CAT[id].one&&other&&PLAN[other]===id)})).join('')}</div></div>`; };
+    const lines=deskLines(PLAN);
+    const leadList=Object.entries(LEADS).sort((a,b)=>(b[1].at||0)-(a[1].at||0));
+    return `<div class="lede"><span class="eyebrow">Trading Desk · hardware upgrade planner</span><h2>Three screens, one new Mac mini</h2><p>Trading Desk and Junior Desk are one project. Work down the page: choose where the computers go, choose each screen, then check the total. Your choices save for the team.</p>${jump([['d-deploy','1 Computers'],['d-screens','2 Screens'],['d-kit','3 Kit'],['d-total','4 Total'],['d-market','Marketplace'],['d-more','Placement and evidence']])}</div>
+      <div class="slot" id="d-deploy"><div><span class="eyebrow">Decision 1</span><h3>Where the computers go</h3><span class="note">Either way you buy one Mac mini. The question is which room gets the new one.</span></div>
+        <div class="pcards">
+          ${optCard(1,'New Mac mini at the home-office desk',['Buy: 1 Mac mini M6 for the desk','Studio keeps the M1 (16 GB)','Desk runs 3 of 3 screens directly'],'No change at the studio. Clean install at the desk.','The 2020 M1 carries music, shows and the always-on jobs on 16 GB.')}
+          ${optCard(2,'M1 to the desk, new Mac mini at the studio',['Buy: 1 Mac mini M6 for the studio','Buy: 1 USB graphics adapter and 1 powered hub','Desk M1 runs 2 of 3 screens directly'],'The heavy and always-on work gets the new machine and three spare-capable ports.','The studio setup is rebuilt on the new Mac. The desk\'s third screen depends on adapter software.')}
+        </div>
+        <div class="pcards">${pcard('mac',{qty:1})}${pcard('m1')}</div>
+        <p class="note">Both 1 TB studio drives stay at the studio under either option.</p></div>
+      <div id="d-screens" style="display:grid;gap:14px">${SLOTS.slice(0,3).map(slotHTML).join('')}
+        <p class="note">Cables: the Mac mini M6 has one HDMI and three USB-C (Thunderbolt) outputs. A screen without USB-C needs an HDMI cable or a USB-C to DisplayPort cable. These are not priced.${PLAN.opt===2?' Under Option 2 the M1 drives two screens directly; put the right-hand screen on the USB graphics adapter.':''}</p></div>
+      <div id="d-kit" style="display:grid;gap:14px">${SLOTS.slice(3).map(slotHTML).join('')}
+        <div class="slot"><div><span class="eyebrow">Also on the list</span><h3>Fixed items</h3></div><div class="pcards">${pcard('mic',{qty:1})}${PLAN.opt===2?pcard('adapter',{qty:1})+pcard('hub',{qty:1}):''}</div></div></div>
+      ${panel('Total','Your plan, Option '+PLAN.opt,tbl(['For','Item','Source','<span class="num">Price</span>'],lines.map(l=>{const c=CAT[l.id];return `<tr><td><b>${esc(l.k)}</b>${l.where?`<small>${esc(l.where)}</small>`:''}</td><td>${esc(c.n)}</td><td>${kindTag(c.kind)} <span class="note">${c.date?esc(c.date):''}</span></td><td class="num mono">${c.price==null?'not priced':c.price===0?'—':money(c.price)}</td></tr>`;}))
+        +`<div class="totals" style="margin-top:10px"><span>Your picks, before tax</span><span class="num">${money(tot.n)}</span><span>GST 5%</span><span class="num">${money(tot.n*0.05)}</span><span><b>Total</b></span><span class="big">${money(tot.n*1.05)}</span><span>Everything new, as first listed</span><span class="num">${money(base.n)}</span><span><b>Your picks save</b></span><span class="num"><b>${money(base.n-tot.n)}</b></span></div>
+        <p class="note">${tot.unp?`${tot.unp} item${tot.unp>1?'s are':' is'} not priced and left out. `:''}"Everything new, as first listed" means two U2723QE screens, the S3422DW, the Ergotron arm and the BR1500G. Marketplace prices are asking prices for single units.</p>`,'d-total')}
+      <div class="panel" id="d-market"><span class="eyebrow">Marketplace</span><h3>Calgary listings</h3>
+        <p class="note">The three listings above were opened by Miller on Nov 16. Facebook Marketplace cannot be opened from where this page is built, so no other current listings were searched. Add any you find here and the page compares them with the new price.</p>
+        <form class="leadform" id="leadForm">
+          <label>For<select id="lead-slot"><option value="left">Left screen</option><option value="centre">Centre screen</option><option value="right">Right screen</option><option value="mac">Mac mini</option><option value="other">Other</option></select></label>
+          <label>Listing title<input id="lead-title" required placeholder="Dell U2723QE"></label>
+          <label>Asking price (CAD)<input id="lead-price" required inputmode="decimal" placeholder="450"></label>
+          <label>Condition (seller's words)<input id="lead-cond" placeholder="Used, like new"></label>
+          <label>Marketplace link<input id="lead-url" required placeholder="https://www.facebook.com/marketplace/item/..."></label>
+          <button class="btn primary" type="submit">Add listing</button>
+        </form><div id="leadMsg" class="note"></div>
+        ${leadList.length?`<div class="pcards">${leadList.map(([id,l])=>{const ref={left:799.99,right:799.99,centre:503.98,mac:1849}[l.slot];return `<div class="pcard"><div class="pt"><span class="ev x">Marketplace</span><span class="ev g">Added by the team</span></div><h4>${esc(l.title)}</h4><div class="pp">${money(l.price)}<small>Asking price, seen ${esc(l.seen||'')}</small></div><ul><li>For: ${esc(l.slot)}</li>${l.cond?`<li>Condition (seller's words): ${esc(l.cond)}</li>`:''}</ul>${ref?`<div class="save">${money(ref-l.price)} less than the new reference (${money(ref)})</div>`:''}<div class="lk"><a href="${esc(l.url)}" target="_blank" rel="noopener">Marketplace listing</a></div><button class="btn" data-leaddel="${id}">Remove</button></div>`;}).join('')}</div>`:'<p class="note">No extra listings added yet.</p>'}
+      </div>
+      <details class="more" id="d-more"><summary>Placement, plug-in plan and evidence</summary><div>
+        ${panel('Place','What goes where',tbl(['Position','Item','Why there'],[...J.layout,...T.layout].map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`)))}
+        ${panel('Option 2 · Studio machine','Where everything plugs into the new Mac mini',tbl(['Connection','Needs','Goes to'],D.ports.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`)))}
+        ${panel('Option 2 · Desk','Two screens direct, the third by adapter',ul(D.third))}
+        ${panel('Why this Mac mini','The studio machine to buy',ul(D.rec))}
+        ${panel('Side by side','Both options in full',tbl(['','Option 1','Option 2'],D.rows.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td style="min-width:200px">${esc(r[1])}</td><td style="min-width:200px">${esc(r[2])}</td></tr>`),'deploy'))}
+        ${panel('What runs where','Studio workloads, by evidence',tbl(null,D.runs.map(r=>`<tr><td>${r[0]==='c'?'<span class="ev c">Confirmed</span>':'<span class="ev u">Unknown</span>'}</td><td><b>${esc(r[1])}</b><small>${esc(r[2])}</small></td><td class="note">${esc(r[3])}</td></tr>`)))}
+        ${panel('Sources and conflicts','Where the facts come from',tbl(null,J.sources.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td><b>${esc(r[1])}</b></td><td class="note">${esc(r[2])}</td></tr>`))+tbl(['Item','What each says','What to do'],J.conflicts.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`)))}
+        ${panel('Apple Canada check · '+esc(D.checked),'What is on sale',tbl(null,D.apple.map(r=>`<tr><td style="min-width:150px"><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`))+`<p class="note">Sources: ${D.links.map(l=>`<a href="${esc(l[1])}" target="_blank" rel="noopener">${esc(l[0])}</a>`).join(' · ')}</p>`)}
+        ${panel('Still unknown','Gaps',ul(['Apple Canada\'s own price and model number for the M6 at 24 GB / 512 GB.','How full the studio M1\'s 512 GB is, and its memory pressure in a full session.','The powered USB-C hub: model and price.','Cables for screens without USB-C.','Desk, chair, keyboard and mouse at the home office: nothing recorded.','Whether each Marketplace listing is still available. They were viewed once on Nov 16.']))}
+      </div></details>`;
   }
 
   if(area==='storage'){
     const R=STORE; const roleName=id=>R.roles.find(r=>r.id===id).name;
-    const dated=`From the Gear Scout storage hunt, read ${esc(R.checked)}. Prices and stock have not been re-checked since.`;
-    if(stage==='today') return head('Where storage stands',esc(R.need))+`<p class="note">${dated}</p>`;
-    if(stage==='plan') return head('Four tiers, three copies')+panel('Rules','How the storage plan works',ul(R.rules))
-      +panel('Roles','What each piece has to do',tbl(['Role','Qty','Must have'],R.roles.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${r.qty}</td><td class="note">${esc(r.must)}</td></tr>`)));
-    if(stage==='buy'){
-      const row=x=>`<tr><td style="min-width:200px"><b>${esc(x.product)}</b><small>${esc(x.specs)}</small></td><td>${esc(roleName(x.role))}</td><td class="num">${x.fit_qty||'—'}</td><td class="num">${x.value_qty||'—'}</td><td class="num mono">${money(x.price)}</td><td><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.source)}</a></td><td class="note" style="min-width:220px">${esc(x.reason)}</td></tr>`;
-      return head('Two builds','Best fit puts the archive on a small network box that both computers can reach. Best value puts it in a USB enclosure on the editing PC.')+`<p class="note">${dated} CAD before GST.</p>`
-        +`<div class="tiers"><div class="tier"><div class="t-top"><h3>Best fit</h3></div><div class="price">${money(R.fit)}</div><p class="note">${esc(R.builds.fit.note)}</p></div><div class="tier"><div class="t-top"><h3>Best value</h3></div><div class="price">${money(R.value)}</div><p class="note">${esc(R.builds.value.note)}</p></div></div>`
-        +panel('Products','Picked items',tbl(['Item','Role','<span class="num">Fit qty</span>','<span class="num">Value qty</span>','<span class="num">Each</span>','Where','Why'],R.items.map(row),'store-buy'))
-        +`<p class="note">The full list of 40 scouted items is on the <a href="https://claude.ai/artifact/FePPhRJnKVvXG71UQNfhWQ#studio-storage-2026-10" target="_blank" rel="noopener">original Gear Scout board</a>.</p>`;
-    }
-    if(stage==='place') return head('Where each drive lives')+panel('By tier','Location',tbl(['Tier','Drive','Where it lives'],[
-        ['Record','Samsung T7 and the RØDECaster Pro II card (owned)','On the recording rig. Cleared after every ingest'],
-        ['Edit','2 TB NVMe SSD','In the editing PC, or in the USB-C enclosure if the PC has no free slot'],
-        ['Archive','Two 8 TB drives, mirrored','In the archive host at the studio'],
-        ['Offsite','8 TB external','Away from the studio. Comes in once a month for a copy'],
-      ].map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td class="note">${r[2]}</td></tr>`)));
-    if(stage==='settings') return head('Choices that set everything else')+panel('Decide first','Archive host',ul(['A network box (NAS) if both the editing PC and the Mac mini need the archive.','A USB enclosure if only the editing PC does. The archive then stays a plain drive letter and the ingest tools need no changes.','Open question: does the Skytech PC have a free M.2 slot? If yes, skip the SSD enclosure.','Not scouted: the 32 GB RAM kit from the Oct 30 audit, cables, a UPS.']));
-    return head('Once the drives land')+panel('Order of operations','Do these in order',ol(['Label the new archive drive.','Run Red Mile Ingest once by hand.','Run the console repoint tool, then Optimize.','Clear the 246 GB of imports and cache from the T7 once the copy has verified.','Set the monthly offsite copy.']))+`<p class="note">${dated}</p>`;
+    const sc=x=>`<div class="pcard"><div class="pt"><span class="ev l">New</span>${x.fit_qty?`<span class="ev c">Best fit ×${x.fit_qty}</span>`:''}${x.value_qty?`<span class="ev g">Best value ×${x.value_qty}</span>`:''}</div><h4>${esc(x.product)}</h4><div class="pp">${money(x.price)}<small>${esc(roleName(x.role))} · read ${esc(R.checked)}</small></div><ul><li>${esc(x.specs)}</li></ul><div class="fit">${esc(x.reason)}</div><div class="lk"><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.source)}</a></div></div>`;
+    return `<div class="lede"><span class="eyebrow">Storage · hardware upgrade planner</span><h2>Two builds for the archive</h2><p>${esc(R.need)}</p>${jump([['s-decide','1 Decide'],['s-buy','2 Products'],['s-market','Marketplace'],['s-more','Rules and steps']])}</div>
+      <div class="slot" id="s-decide"><div><span class="eyebrow">Decision</span><h3>Network box or USB enclosure</h3><span class="note">Prices read ${esc(R.checked)} and not re-checked since. CAD before GST.</span></div>
+        <div class="pcards"><div class="pcard"><h4>Best fit</h4><div class="pp">${money(R.fit)}</div><div class="fit">${esc(R.builds.fit.note)}</div></div><div class="pcard"><h4>Best value</h4><div class="pp">${money(R.value)}<small>${money(R.fit-R.value)} less</small></div><div class="fit">${esc(R.builds.value.note)}</div></div></div></div>
+      ${panel('Products','Picked items',`<div class="pcards">${R.items.map(sc).join('')}</div><p class="note">The full list of 40 scouted items is on the <a href="https://claude.ai/artifact/FePPhRJnKVvXG71UQNfhWQ#studio-storage-2026-10" target="_blank" rel="noopener">original Gear Scout board</a>.</p>`,'s-buy')}
+      ${panel('Marketplace','Calgary listings on record for storage',leadsBlock('storage'),'s-market')}
+      <details class="more" id="s-more"><summary>Rules, roles and order of operations</summary><div>
+        ${panel('Rules','How the storage plan works',ul(R.rules))}
+        ${panel('Roles','What each piece has to do',tbl(['Role','Qty','Must have'],R.roles.map(r=>`<tr><td><b>${esc(r.name)}</b></td><td>${r.qty}</td><td class="note">${esc(r.must)}</td></tr>`)))}
+        ${panel('Once the drives land','Do these in order',`<ol class="steps">${['Label the new archive drive.','Run Red Mile Ingest once by hand.','Run the console repoint tool, then Optimize.','Clear the 246 GB of imports and cache from the T7 once the copy has verified.','Set the monthly offsite copy.'].map(o=>`<li><div>${o}</div></li>`).join('')}</ol>`)}
+        ${panel('Still unknown','Gaps',ul(['Whether the Skytech PC has a free M.2 slot. If yes, skip the SSD enclosure.','Current prices and stock: nothing here has been re-read since Oct 31.','Not scouted: the 32 GB RAM kit from the Oct 30 audit, cables, a UPS.']))}
+      </div></details>`;
   }
 
-  // music
-  if(stage==='today') return head('What the music side owns','The recording and mixing rig at the studio, as verified on the machine. Nothing here is planned or priced.')
-    +panel('Owned','In the room today',tbl(['Item','Role','Source'],MUSIC_OWNED.map(r=>`<tr><td><b>${esc(r[0])}</b></td><td>${esc(r[1])}</td><td class="note">${esc(r[2])}</td></tr>`)));
-  if(stage==='buy') return head('Nothing on the music buying list yet')
-    +empty('One related purchase sits in another area.','The new studio Mac mini would run Ableton and the Apollo x6. It is planned under Trading Desk, on the Plan and Buy tabs.')
-    +empty('No music gear hunt is recorded.','Start one in chat with "scout:" and what the studio needs. The picks land here.');
-  return head(`No ${stName.toLowerCase()} recorded for Music yet`)+empty('This stage is empty.','Nothing in the project records covers it. Start a hunt in chat with "scout:" and what the studio needs.');
+  return `<div class="lede"><span class="eyebrow">Music · owned gear</span><h2>The recording and mixing rig</h2><p>Everything here is owned, as verified on the studio machine. Nothing is planned or priced for music yet.</p></div>
+    <div class="pcards">${MUSIC_OWNED.map(r=>`<div class="pcard"><div class="pt"><span class="ev c">Owned</span></div><h4>${esc(r[0])}</h4><div class="fit">${esc(r[1])}</div></div>`).join('')}</div>
+    <div class="empty"><b>One related purchase sits under Trading Desk.</b><span>The new studio Mac mini would run Ableton and the Apollo x6. <a href="#desk">See the Trading Desk plan</a>.</span></div>
+    <div class="empty"><b>No music gear hunt is recorded.</b><span>Start one in chat with "scout:" and what the studio needs. The picks land here as product cards.</span></div>`;
 }
-function renderArea(){ if(area==='lighting') return; $('#areaView').innerHTML=areaHTML(); }
+function renderArea(){ if(area==='lighting') return; $('#areaView').innerHTML=setupHTML(); }
+function savePlan(){ renderArea(); if(S.db&&S.canWrite) writeDoc('plans/desk',{...PLAN,at:Date.now(),by:S.uid}); }
 
 /* ---------- keep scroll and focus across re-renders ---------- */
 function keep(fn){ return function(...args){
@@ -1374,26 +1525,42 @@ function keep(fn){ return function(...args){
   return out; }; }
 
 /* ---------- render all ---------- */
-function renderAll(){ renderArea(); renderToday(); renderChips(); renderPlan(); renderTiers(); renderKelvin(); renderPicker(); renderSummary(); renderShop(); renderPlace(); renderCamera(); renderRun(); }
-renderAll=keep(renderAll); renderShop=keep(renderShop); renderRun=keep(renderRun); renderPlace=keep(renderPlace);
+function renderAll(){ renderArea(); renderLightLeads(); renderToday(); renderChips(); renderPlan(); renderTiers(); renderKelvin(); renderPicker(); renderSummary(); renderShop(); renderPlace(); renderCamera(); renderRun(); }
+renderAll=keep(renderAll); renderArea=keep(renderArea); renderShop=keep(renderShop); renderRun=keep(renderRun); renderPlace=keep(renderPlace);
 renderToday=keep(renderToday); renderCamera=keep(renderCamera); renderPlan=keep(renderPlan); renderRig=keep(renderRig);
 
 /* ---------- routing ---------- */
-const LEGACY={today:['lighting','today'],plan:['lighting','plan'],buy:['lighting','buy'],place:['lighting','place'],camera:['lighting','settings'],run:['lighting','run'],junior:['desk','today'],trading:['desk','today']};
+const LEGACY={today:['lighting','today'],plan:['lighting','plan'],buy:['lighting','buy'],place:['lighting','place'],camera:['lighting','settings'],run:['lighting','run'],junior:['desk',''],trading:['desk','']};
 function route(){
   const h=(location.hash||'').slice(1); const m=h.split('-');
-  if(AREAS[m[0]]&&STAGES.some(x=>x[0]===m[1])){ area=m[0]; stage=m[1]; }
-  else if(AREAS[m[0]]&&m.length===1){ area=m[0]; stage=area==='lighting'?'plan':'today'; }
-  else if(LEGACY[h]){ [area,stage]=LEGACY[h]; }
-  else { area='lighting'; stage='plan'; }
+  if(m[0]==='lighting'){ area='lighting'; stage=STAGES.some(x=>x[0]===m[1])?m[1]:'plan'; }
+  else if(SETUPS[m[0]]){ area=m[0]; }
+  else if(LEGACY[h]){ area=LEGACY[h][0]; if(LEGACY[h][1]) stage=LEGACY[h][1]; }
+  else { area='overview'; }
   document.querySelectorAll('main section.stage').forEach(x=>{x.hidden=true;});
   if(area==='lighting') $('#'+LIGHT_SEC[stage]).hidden=false; else { renderArea(); $('#areaView').hidden=false; }
-  $('#stageNav').innerHTML=STAGES.map(([k,n],i)=>`<a href="#${area}-${k}" data-tab="${k}" ${k===stage?'aria-current="page"':''}><span class="n">${i}</span>${n}</a>`).join('');
-  const sel=$('#areaSel'); if(!sel.options.length) sel.innerHTML=Object.entries(AREAS).map(([k,v])=>`<option value="${k}">${esc(v.name)}</option>`).join('');
-  sel.value=area; $('#areaSub').textContent=AREAS[area].sub;
-  $('#chips').hidden=area!=='lighting'; $('#sync').hidden=area!=='lighting';
+  $('#setupNav').innerHTML=Object.entries(SETUPS).map(([k,v])=>`<a href="#${k==='lighting'?'lighting-'+stage:k}" ${k===area?'aria-current="page"':''}>${esc(v.name)}</a>`).join('');
+  const sn=$('#stageNav'); sn.hidden=area!=='lighting';
+  sn.innerHTML=STAGES.map(([k,n],i)=>`<a href="#lighting-${k}" data-tab="${k}" ${k===stage?'aria-current="page"':''}><span class="n">${i}</span>${n}</a>`).join('');
+  $('#areaSub').textContent=SETUPS[area].sub;
+  $('#chips').hidden=area!=='lighting'; $('#sync').hidden=area==='music';
 }
-$('#areaSel').addEventListener('change',e=>{ const a=e.target.value; location.hash=a+'-'+(a==='lighting'?'plan':'today'); });
+document.addEventListener('click',e=>{
+  const dp=e.target.closest('[data-dpick]'); if(dp&&!dp.disabled){ const sl=dp.dataset.dslot, id=dp.dataset.dpick; PLAN[sl]=id;
+    if(CAT[id].one){ const other=sl==='left'?'right':'left'; if(PLAN[other]===id) PLAN[other]=other==='left'?'u2723qe':'undecided'; }
+    savePlan(); return; }
+  const dd=e.target.closest('[data-deploy]'); if(dd&&!dd.disabled){ PLAN.opt=+dd.dataset.deploy; savePlan(); return; }
+  const j=e.target.closest('[data-jump]'); if(j){ const t=document.getElementById(j.dataset.jump); if(t){ if(t.tagName==='DETAILS') t.open=true; const y=t.getBoundingClientRect().top+window.scrollY-130; window.scrollTo({top:y}); } return; }
+  const ld=e.target.closest('[data-leaddel]'); if(ld){ const id=ld.dataset.leaddel; delete LEADS[id]; renderArea(); if(S.db) S.db.doc('leads/'+id).delete().catch(()=>{}); return; }
+});
+document.addEventListener('submit',e=>{
+  if(e.target.id!=='leadForm') return; e.preventDefault();
+  const v=id=>$('#'+id).value.trim(); const price=parseFloat(v('lead-price').replace(/[^0-9.]/g,'')); const url=v('lead-url');
+  if(!v('lead-title')||!(price>0)||!/^https:\/\/(www\.|m\.)?facebook\.com\/marketplace\//.test(url)){ $('#leadMsg').textContent='Add a title, an asking price and a facebook.com/marketplace link.'; return; }
+  const id='l'+Date.now().toString(36); const d=new Date();
+  LEADS[id]={slot:v('lead-slot'),title:v('lead-title'),price,cond:v('lead-cond'),url,seen:d.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'}),at:Date.now(),by:S.uid};
+  renderArea(); if(S.db) writeDoc('leads/'+id,LEADS[id]);
+});
 window.addEventListener('hashchange',()=>{route();window.scrollTo(0,0);});
 
 /* ---------- writes ---------- */
@@ -1449,6 +1616,8 @@ route(); renderAll();
   },onErr);
   db.collection('status').onSnapshot(q=>{ const m={}; q.docs.forEach(d=>m[d.id]=d.data()); S.status=m; renderShop(); renderPlan(); },onErr);
   db.collection('checks').onSnapshot(q=>{ const m={}; q.docs.forEach(d=>m[d.id]=d.data().items||{}); S.checks=m; renderRun(); renderPlan(); renderToday(); },onErr);
+  db.doc('plans/desk').onSnapshot(sn=>{ if(sn.exists&&!sn.metadata.hasPendingWrites){ const d=sn.data(); for(const k of Object.keys(PLAN_DEFAULT)){ if(k==='opt'){ if(d.opt===1||d.opt===2) PLAN.opt=d.opt; } else if(CAT[d[k]]) PLAN[k]=d[k]; } renderArea(); } },onErr);
+  db.collection('leads').onSnapshot(q=>{ const m={}; q.docs.forEach(d=>m[d.id]=d.data()); LEADS=m; renderArea(); },onErr);
   db.collection('riglog').onSnapshot(q=>{ const m={}; q.docs.forEach(d=>m[d.id]=d.data()); S.rig=m; renderRig(); renderChips(); renderPlan(); },onErr);
 })();
 </script>
